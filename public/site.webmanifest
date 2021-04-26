@@ -1,0 +1,12 @@
+{
+  "short_name": "DLA",
+  "name": "Dunbar Library and Archive",
+  "icons": [{
+    "src": "/images/dla.png",
+    "type": "image/png",
+    "sizes": "512x512"
+  }],
+  "start_url": "/",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa"
+}
