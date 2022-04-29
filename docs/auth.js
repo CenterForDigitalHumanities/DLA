@@ -27,7 +27,11 @@ const webAuth = new auth0.WebAuth({
     "state": urlToBase64(location.href)
 })
 
-const logout = () => webAuth.logout({ returnTo: origin })
+const logout = () => {
+    localStorage.removeItem("userToken")
+    delete window.DLA_USER
+    webAuth.logout({ returnTo: origin })
+}
 const login = () => webAuth.authorize({ authParamsMap: { 'app': 'dla' } })
 
 const getReferringPage = () => {
