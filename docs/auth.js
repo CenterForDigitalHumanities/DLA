@@ -82,3 +82,5 @@ function b64toUrl(base64str) {
 function urlToBase64(url) {
     return  window.btoa(url).replace(/\//g, "_").replace(/\+/g, "-").replace(/=+$/, "")
 }
+
+export default AuthButton
