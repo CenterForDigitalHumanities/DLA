@@ -23,7 +23,7 @@ const webAuth = new auth0.WebAuth({
     "audience": AUDIENCE,
     "scope": "read:roles profile openid email",
     "redirectUri": origin,
-    "responseType": "id_token",
+    "responseType": "id_token token",
     "state": urlToBase64(location.href)
 })
 
