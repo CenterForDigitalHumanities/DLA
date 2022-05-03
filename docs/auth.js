@@ -74,7 +74,7 @@ class AuthCreator extends HTMLInputElement {
     }
 
     connectedCallback() {
-        if(!DLA_USER) { return }
+        if(!window.DLA_USER) { return }
         this.value = DLA_USER["http://store.rerum.io/agent"] ?? "anonymous"
     }
 }
