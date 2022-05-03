@@ -30,6 +30,7 @@ const webAuth = new auth0.WebAuth({
 const logout = () => {
     localStorage.removeItem("userToken")
     delete window.DLA_USER
+    document.querySelectorAll('[is="auth-creator"]').forEach(el=>el.connectedCallback())
     webAuth.logout({ returnTo: origin })
 }
 const login = () => webAuth.authorize({ authParamsMap: { 'app': 'dla' } })
@@ -58,13 +59,27 @@ class AuthButton extends HTMLButtonElement {
             if (ref && ref !== location.href) { location.href = ref }
             localStorage.setItem("userToken", result.idToken)
             window.DLA_USER = result.idTokenPayload
+            document.querySelectorAll('[is="auth-creator"]').forEach(el=>el.connectedCallback())
             this.innerText = `Logout ${DLA_USER.nickname}`
             this.removeAttribute('disabled')
         })
     }
 }
 
-customElements.define('auth-button', AuthButton, { extends: 'button' })
+customElements.define('auth-creator', AuthCreator, { extends: 'button' })
+
+class AuthCreator extends HTMLInputElement {
+    constructor() {
+        super()
+    }
+
+    connectedCallback() {
+        this.value = DLA_USER?.["http://store.rerum.io/agent"] ?? "anonymous"
+    }
+}
+
+customElements.define('auth-creator', AuthCreator, { extends: 'input' })
+
 
 /**
  * Follows the 'base64url' rules to decode a string.
@@ -80,7 +95,7 @@ function b64toUrl(base64str) {
  * @returns encoded string to pass as `state` to Auth0
  */
 function urlToBase64(url) {
-    return  window.btoa(url).replace(/\//g, "_").replace(/\+/g, "-").replace(/=+$/, "")
+    return window.btoa(url).replace(/\//g, "_").replace(/\+/g, "-").replace(/=+$/, "")
 }
 
-export default AuthButton
+export default {AuthButton, AuthCreator}
