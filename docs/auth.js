@@ -66,7 +66,7 @@ class AuthButton extends HTMLButtonElement {
     }
 }
 
-customElements.define('auth-creator', AuthCreator, { extends: 'button' })
+customElements.define('auth-button', AuthButton, { extends: 'button' })
 
 class AuthCreator extends HTMLInputElement {
     constructor() {
