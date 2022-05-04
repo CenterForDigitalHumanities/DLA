@@ -21,7 +21,7 @@ const webAuth = new auth0.WebAuth({
     "domain": DOMAIN,
     "clientID": CLIENT_ID,
     "audience": AUDIENCE,
-    "scope": "read:roles profile openid email",
+    "scope": "read:roles update:current_user_metadata name nickname picture email profile openid offline_access",
     "redirectUri": origin,
     "responseType": "id_token token",
     "state": urlToBase64(location.href)
