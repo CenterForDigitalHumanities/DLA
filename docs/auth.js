@@ -59,6 +59,7 @@ class AuthButton extends HTMLButtonElement {
             if (ref && ref !== location.href) { location.href = ref }
             localStorage.setItem("userToken", result.idToken)
             window.DLA_USER = result.idTokenPayload
+            window.DLA_USER.authorization = result.accessToken
             document.querySelectorAll('[is="auth-creator"]').forEach(el=>el.connectedCallback())
             this.innerText = `Logout ${DLA_USER.nickname}`
             this.removeAttribute('disabled')
