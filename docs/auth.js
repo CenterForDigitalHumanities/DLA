@@ -65,6 +65,8 @@ class AuthButton extends HTMLButtonElement {
             document.querySelectorAll('[is="auth-creator"]').forEach(el=>el.connectedCallback())
             this.innerText = `Logout ${DLA_USER.nickname}`
             this.removeAttribute('disabled')
+            const loginEvent = new CustomEvent('dla-authenticated',{detail:window.DLA_USER})
+            this.dispatchEvent(loginEvent)
         })
     }
 }
