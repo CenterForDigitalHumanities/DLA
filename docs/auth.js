@@ -47,6 +47,8 @@ class AuthButton extends HTMLButtonElement {
     constructor() {
         super()
         this.onclick = logout
+        this.login = login
+        this.logout = logout
     }
 
     connectedCallback() {
