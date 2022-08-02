@@ -7,12 +7,11 @@ const pubTok = process.env.RERUM_API
 const RERUM = "http://store.rerum.io/v1"
 
 /* Collection API */
-router.get('/:collectionID', function(req, res, next) {
-    if(!req.params.collectionID.startsWith("http")) {
+router.get('/:collectionID', function (req, res, next) {
+    if (!req.params.collectionID.startsWith("http")) {
         req.params.collectionID = RERUM + "/id/" + req.params.collectionID
     }
-//  res.send('index.html', { root: path.join(__dirname, '../components/collection') })
- res.send({ id: req.params.collectionID })
+    res.sendFile('index.html', { root: path.join(__dirname, '../components/collection') })
 })
 
 module.exports = router
