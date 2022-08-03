@@ -53,5 +53,5 @@ if ('serviceWorker' in navigator) {
 
 import ('./components/view/view.js')
 import ('./components/view/entity.js')
-import ('./components/view/collectionCard.js')
+// import ('./components/view/collectionCard.js')
 import ('./components/view/collection.js')

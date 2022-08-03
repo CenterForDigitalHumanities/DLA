@@ -13,7 +13,7 @@
 // import * as CryptoJS from "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
 import { default as DEER } from './deer-config.js'
 
-var worker = new Worker('javascripts/deer/worker.js')
+var worker = new Worker('/javascripts/deer/worker.js')
 
 const utils = {
     worker: worker,

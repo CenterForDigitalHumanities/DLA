@@ -19,7 +19,7 @@ export default class DeerView extends HTMLElement {
 
     constructor() {
         super()
-        this.template = template
+        this.template = DEER.TEMPLATES[this.getAttribute(`${DEER.PREFIX}-template`)] ?? template
     }
 
     connectedCallback() {
