@@ -6,7 +6,7 @@ let progress
 
 const template = obj => {
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
-    let tmpl = `<div><header>${obj.name}</header>
+    return `<div><header>${obj.name}</header>
         <span class="badge">${obj.numberOfItems??``}</span> ${obj.description??``}
         <div class="container reverse">
             <div id="Records" class="grow wrap">list loading</div>
@@ -18,7 +18,6 @@ const template = obj => {
             </div>
         </div>
     </div>`
-    return tmpl
 }
 
 export default class DLA_Collection extends DeerView {
@@ -71,17 +70,13 @@ export default class DLA_Collection extends DeerView {
         ]
     
         let list = dataRecords.reduce((a, b) => a += `
-        <deer-view class="record" deer-id="${b['@id']}">
-            <h4>${b.label}</h4>
+        <x-deer-view class="record" deer-id="${b['@id']}">
+            <h4><a href="./record.html?id=${b['@id']}">${b.label}</a></h4>
             <div class="row">
-                <img class="thumbnail" >
                 <dl>
                 </dl>
             </div>
-            <div class="btn-group">
-                <a href="./record.html?id=${b['@id']}">View</a>
-            </div>
-        </deer-view>`, ``)
+        </x-deer-view>`, ``)
     
         document.getElementById('Records').innerHTML = list
     
@@ -111,6 +106,7 @@ export default class DLA_Collection extends DeerView {
             //                 }
             //             }
             //         })
+                    r.setAttribute("data-query", r.textContent.trim())
             //         r.setAttribute("data-query", SEARCH.reduce((a, b) => a += (metadataMap.has(b) ? metadataMap.get(b) : "*") + " ", ""))
             //         r.querySelector("dl").innerHTML = dl
             //         r.querySelector("img").src = dataRecord.sequences?.[0].canvases[Math.floor((dataRecord.sequences[0].canvases.length - 1) / 2)].thumbnail['@id'] ?? "https://via.placeholder.com/150"
@@ -118,7 +114,7 @@ export default class DLA_Collection extends DeerView {
             //     .catch(err => { throw Error(err) })
             // )
         })
-        query.addEventListener("input", this.#filterQuery)
+        query.addEventListener("input", this.#filterQuery.bind(this))
         try {
             await Promise.all(loading)
             return this.#populateSidebar(facets, FILTERS)
@@ -184,7 +180,7 @@ export default class DLA_Collection extends DeerView {
         side += `</ul>`
         facetFilter.innerHTML = side
         let facetsElements = document.querySelectorAll("[data-facet]")
-        Array.from(facetsElements).forEach(el => el.addEventListener("click", filterFacets))
+        Array.from(facetsElements).forEach(el => el.addEventListener("click", filterFacets.bind(this)))
         this.#updateCount()
         this.#loadQuery()
     }
