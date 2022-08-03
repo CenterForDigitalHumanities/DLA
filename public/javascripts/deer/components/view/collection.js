@@ -8,9 +8,9 @@ const template = obj => {
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
     return `<div><header>${obj.name}</header>
         <span class="badge">${obj.numberOfItems??``}</span> ${obj.description??``}
-        <div class="container reverse">
-            <div id="Records" class="grow wrap">list loading</div>
-            <div class="sidebar">
+        <div class="flex-reverse">
+        <div id="Records" class="grow wrap">list loading</div>
+        <div class="sidebar">
                 <h3>Refine Results <button role="button" id="queryReset">clear all</button></h3>
                 <progress value="${obj.numberOfItems??0}" max="${obj.numberOfItems??10}">${obj.numberOfItems??``} of ${obj.numberOfItems??``}</progress>
                 <input id="query" type="text" placeholder="type to filter">
@@ -74,6 +74,7 @@ export default class DLA_Collection extends DeerView {
             <h4><a href="./record.html?id=${b['@id']}">${b.label}</a></h4>
             <div class="row">
                 <dl>
+                    <dt>Type of Resource</dt>
                 </dl>
             </div>
         </x-deer-view>`, ``)

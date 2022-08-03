@@ -57,23 +57,11 @@ export default {
      * or an HTML String.
      */
     TEMPLATES: {
-        cat: (obj) => `<h5>${obj.name}</h5><img src="http://placekitten.com/300/150" style="width:100%;">`,
         collectionCard: obj => {
             // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
-            let tmpl = `<div><header><a href="/collection/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${obj.name}</a></header>
+            return `<div><header><a href="/collection/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${obj.name}</a></header>
                 <p><span class="badge">${obj.numberOfItems ?? ``}</span> ${obj.description ?? ``}</p>
                 </div>`
-            return tmpl
-        },
-        collection: obj => {
-            // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
-            let tmpl = `<div><header>${obj.name}</header>
-                    <p><span class="badge">${obj.numberOfItems ?? ``}</span> ${obj.description ?? ``}</p>
-                    <ul>
-                    ${obj.itemListElement?.reduce((acc, item) => acc + `<li>${item.label}</li>`, ``)}
-                    </ul>
-                    </div>`
-            return tmpl
         }
     },
 

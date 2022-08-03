@@ -38,12 +38,24 @@
         <a href="/about" class="">About</a>
       </nav>
       <div class="container content">
-        <deer-collection deer-id="http://store.rerum.io/v1/id/615b724650c86821e60b11fa">
-          http://store.rerum.io/v1/id/615b724650c86821e60b11fa
+        <deer-collection>
+          loading collection...
         </deer-collection>
       </div>
       <footer>
     
       </footer>
+      <script>
+        const RERUM = "http://store.rerum.io/v1"
+
+        window.addEventListener('load', () => {
+          let id = location.href.split('/').pop()
+
+          if (!id.startsWith("http")) {
+              id = RERUM + "/id/" + id
+          }
+          document.getElementsByTagName('deer-collection')[0]?.setAttribute('deer-id', id)
+        })
+      </script>
 </body>
 </html>
