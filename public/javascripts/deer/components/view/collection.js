@@ -1,21 +1,22 @@
 import { default as UTILS } from '../../deer-utils.js'
 import { default as DEER } from '../../deer-config.js'
 import DeerView from './view.js'
+import DeerRecord from './record.js'
 
 let progress
 
-const template = obj => {
+const template = (obj,options={}) => {
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
     return `
     <style scoped>
         .flex-reverse {
-        box-sizing: border-box;
-        max-width: var(--grid-maxWidth);
-        margin: 0 auto;
-        width: 96%;
-        padding: 0 calc(var(--grid-gutter) / 2);
-        display: flex;
-        flex-direction: column-reverse;
+            box-sizing: border-box;
+            max-width: var(--grid-maxWidth);
+            margin: 0 auto;
+            width: 96%;
+            padding: 0 calc(var(--grid-gutter) / 2);
+            display: flex;
+            flex-direction: row-reverse;
         }
 
         .row {
@@ -210,19 +211,24 @@ const template = obj => {
 
         #Records {
             overflow: auto;
-            height: calc(100vh - 75px);
+            height: calc(100vh - 75px - 52px - var(--body-padding));
         }
     </style>
-    <div><header>${obj.name}</header>
-        <span class="badge">${obj.numberOfItems??``}</span> ${obj.description??``}
-        <div class="flex-container">
+    <div>
+        <div class="flex-reverse">
+            <div id="Records" class="grow wrap">
+            ${(obj[options.list ?? "itemListElement"] ?? [])?.reduce((a, b) => a += `
+            <deer-record class="record" deer-id="${b['@id']}">
+            <h4><a href="./record.html?id=${b['@id']}">${b.label ?? b['@id']}</a></h4>
+            </deer-record>`, ``)}
+            </div>
             <div class="sidebar">
-                <h3>Refine Results <button role="button" id="queryReset">clear all</button></h3>
+                <header title="${obj.description??``}">${obj.name}</header>
+                <h3>Refine Results <button role="button" type="reset">clear all</button></h3>
                 <progress value="${obj.numberOfItems??0}" max="${obj.numberOfItems??10}">${obj.numberOfItems??``} of ${obj.numberOfItems??``}</progress>
                 <input id="query" type="text" placeholder="type to filter">
                 <section id="facetFilter"></section>
             </div>
-            <div id="Records" class="grow wrap">list loading</div>
         </div>
     </div>`
 }
@@ -233,6 +239,7 @@ export default class DLA_Collection extends DeerView {
     constructor() {
         super()
         this.template = template
+        this.$final = false
     }
 
     get records() {return document.querySelectorAll(".record")}
@@ -242,90 +249,34 @@ export default class DLA_Collection extends DeerView {
         UTILS.worker.addEventListener('message', e => {
             if (e.data.id !== this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)) { return }
             switch (e.data.action) {
-                case "update":
-                this.innerHTML = this.template(e.data.payload)
-                this.#loadRecords()
-                .then(dataRecords => this.#renderRecords(dataRecords))
-                break
-                case "reload":
-                    this.Entity = e.data.payload 
+                case "complete":
+                    this.querySelector('button[type="reset"]')?.addEventListener("click", ev => {
+                        Array.from(document.querySelectorAll(".clicked")).forEach(el => el.dispatchEvent(new Event("click")))
+                        query.value = ""
+                        query.dispatchEvent(new Event("input"))
+                    })        
+                    this.$final = true
                 default:
             }
-        })        
+        })
     }
 
     async #loadRecords(pagination = [0,]) {
-        const data = await this.#fetchList(this.getAttribute(`${DEER.PREFIX}-id`)).catch(err => this.#flashMessage(err)) ?? {}
-        return (data[this.getAttribute(`${DEER.PREFIX}-list`) ?? "itemListElement"] ?? []).slice(pagination[0], pagination[1])
+        // const data = await this.#fetchList(this.getAttribute(`${DEER.PREFIX}-id`)).catch(err => this.#flashMessage(err)) ?? {}
+        // return (data[this.getAttribute(`${DEER.PREFIX}-list`) ?? "itemListElement"] ?? []).slice(pagination[0], pagination[1])
     }
 
     async #renderRecords(dataRecords) {
-
-        const FIELDS = [
-            "Alternative Title", "Date Issued", "Is Part Of",
-            "Date Issued", "Author(s) or Contributor(s)"
-            // script, decoration, physical description
-        ]
-        const FILTERS = {
-            "Type of Resource": "resource-type", Genre: "genre", Language: "language",
-            Script: "script", "Reading Difficulty": "readability", Topic: "topic",
-            Region: "region", "Time Period": "period", Repository: "repository"
-        }
-        const SEARCH = [
-            "Title", "Physical Description", "Note(s)", "Region",
-            "Topic", "Subject", "Repository", "Call Number", "Is Part Of"
-        ]
+        // let list = dataRecords.reduce((a, b) => a += `
+        // <deer-record class="record" deer-id="${b['@id']}">
+        // <h4><a href="./record.html?id=${b['@id']}">${b.label ?? b['@id']}</a></h4>
+        // </deer-record>`, ``)
     
-        let list = dataRecords.reduce((a, b) => a += `
-        <x-deer-view class="record" deer-id="${b['@id']}">
-            <h4><a href="./record.html?id=${b['@id']}">${b.label}</a></h4>
-            <div class="row">
-                <dl>
-                    <dt>Type of Resource</dt>
-                </dl>
-            </div>
-        </x-deer-view>`, ``)
-    
-        document.getElementById('Records').innerHTML = list
-    
-        let facets = {}
-        let loading = []
-        Array.from(this.records).forEach(r => {
-            const url = r.getAttribute("data-id")
-            let dl = ``
-            // loading.push(fetch(url)
-            //     .then(status => { if (!status.ok) { throw Error(status) } return status })
-            //     .then(response => response.json())
-            //     .then(dataRecord => {
-            //         let metadataMap = new Map()
-            //         dataRecord.metadata?.forEach(dat => {
-            //             metadataMap.set(dat.label, Array.isArray(dat.value) ? dat.value.join(", ") : dat.value)
-            //             if (FIELDS.includes(dat.label)) {
-            //                 dl += `<dt>${dat.label}</dt><dd>${metadataMap.get(dat.label)}</dd>`
-            //             }
-            //             if (FILTERS[dat.label]) {
-            //                 r.setAttribute("data-" + FILTERS[dat.label], metadataMap.get(dat.label))
-            //                 let values = (Array.isArray(dat.value)) ? dat.value : [dat.value]
-            //                 if (!facets[FILTERS[dat.label]]) {
-            //                     facets[FILTERS[dat.label]] = new Set()
-            //                 }
-            //                 for (const v of values) {
-            //                     facets[FILTERS[dat.label]] = facets[FILTERS[dat.label]].add(v.replace(/\?/g, ""))
-            //                 }
-            //             }
-            //         })
-                    r.setAttribute("data-query", r.textContent.trim())
-            //         r.setAttribute("data-query", SEARCH.reduce((a, b) => a += (metadataMap.has(b) ? metadataMap.get(b) : "*") + " ", ""))
-            //         r.querySelector("dl").innerHTML = dl
-            //         r.querySelector("img").src = dataRecord.sequences?.[0].canvases[Math.floor((dataRecord.sequences[0].canvases.length - 1) / 2)].thumbnail['@id'] ?? "https://via.placeholder.com/150"
-            //     })
-            //     .catch(err => { throw Error(err) })
-            // )
-        })
+        // document.getElementById('Records').innerHTML = list
         query.addEventListener("input", this.#filterQuery.bind(this))
         try {
-            await Promise.all(loading)
-            return this.#populateSidebar(facets, FILTERS)
+            //await Promise.all(loading)
+            // return this.#populateSidebar(facets, FILTERS)
         } catch (err_1) {
             return console.error(err_1)
         }

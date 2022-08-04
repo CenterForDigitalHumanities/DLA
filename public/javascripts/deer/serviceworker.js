@@ -61,7 +61,8 @@ self.addEventListener('fetch', event => {
                     return response
                 }
                 console.log('Network request for ', event.request.url)
-                return fetch(event.request)
+                return event.waitUntil(event=>{
+                    fetch(event.request)
                     .then(response => {
                         if (response.status === 404) {
                             return caches.match('pages/404.html')
@@ -71,6 +72,7 @@ self.addEventListener('fetch', event => {
                             return response
                         })
                     })
+                })
             }).catch(error => {
                 console.log('Error, ', error)
                 return caches.match('/pages/offline.html')

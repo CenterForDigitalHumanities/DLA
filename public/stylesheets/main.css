@@ -12,7 +12,7 @@
    ========================================================================== */
 :root {
   --body-padding: 50px;
-  --grid-maxWidth: 60rem;
+  --grid-maxWidth: 80rem;
   --grid-gutter: 2rem;
 }
 

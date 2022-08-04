@@ -21,7 +21,8 @@ class Entity extends Object {
     get assertions() {
         let clone = JSON.parse(JSON.stringify(this.data))
         this.Annotations.forEach(annotation => applyAssertions(clone, annotation.normalized))
-        return clone
+        this._assertions = clone
+        return this._assertions
     }
     
     get data() {
@@ -36,6 +37,7 @@ class Entity extends Object {
         entity.id = entity.id ?? entity["@id"] ?? entity // id is primary key
         if(objectMatch(this._data, entity)) {
             console.warn("Entity data unchanged")
+            this.#announceComplete()
             return
         }
         const oldRecord = this._data ? JSON.parse(JSON.stringify(this._data)) : {}
@@ -43,6 +45,7 @@ class Entity extends Object {
         EntityMap.set(this.id, this)
         this.#announceUpdate()
         if(!objectMatch(oldRecord.id, this.id)) { this.#resolveURI().then(this.#findAssertions).then(this.#announceNewEntity) }
+        else { this.#announceComplete() }
     }
 
     attachAnnotation(annotation) {
@@ -69,6 +72,15 @@ class Entity extends Object {
                 action: "update",
                 id: this.id,
                 payload: this.assertions
+            }
+        })
+        document.dispatchEvent(updateAnnouncement)
+    }
+    #announceComplete = () =>{
+        const updateAnnouncement = new CustomEvent("complete", {
+            detail: {
+                action: "complete",
+                id: this.id
             }
         })
         document.dispatchEvent(updateAnnouncement)

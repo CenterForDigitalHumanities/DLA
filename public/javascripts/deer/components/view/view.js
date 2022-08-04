@@ -15,15 +15,16 @@ const template = (obj, options = {}) => {
 }
 
 export default class DeerView extends HTMLElement {
-    static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-key`,`${DEER.PREFIX}-list`,`${DEER.PREFIX}-link`,`${DEER.PREFIX}-listening`]; }
+    static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-final`,`${DEER.PREFIX}-key`,`${DEER.PREFIX}-list`,`${DEER.PREFIX}-link`,`${DEER.PREFIX}-listening`]; }
 
     constructor() {
         super()
         this.template = DEER.TEMPLATES[this.getAttribute(`${DEER.PREFIX}-template`)] ?? template
+        this.$final = false
     }
 
     connectedCallback() {
-        this.innerHTML = `<small>&copy;2022 Research Computing Group</small>`
+        this.innerHTML = this.textContent?.trim() ?? `<small>&copy;2022 Research Computing Group</small>`
         UTILS.worker.addEventListener('message', e => {
             if (e.data.id !== this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)) { return }
             switch (e.data.action) {
@@ -32,6 +33,9 @@ export default class DeerView extends HTMLElement {
                 break
                 case "reload":
                     this.Entity = e.data.payload 
+                    break
+                case "complete":
+                    this.$final = true
                 default:
             }
         })
