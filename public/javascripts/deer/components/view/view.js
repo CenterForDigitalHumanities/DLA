@@ -16,11 +16,11 @@ const template = (obj, options = {}) => {
 
 export default class DeerView extends HTMLElement {
     static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-final`,`${DEER.PREFIX}-key`,`${DEER.PREFIX}-list`,`${DEER.PREFIX}-link`,`${DEER.PREFIX}-listening`]; }
+    #final = false
 
     constructor() {
         super()
         this.template = DEER.TEMPLATES[this.getAttribute(`${DEER.PREFIX}-template`)] ?? template
-        this.$final = false
     }
 
     connectedCallback() {
@@ -40,6 +40,13 @@ export default class DeerView extends HTMLElement {
             }
         })
     }
+
+    set $final(bool) { 
+        this.setAttribute(`${DEER.PREFIX}-final`, bool)
+        this.#final = Boolean(bool)
+    }
+
+    get $final() { return this.#final }
 
     disconnectedCallback(){}
     adoptedCallback(){}

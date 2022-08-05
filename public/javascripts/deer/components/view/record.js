@@ -20,13 +20,11 @@ export default class DLA_Record extends DeerView {
         this.template = template
     }
 
-    connectedCallback() {
-        super.connectedCallback()
-        this.addEventListener("complete", event =>{
-            if(event.detail.id === this.getAttribute(`${DEER.PREFIX}-id`)) {
-                this.#renderRecord.bind(this)
-            }
-        })
+    attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue)
+        switch (name) {
+            case `${DEER.PREFIX}-final`: this.#renderRecord.bind(this)
+        }
     }
 
     async #renderRecord() {
@@ -39,7 +37,7 @@ export default class DLA_Record extends DeerView {
             // script, decoration, physical description
         ]
         const FILTERS = {
-            "Type of Resource": "@type", Genre: "genre", Language: "language",
+            "Type of Resource": ["additionalType","type","@type"], Genre: "genre", Language: "language",
             Script: "script", "Reading Difficulty": "readability", Topic: "topic",
             Region: "region", "Time Period": "period", Repository: "repository"
         }
