@@ -6,7 +6,7 @@ let progress
 
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
 const template = obj => `
-    <h4><a href="./record.html?id=${obj.id}">${obj.label ?? obj.id}</a></h4>
+    <h4><a href="./record.html?id=${obj.id}">${UTILS.getLabel(obj)}</a></h4>
         <div class="row">
             <dl>
             </dl>

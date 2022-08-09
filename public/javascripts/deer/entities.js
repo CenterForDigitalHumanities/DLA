@@ -53,10 +53,10 @@ class Entity extends Object {
     }
 
     #findAssertions = (assertions) => {
-        var annos = Array.isArray(assertions) ? Promise(assertions) : findByTargetId(this.id,[],`http://${this.id.includes("dev")?"tinydev":"tinypaul"}.rerum.io/app/query`)
+        var annos = Array.isArray(assertions) ? new Promise.resolve(assertions) : findByTargetId(this.id,[],`http://${this.id.includes("dev")?"tinydev.rerum.io/app":"tinypaul.rerum.io/dla"}/query`)
         return annos
             .then(annotations => annotations.filter(a=>(a.type ?? a['@type'])?.includes("Annotation")).map(anno => new Annotation(anno)))
-            .then(this.#announceUpdate)
+            .then(newAssertions => newAssertions?.length ? this.#announceUpdate() : this.#announceComplete())
             .catch(err => console.log(err))
     }
 
@@ -69,14 +69,19 @@ class Entity extends Object {
             o[target] = this.id
             obj["$or"].push(o)
         }
-        var results = Boolean(withAssertions) ? fetch(`http://${this.id.includes("dev")?"tinydev":"tinypaul"}.rerum.io/app/query`,{
+        var results = Boolean(withAssertions) ? fetch(`http://${this.id.includes("dev")?"tinydev.rerum.io/app":"tinypaul.rerum.io/dla"}/query`,{
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: obj
+            body: JSON.stringify(obj)
         }) : fetch(this.id)
         return results
-        .then(res => res.ok ? res.json() : Promise.reject(res))
-        .then(entity => this.data = entity)
+        .then(res => res.ok ? res.json() : new Promise.reject(res))
+        .then(finds => {
+            this.data = withAssertions ? finds.find(e => e['@id'] === this.id) : finds
+            if (withAssertions) {
+                this.#findAssertions(finds)
+            }
+        })
         .catch(err => console.log(err))
     }
 

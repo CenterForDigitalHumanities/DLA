@@ -109,7 +109,7 @@ const utils = {
             return label || noLabel
         }
     },
-    postView(entity, matchOn = ["__rerum.generatedBy", "creator"]) {
+    postView(entity, lazy = false) {
         let UTILS = this
         const id = entity["@id"] ?? entity.id ?? entity
         if (typeof id !== "string") {
@@ -120,8 +120,8 @@ const utils = {
             id,
             action: "view",
             args: {
-                matchOn: matchOn,
-                entity: entity
+                lazy,
+                entity
             }
         }
         this.worker.postMessage(message)
