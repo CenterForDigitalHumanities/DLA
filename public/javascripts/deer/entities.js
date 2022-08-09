@@ -44,7 +44,7 @@ class Entity extends Object {
         this._data = entity
         EntityMap.set(this.id, this)
         this.#announceUpdate()
-        if(!objectMatch(oldRecord.id, this.id)) { this.#resolveURI().then(this.#findAssertions).then(this.#announceNewEntity) }
+        if(!objectMatch(oldRecord.id, this.id)) { this.#resolveURI(true).then(this.#findAssertions).then(this.#announceNewEntity) }
         else { this.#announceComplete() }
     }
 
@@ -52,15 +52,29 @@ class Entity extends Object {
         this.Annotations.set(annotation.id, annotation)
     }
 
-    #findAssertions = () => {
-        findByTargetId(this.id,[],`http://${this.id.includes("dev")?"tinydev":"tiny"}.rerum.io/app/query`)
-            .then(annotations => annotations.map(anno => new Annotation(anno)))
+    #findAssertions = (assertions) => {
+        var annos = Array.isArray(assertions) ? Promise(assertions) : findByTargetId(this.id,[],`http://${this.id.includes("dev")?"tinydev":"tinypaul"}.rerum.io/app/query`)
+        return annos
+            .then(annotations => annotations.filter(a=>(a.type ?? a['@type'])?.includes("Annotation")).map(anno => new Annotation(anno)))
             .then(this.#announceUpdate)
             .catch(err => console.log(err))
     }
 
-    #resolveURI = () =>{
-        return fetch(this.id)
+    #resolveURI = (withAssertions) =>{
+        const targetStyle = ["target", "target.@id", "target.id"]
+        let historyWildcard = { "$exists": true, "$size": 0 }
+        let obj = { "$or": [{'@id': this.id}], "__rerum.history.next": historyWildcard }
+        for (let target of targetStyle) {
+            let o = {}
+            o[target] = this.id
+            obj["$or"].push(o)
+        }
+        var results = Boolean(withAssertions) ? fetch(`http://${this.id.includes("dev")?"tinydev":"tinypaul"}.rerum.io/app/query`,{
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: obj
+        }) : fetch(this.id)
+        return results
         .then(res => res.ok ? res.json() : Promise.reject(res))
         .then(entity => this.data = entity)
         .catch(err => console.log(err))
