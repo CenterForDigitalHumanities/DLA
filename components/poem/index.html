@@ -35,14 +35,14 @@
   </header>
   <nav>
     <a href="/" class="">Home</a>
-    <a href="/collections" class="active">Collections</a>
+    <a href="/collections" class="">Collections</a>
     <a href="/browse" class="">Browse</a>
     <a href="/about" class="">About</a>
   </nav>
   <div class="container content">
-    <deer-collection deer-lazy="true">
-      loading collection...
-    </deer-collection>
+    <deer-poem deer-lazy="true">
+      loading poem...
+    </deer-poem>
   </div>
   <footer>
 
@@ -56,7 +56,7 @@
       if (!id.startsWith("http")) {
         id = RERUM + "/id/" + id
       }
-      document.getElementsByTagName('deer-collection')[0]?.setAttribute('deer-id', id)
+      document.getElementsByTagName('deer-poem')[0]?.setAttribute('deer-id', id)
     })
   </script>
 </body>
