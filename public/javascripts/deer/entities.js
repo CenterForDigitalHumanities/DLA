@@ -75,12 +75,22 @@ class Entity extends Object {
         return results
         .then(res => res.ok ? res.json() : Promise.reject(res))
         .then(finds => {
-            this.data = withAssertions ? finds.find(e => e['@id'] === this.id) : finds
+            if(finds.length === 0) { return Promise.reject({status:404}) }
+            this.data = finds?.find(e => e['@id'] === this.id) ?? finds
             if (withAssertions) {
                 this.#findAssertions(finds)
             }
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            switch(err.status) {
+                case 404: console.log(`${this.id} not found`)
+                case 500: console.log(`${this.id} encountered a server error`)
+                this.#announceError(err)
+                break
+
+                default: console.log(err)
+            }
+        })
     }
 
     #announceUpdate = () =>{
@@ -111,6 +121,16 @@ class Entity extends Object {
             }
         })
         document.dispatchEvent(reloadAnnouncement)
+    }
+    #announceError = (err) =>{
+        const errorAnnouncement = new CustomEvent("error", {
+            detail: {
+                action: "error",
+                id: this.id,
+                payload: err
+            }
+        })
+        document.dispatchEvent(errorAnnouncement)
     }
 }
 

@@ -34,6 +34,9 @@ export default class DeerView extends HTMLElement {
                 case "reload":
                     this.Entity = e.data.payload 
                     break
+                case "error":
+                    this.#handleErrors(e.data.payload) 
+                    break
                 case "complete":
                     this.$final = true
                 default:
@@ -68,6 +71,11 @@ export default class DeerView extends HTMLElement {
                         if (loadId === listensTo) { this.setAttribute("deer-id", loadId) }
                     })
                 }
+        }
+    }
+    #handleErrors(err) {
+        if(err.status === 404) {
+            this.innerHTML = `<small>ID ${this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)} could not be loaded.</small>`
         }
     }
 }
