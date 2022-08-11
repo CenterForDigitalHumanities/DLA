@@ -58,6 +58,7 @@ export default {
      */
     TEMPLATES: {
         collectionCard: obj => {
+            if(!obj.hasOwnProperty("numberOfItems")) { return }
             // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
             return `<div><header><a href="/collection/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${obj.name}</a></header>
                 <p><span class="badge">${obj.numberOfItems ?? ``}</span> ${obj.description ?? ``}</p>

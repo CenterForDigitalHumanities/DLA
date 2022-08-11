@@ -1,11 +1,11 @@
 import { default as UTILS } from '../../deer-utils.js'
 import { default as DEER } from '../../deer-config.js'
 import DeerView from './view.js'
-import DeerRecord from './record.js'
 
 let progress
 
 const template = (obj,options={}) => {
+    if(!obj.hasOwnProperty("numberOfItems")) { return }
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
     return `
     <style scoped>

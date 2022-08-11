@@ -37,7 +37,6 @@ class Entity extends Object {
         entity.id = entity.id ?? entity["@id"] ?? entity // id is primary key
         if(objectMatch(this._data, entity)) {
             console.warn("Entity data unchanged")
-            this.#announceComplete()
             return
         }
         const oldRecord = this._data ? JSON.parse(JSON.stringify(this._data)) : {}
@@ -45,7 +44,6 @@ class Entity extends Object {
         EntityMap.set(this.id, this)
         this.#announceUpdate()
         if(!objectMatch(oldRecord.id, this.id)) { this.#resolveURI(true).then(this.#findAssertions).then(this.#announceNewEntity) }
-        else { this.#announceComplete() }
     }
 
     attachAnnotation(annotation) {
@@ -77,12 +75,22 @@ class Entity extends Object {
         return results
         .then(res => res.ok ? res.json() : Promise.reject(res))
         .then(finds => {
-            this.data = withAssertions ? finds.find(e => e['@id'] === this.id) : finds
+            if(finds.length === 0) { return Promise.reject({status:404}) }
+            this.data = finds?.find(e => e['@id'] === this.id) ?? finds
             if (withAssertions) {
                 this.#findAssertions(finds)
             }
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            switch(err.status) {
+                case 404: console.log(`${this.id} not found`)
+                case 500: console.log(`${this.id} encountered a server error`)
+                this.#announceError(err)
+                break
+
+                default: console.log(err)
+            }
+        })
     }
 
     #announceUpdate = () =>{
@@ -96,13 +104,13 @@ class Entity extends Object {
         document.dispatchEvent(updateAnnouncement)
     }
     #announceComplete = () =>{
-        const updateAnnouncement = new CustomEvent("complete", {
+        const completeAnnouncement = new CustomEvent("complete", {
             detail: {
                 action: "complete",
                 id: this.id
             }
         })
-        document.dispatchEvent(updateAnnouncement)
+        document.dispatchEvent(completeAnnouncement)
     }
     #announceNewEntity = () =>{
         const reloadAnnouncement = new CustomEvent("reload", {
@@ -113,6 +121,16 @@ class Entity extends Object {
             }
         })
         document.dispatchEvent(reloadAnnouncement)
+    }
+    #announceError = (err) =>{
+        const errorAnnouncement = new CustomEvent("error", {
+            detail: {
+                action: "error",
+                id: this.id,
+                payload: err
+            }
+        })
+        document.dispatchEvent(errorAnnouncement)
     }
 }
 
