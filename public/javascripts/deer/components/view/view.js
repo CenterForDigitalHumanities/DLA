@@ -29,7 +29,7 @@ export default class DeerView extends HTMLElement {
             if (e.data.id !== this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)) { return }
             switch (e.data.action) {
                 case "update":
-                    this.innerHTML = this.template(e.data.payload)
+                    this.innerHTML = this.template(e.data.payload) ?? this.innerHTML
                     break
                 case "reload":
                     this.Entity = e.data.payload 
