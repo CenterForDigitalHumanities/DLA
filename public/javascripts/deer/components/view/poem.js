@@ -60,7 +60,8 @@ export default class ViewPoem extends DeerView {
             }],
             "__rerum.history.next": historyWildcard
         }
-        const expressionConnections = fetch("http://tinypaul.rerum.io/dla/query", {
+        const expressionConnections = fetch("http://tinydev.rerum.io/app/query", {
+        // const expressionConnections = fetch("http://tinypaul.rerum.io/dla/query", {
             method: "POST",
             mode: "cors",
             body: JSON.stringify(exprQuery)
