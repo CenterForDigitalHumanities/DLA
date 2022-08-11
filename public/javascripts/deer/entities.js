@@ -37,7 +37,6 @@ class Entity extends Object {
         entity.id = entity.id ?? entity["@id"] ?? entity // id is primary key
         if(objectMatch(this._data, entity)) {
             console.warn("Entity data unchanged")
-            this.#announceComplete()
             return
         }
         const oldRecord = this._data ? JSON.parse(JSON.stringify(this._data)) : {}
@@ -45,7 +44,6 @@ class Entity extends Object {
         EntityMap.set(this.id, this)
         this.#announceUpdate()
         if(!objectMatch(oldRecord.id, this.id)) { this.#resolveURI(true).then(this.#findAssertions).then(this.#announceNewEntity) }
-        else { this.#announceComplete() }
     }
 
     attachAnnotation(annotation) {
@@ -53,7 +51,7 @@ class Entity extends Object {
     }
 
     #findAssertions = (assertions) => {
-        var annos = Array.isArray(assertions) ? new Promise.resolve(assertions) : findByTargetId(this.id,[],`http://${this.id.includes("dev")?"tinydev.rerum.io/app":"tinypaul.rerum.io/dla"}/query`)
+        var annos = Array.isArray(assertions) ? Promise.resolve(assertions) : findByTargetId(this.id,[],`http://${this.id.includes("dev")?"tinydev.rerum.io/app":"tinypaul.rerum.io/dla"}/query`)
         return annos
             .then(annotations => annotations.filter(a=>(a.type ?? a['@type'])?.includes("Annotation")).map(anno => new Annotation(anno)))
             .then(newAssertions => newAssertions?.length ? this.#announceUpdate() : this.#announceComplete())
@@ -75,7 +73,7 @@ class Entity extends Object {
             body: JSON.stringify(obj)
         }) : fetch(this.id)
         return results
-        .then(res => res.ok ? res.json() : new Promise.reject(res))
+        .then(res => res.ok ? res.json() : Promise.reject(res))
         .then(finds => {
             this.data = withAssertions ? finds.find(e => e['@id'] === this.id) : finds
             if (withAssertions) {
