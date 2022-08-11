@@ -112,14 +112,14 @@ class DLAPublicHeader extends HTMLElement {
             </logoimg>
         </gm-header>
         <nav class="tabs">
-            <a href="/" class="">Home</a>
+            <a href="/index.html" class="">Home</a>
             <a href="/collections">Collections</a>
             <a href="/browse" class="">Browse</a>
             <a href="/about" class="">About</a>
         </nav>
         `
-        this.querySelector(`.tabs a[href*="${location.pathname.replaceAll('/', '')}"]`).classList.add("active")
-        this.querySelector(`logoimg img`).setAttribute("src", `../images/logo-${location.pathname.replaceAll('/', '')}.jpg`)
+        this.querySelector(`.tabs a[href*="${location.pathname.split('/')[1]}"]`)?.classList.add("active")
+        this.querySelector(`logoimg img`).setAttribute("src", `../images/logo-${location.pathname.split('/')[1].replace(".html","")}.jpg`)
     }
 }
 customElements.define("dla-header", DLAPublicHeader)
