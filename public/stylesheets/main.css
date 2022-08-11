@@ -12,6 +12,8 @@
    ========================================================================== */
 :root {
   --body-padding: 50px;
+  --grid-maxWidth: 80rem;
+  --grid-gutter: 2rem;
 }
 
 html {
@@ -263,4 +265,3 @@ textarea {
     page-break-after: avoid;
   }
 }
-
