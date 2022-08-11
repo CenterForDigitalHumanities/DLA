@@ -104,13 +104,13 @@ class Entity extends Object {
         document.dispatchEvent(updateAnnouncement)
     }
     #announceComplete = () =>{
-        const updateAnnouncement = new CustomEvent("complete", {
+        const completeAnnouncement = new CustomEvent("complete", {
             detail: {
                 action: "complete",
                 id: this.id
             }
         })
-        document.dispatchEvent(updateAnnouncement)
+        document.dispatchEvent(completeAnnouncement)
     }
     #announceNewEntity = () =>{
         const reloadAnnouncement = new CustomEvent("reload", {
