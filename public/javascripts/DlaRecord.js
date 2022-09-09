@@ -21,9 +21,7 @@ export default class DlaRecord extends DeerView {
 
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
-        switch (name) {
-            case `${DEER.PREFIX}-final`: this.#renderRecord.bind(this)
-        }
+        if (name === DEER.FINAL) { this.#renderRecord.bind(this) }
     }
 
     async #renderRecord() {
@@ -33,7 +31,6 @@ export default class DlaRecord extends DeerView {
         const FIELDS = [
             "Alternative Title", "Date Issued", "Is Part Of",
             "Date Issued", "Author(s) or Contributor(s)"
-            // script, decoration, physical description
         ]
         const FILTERS = {
             "Type of Resource": ["additionalType","type","@type"], Genre: "genre", Language: "language",
@@ -48,34 +45,52 @@ export default class DlaRecord extends DeerView {
         let facets = {}
         let dl = ``
         const metadataMap = new Map()
-        ;(dataRecord.metadata ?? Object.entries(dataRecord))?.forEach(dat => {
-            let key, val
-            if(Array.isArray(dat)) {
-                key = dat[0]
-                val = dat[1]
-            } else {
-                key = dat.label
-                val = Array.isArray(dat.value) ? dat.value.join(", ") : dat.value
-            }
+        const metadata = dataRecord.metadata ?? Object.entries(dataRecord)
+        metadata.forEach(dat => {
+            const {key,val} = simplifyDataValue(dat)
             metadataMap.set(key,val)
-            if (FIELDS.includes(key)) {
-                dl += `<dt>${key}</dt><dd>${metadataMap.get(key)}</dd>`
-            }
-            if (FILTERS[key]) {
-                this.setAttribute("data-" + FILTERS[key], metadataMap.get(key))
-                let values = (Array.isArray(val)) ? val : [dat.value]
-                if (!facets[FILTERS[key]]) {
-                    facets[FILTERS[key]] = new Set()
-                }
-                for (const v of values) {
-                    facets[FILTERS[key]] = facets[FILTERS[key]].add(v.replace(/\?/g, ""))
-                }
-            }
-            this.setAttribute("data-query", SEARCH.reduce((a, b) => a += (metadataMap.has(b) ? metadataMap.get(b) : "*") + " ", ""))
+            dl += addIncludedField(FIELDS,key,val)
+            Object.assign(facets,registerFiltersOnFacets(this,FILTERS,key,val))
+            this.setAttribute("data-query", dataQueryString(SEARCH,metadataMap))
             this.querySelector("dl").innerHTML = dl
-            this.querySelector("img").src = dataRecord.sequences?.[0].canvases[Math.floor((dataRecord.sequences[0].canvases.length - 1) / 2)].thumbnail['@id'] ?? "https://via.placeholder.com/150"
+            this.querySelector("img").src = getThumbnailSrc(manifest)
         })
         .catch(err => { throw Error(err) })
+
+        function simplifyDataValue(datum){
+            let key, val
+            if(Array.isArray(datum)) {
+                key = datum[0]
+                val = datum[1]
+            } else {
+                key = datum.label
+                val = Array.isArray(datum.value) ? datum.value.join(", ") : datum.value
+            }
+            return {key,val}
+        }
+
+        function addIncludedField(fields,key,val){
+            if (fields.includes(key)) {
+                return `<dt>${key}</dt><dd>${val}</dd>`
+            }
+            return ``
+        }
+
+        function registerFiltersOnFacets(elem,filters,key,val){
+            if (filters.hasOwnProperty(key)) {
+                elem.setAttribute(`data-${filters[key]}`, val)
+                return {[filters[key]]:val.replace(/\?/g, "")}
+            }
+            return {}
+        }
+
+        function dataQueryString(search,metaMap){
+            return search.reduce((a, b) => a += (metaMap.has(b) ? metaMap.get(b) : "*") + " ", "")
+        }
+
+        function getThumbnailSrc(manifest){
+            return manifest.sequences?.[0].canvases[Math.floor((manifest.sequences[0].canvases.length - 1) / 2)].thumbnail['@id'] ?? "https://via.placeholder.com/150"
+        }
     }
 }
 

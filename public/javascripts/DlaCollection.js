@@ -247,25 +247,23 @@ export default class DlaCollection extends DeerView {
         super.connectedCallback()
         UTILS.worker.addEventListener('message', e => {
             if (e.data.id !== this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)) { return }
-            switch (e.data.action) {
-                case "complete":
-                    this.querySelector('button[type="reset"]')?.addEventListener("click", ev => {
+            if (e.data.action === "complete") {
+                    this.querySelector('button[type="reset"]')?.addEventListener("click", _ev => {
                         Array.from(document.querySelectorAll(".clicked")).forEach(el => el.dispatchEvent(new Event("click")))
                         query.value = ""
                         query.dispatchEvent(new Event("input"))
                     })        
                     this.$final = true
-                default:
             }
         })
     }
 
-    async #loadRecords(pagination = [0,]) {
+    async #loadRecords(_pagination = [0,]) {
         // const data = await this.#fetchList(this.getAttribute(`${DEER.PREFIX}-id`)).catch(err => this.#flashMessage(err)) ?? {}
         // return (data[this.getAttribute(`${DEER.PREFIX}-list`) ?? "itemListElement"] ?? []).slice(pagination[0], pagination[1])
     }
 
-    async #renderRecords(dataRecords) {
+    async #renderRecords(_dataRecords) {
         // let list = dataRecords.reduce((a, b) => a += `
         // <deer-record class="record" deer-id="${b['@id']}">
         // <h4><a href="./record.html?id=${b['@id']}">${b.label ?? b['@id']}</a></h4>
