@@ -1,6 +1,5 @@
-import { default as UTILS } from '../../deer-utils.js'
-import { default as DEER } from '../../deer-config.js'
-import DeerView from './view.js'
+import { DEER, UTILS } from 'https://deer.rerum.io/releases/rc-1.0/js/deer-utils.js'
+import DeerView from 'https://deer.rerum.io/releases/rc-1.0/components/view/view.js'
 
 let progress
 
@@ -12,7 +11,7 @@ const template = obj => `
             </dl>
         </div>`
 
-export default class DLA_Record extends DeerView {
+export default class DlaRecord extends DeerView {
     static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-listening`] }
 
     constructor() {
@@ -49,7 +48,7 @@ export default class DLA_Record extends DeerView {
         let facets = {}
         let dl = ``
         const metadataMap = new Map()
-        (dataRecord.metadata ?? Object.entries(dataRecord))?.forEach(dat => {
+        ;(dataRecord.metadata ?? Object.entries(dataRecord))?.forEach(dat => {
             let key, val
             if(Array.isArray(dat)) {
                 key = dat[0]
@@ -81,4 +80,4 @@ export default class DLA_Record extends DeerView {
 }
 
 
-customElements.define(`${DEER.PREFIX}-record`, DLA_Record)
+customElements.define(`dla-record`, DlaRecord)

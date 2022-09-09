@@ -1,3 +1,4 @@
+console.log("local config loaded")
 export default {
     PREFIX: "deer", // namespace for this projects custom elements
     ID: "id", // attribute, URI for resource to render

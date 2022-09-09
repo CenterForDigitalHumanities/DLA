@@ -1,6 +1,5 @@
-import { default as UTILS } from '../../deer-utils.js'
-import { default as DEER } from '../../deer-config.js'
-import DeerView from './view.js'
+import { DEER, UTILS } from 'https://deer.rerum.io/releases/rc-1.0/js/deer-utils.js'
+import DeerView from 'https://deer.rerum.io/releases/rc-1.0/components/view/view.js'
 
 let progress
 
@@ -233,7 +232,7 @@ const template = (obj,options={}) => {
     </div>`
 }
 
-export default class DLA_Collection extends DeerView {
+export default class DlaCollection extends DeerView {
     static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-listening`] }
 
     constructor() {
@@ -375,4 +374,4 @@ export default class DLA_Collection extends DeerView {
 }
 
 
-customElements.define(`${DEER.PREFIX}-collection`, DLA_Collection)
+customElements.define(`dla-collection`, DlaCollection)
