@@ -1,4 +1,6 @@
 import { DEER, UTILS } from 'https://deer.rerum.io/releases/rc-1.0/js/deer-utils.js'
+import {default as configObj} from 'deer-config.js'
+DEER.config(configObj)
 import DeerView from 'https://deer.rerum.io/releases/rc-1.0/components/view/view.js'
 
 let progress
