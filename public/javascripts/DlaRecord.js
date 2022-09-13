@@ -1,6 +1,6 @@
 import { DEER, UTILS } from 'https://deer.rerum.io/releases/rc-1.0/js/deer-utils.js'
-import {default as configObj} from 'deer-config.js'
-DEER.config(configObj)
+import {default as configObj} from './deer-config.js'
+UTILS.config(configObj)
 import DeerView from 'https://deer.rerum.io/releases/rc-1.0/components/view/view.js'
 
 let progress
@@ -14,7 +14,7 @@ const template = obj => `
         </div>`
 
 export default class DlaRecord extends DeerView {
-    static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-listening`] }
+    static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
 
     constructor() {
         super()

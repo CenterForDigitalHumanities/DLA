@@ -1,6 +1,6 @@
 import { DEER, UTILS } from 'https://deer.rerum.io/releases/rc-1.0/js/deer-utils.js'
-import {default as configObj} from 'deer-config.js'
-DEER.config(configObj)
+import {default as configObj} from './deer-config.js'
+UTILS.config(configObj)
 import DeerView from 'https://deer.rerum.io/releases/rc-1.0/components/view/view.js'
 
 let progress
@@ -375,17 +375,17 @@ export class DlaCollection extends DeerView {
 
 customElements.define(`dla-collection`, DlaCollection)
 
-export class DlaCollectionCard extends DeerView {
-    constructor() {
-        super()
-        this.template = (obj,_options) => {
-            if(!obj.hasOwnProperty("numberOfItems")) { return }
-            // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
-            return `<div><header><a href="/collection/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${obj.name}</a></header>
-                <p><span class="badge">${obj.numberOfItems ?? ``}</span> ${obj.description ?? ``}</p>
-                </div>`
-        }
-    }
-}
+// export class DlaCollectionCard extends DeerView {
+//     constructor() {
+//         super()
+//         this.template = (obj,_options) => {
+//             if(!obj.hasOwnProperty("numberOfItems")) { return }
+//             // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
+//             return `<div><header><a href="/collection/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${obj.name}</a></header>
+//                 <p><span class="badge">${obj.numberOfItems ?? ``}</span> ${obj.description ?? ``}</p>
+//                 </div>`
+//         }
+//     }
+// }
 
-customElements.define(`dla-collection-card`, DlaCollectionCard)
+// customElements.define(`dla-collection-card`, DlaCollectionCard)

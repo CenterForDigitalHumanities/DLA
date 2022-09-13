@@ -18,7 +18,8 @@ if ('serviceWorker' in navigator) {
     importScripts('entities.js')
 }
 
-import ('https://deer.rerum.io/releases/rc-1.0/components/view/view.js')
-import ('https://deer.rerum.io/releases/rc-1.0/components/view/entity.js')
+import {default as configObj} from './deer-config.js'
+import ('https://deer.rerum.io/releases/rc-1.0/components/view/view.js').then(mod=>mod.default.config =configObj)
+import ('https://deer.rerum.io/releases/rc-1.0/components/view/entity.js').then(mod=>mod.default.config =configObj)
 import ('/javascripts/DlaCollection.js')
 import ('/javascripts/DlaRecord.js')
