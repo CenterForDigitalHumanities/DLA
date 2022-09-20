@@ -1,12 +1,11 @@
-<!doctype html>
-<html class="no-js" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>Dunbar Library and Archive</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collection — Dunbar Library & Archive</title>
   <meta property="og:title" content="Dunbar Library and Archive">
   <meta property="og:type" content="website">
   <!-- <meta property="og:url" content=""> -->
@@ -21,6 +20,7 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
 
   <meta name="theme-color" content="#fafafa">
+  <script src="/javascripts/deer/deer.js" type="module"></script>
   <script src="/javascripts/plugins.js" defer></script>
   <script src="/javascripts/main.js" defer></script>
 </head>
@@ -28,18 +28,23 @@
 <body>
   <dla-header></dla-header>
   <div class="container content">
-    <row>
-      <p>
-        Bridging campus and community, teaching and research, the humanities and other disciplines, the Dunbar
-        Initiative engages
-        students, researchers and community members with many facets of Paul Laurence Dunbar's life.
-      </p>
-      <img
-        src="https://udayton.edu/artssciences/initiatives/dunbar-initiative/_resources/images-docs/dunbar-paul-laurence.jpg"
-        alt="Dunbar Library and Archive">
-    </row>
+    <deer-collection deer-lazy="true">
+      loading collection...
+    </deer-collection>
   </div>
   <dla-footer></dla-footer>
+  <script>
+    const RERUM = "http://store.rerum.io/v1"
+
+    window.addEventListener('load', () => {
+      let id = location.href.split('/').pop()
+
+      if (!id.startsWith("http")) {
+        id = RERUM + "/id/" + id
+      }
+      document.getElementsByTagName('deer-collection')[0]?.setAttribute('deer-id', id)
+    })
+  </script>
 </body>
 
 </html>
