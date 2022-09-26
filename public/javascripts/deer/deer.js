@@ -13,12 +13,12 @@
 // Add custom templates in the /templates directory
 
 // attach service worker for offline support
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/serviceworker.js')
-} else {
-    console.log('Service workers are not supported in this browser.')
-    importScripts('entities.js')
-}
+// if ('serviceWorker' in navigator) {
+//     navigator.serviceWorker.register('/serviceworker.js')
+// } else {
+//     console.log('Service workers are not supported in this browser.')
+//     importScripts('entities.js')
+// }
 
 import ('./components/view/view.js')
 import ('./components/view/entity.js')
