@@ -29,7 +29,7 @@
      }
  })
  
- self.onmessage = message => {
+ self.addEventListener('message', message => {
      switch (message.data.action) {
          case "view":
              /**
@@ -55,7 +55,7 @@
              break
          default:
      }
- }
+ })
  
  function getItem(id, args = {}) {
      db.then(db => {
@@ -94,19 +94,15 @@
          }
      })
  }
- 
- /**
-  * Careful with this. It's a global event listener simulation. The `document` object 
-  * is not a real DOM element, so it doesn't have a `dispatchEvent` method. If more 
-  * than one action type is needed, this should be refactored.
-  */
- var document = {}
- document.dispatchEvent = msg => {
-     const id = msg.detail.id
-     const action = msg.detail.action
-     const payload = msg.detail.payload
- 
-     postMessage({ id, action, payload})
+ function postMessage(message) {
+    const msg = new MessageEvent("message", { data: message })
+    document.dispatchEvent(msg)
  }
+
+export default {
+    getItem,
+    db,
+    postMessage
+}
  
  

@@ -14,21 +14,21 @@ const template = (obj, options = {}) => {
 }
 
 export default class DeerView extends HTMLElement {
-    static get observedAttributes() { return [`${DEER.PREFIX}-id`, `${DEER.PREFIX}-final`, `${DEER.PREFIX}-lazy`, `${DEER.PREFIX}-key`, `${DEER.PREFIX}-list`, `${DEER.PREFIX}-link`, `${DEER.PREFIX}-listening`]; }
+    static get observedAttributes() { return [DEER.ID, DEER.FINAL, DEER.LAZY, DEER.KEY, DEER.LIST, DEER.LINK, DEER.LISTENING]; }
     #final = false
 
     constructor() {
         super()
-        this.template = DEER.TEMPLATES[this.getAttribute(`${DEER.PREFIX}-template`)] ?? template
+        this.template = DEER.TEMPLATES[this.getAttribute(DEER.TEMPLATE)] ?? template
     }
 
     connectedCallback() {
         this.innerHTML = this.innerHTML?.trim() ?? `<small>&copy;2022 Research Computing Group</small>`
-        UTILS.worker.addEventListener('message', e => {
-            if (e.data.id !== this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)) { return }
+        self.addEventListener('message', e => {
+            if (e.data.id !== this.getAttribute(DEER.ID)) { return }
             switch (e.data.action) {
                 case "reload":
-                    this.Entity = e.data.payload 
+                    this.Entity = e.data.payload
                 case "update":
                     this.innerHTML = this.template(e.data.payload) ?? this.innerHTML
                     break
@@ -42,7 +42,7 @@ export default class DeerView extends HTMLElement {
         })
     }
     set $final(bool) {
-        this.setAttribute(`${DEER.PREFIX}-final`, bool)
+        this.setAttribute(DEER.FINAL, bool)
         this.#final = Boolean(bool)
     }
 
@@ -56,9 +56,9 @@ export default class DeerView extends HTMLElement {
             case DEER.KEY:
             case DEER.LINK:
             case DEER.LIST:
-                let id = this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)
+                let id = this.getAttribute(DEER.ID)
                 if (id === null || this.getAttribute(DEER.COLLECTION)) { return }
-                UTILS.postView(id, this.getAttribute(`${DEER.PREFIX}-lazy`))
+                UTILS.postView(id, this.getAttribute(DEER.LAZY))
                 break
             case DEER.LISTENING:
                 let listensTo = this.getAttribute(DEER.LISTENING)
@@ -74,16 +74,16 @@ export default class DeerView extends HTMLElement {
     #handleErrors(err) {
         switch (err.status) {
             case 404:
-                this.innerHTML = `<small>ID ${this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)} could not be loaded.</small>`
+                this.innerHTML = `<small>ID ${this.getAttribute(DEER.ID)} could not be loaded.</small>`
                 break
             case 500:
-                this.innerHTML = `<small>A server error occurred while loading ${this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)}.</small>`
+                this.innerHTML = `<small>A server error occurred while loading ${this.getAttribute(DEER.ID)}.</small>`
                 break
             default:
-                this.innerHTML = `<small>An unknown error occurred while loading ${this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)}.</small>`
+                this.innerHTML = `<small>An unknown error occurred while loading ${this.getAttribute(DEER.ID)}.</small>`
         }
         console.error(err)
     }
 }
 
-customElements.define(`${DEER.PREFIX}-${DEER.VIEW}`, DeerView)
+customElements.define(DEER.VIEW, DeerView)

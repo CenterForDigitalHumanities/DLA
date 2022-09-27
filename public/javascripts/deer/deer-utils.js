@@ -12,11 +12,8 @@
 
  import { default as DEER } from './deer-config.js'
 
- if('undefined' !== typeof window) {
-     window.DEERWorker = window.DEERWorker ?? new Worker('/javascripts/deer/worker.js', { type: 'module' })
- }
- const worker = ('undefined' !== typeof WorkerGlobalScope) ? undefined : window?.DEERWorker ?? new Worker('/js/worker.js', { type: 'module' })
- 
+ import { default as worker } from '/javascripts/deer/worker.js'
+
  const utils = {
      worker,
      listFromCollection: function (collectionId) {

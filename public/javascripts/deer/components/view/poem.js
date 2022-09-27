@@ -42,7 +42,7 @@ const OGtemplate = (obj, options = {}) => {
 }
 
 export default class ViewPoem extends DeerView {
-    static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-lazy`] }
+    static get observedAttributes() { return [DEER.ID,DEER.LAZY] }
 
     constructor() {
         super()
@@ -79,4 +79,4 @@ export default class ViewPoem extends DeerView {
     }
 }
 
-customElements.define(`${DEER.PREFIX}-poem`, ViewPoem)
+customElements.define(`dla-poem`, ViewPoem)
