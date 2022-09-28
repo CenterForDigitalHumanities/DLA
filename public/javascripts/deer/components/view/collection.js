@@ -245,7 +245,7 @@ export default class DLA_Collection extends DeerView {
 
     connectedCallback() {
         super.connectedCallback()
-        self.addEventListener('message', e => {
+        const facetRecords = e => {
             if (e.data.id !== this.getAttribute(DEER.ID)) { return }
             switch (e.data.action) {
                 case "complete":
@@ -253,11 +253,13 @@ export default class DLA_Collection extends DeerView {
                         Array.from(document.querySelectorAll(".clicked")).forEach(el => el.dispatchEvent(new Event("click")))
                         query.value = ""
                         query.dispatchEvent(new Event("input"))
-                    })        
+                    })
                     this.$final = true
+                    this.removeEventListener(this.getAttribute(DEER.ID), facetRecords)
                 default:
             }
-        })
+        }
+        this.addEventListener(this.getAttribute(DEER.ID), facetRecords)
     }
 
     async #loadRecords(pagination = [0,]) {

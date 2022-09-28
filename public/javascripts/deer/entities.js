@@ -116,43 +116,31 @@
      }
  
      #announceUpdate = () =>{
-         const updateAnnouncement = new CustomEvent("update", {
-             detail: {
+         postMessage( {
                  action: "update",
                  id: this.id,
                  payload: this.assertions
-             }
          })
-         document.dispatchEvent(updateAnnouncement)
      }
      #announceNewEntity = () =>{
-         const reloadAnnouncement = new CustomEvent("reload", {
-             detail: {
+         postMessage( {
                  action: "reload",
                  id: this.id,
                  payload: this
-             }
          })
-         document.dispatchEvent(reloadAnnouncement)
      }
      #announceComplete = () =>{
-         const completeAnnouncement = new CustomEvent("complete", {
-             detail: {
+         postMessage({
                  action: "complete",
                  id: this.id
-             }
          })
-         document.dispatchEvent(completeAnnouncement)
      }
      #announceError = (err) =>{
-         const errorAnnouncement = new CustomEvent("error", {
-             detail: {
+         postMessage({
                  action: "error",
                  id: this.id,
                  payload: err
-             }
          })
-         document.dispatchEvent(errorAnnouncement)
      }
  }
  
@@ -353,7 +341,13 @@
      valueObject.evidence = val.evidence || fromAnno.evidence || ""
      return valueObject
  }
+
+ function postMessage(message) {
+    const msg = new CustomEvent(message.type ?? message.id ?? message.action ?? "mystery-post", { detail: message }) //TODO: ?.split("://")[1] for HTTPS insensitivity?
+    console.info("Posting message: ", msg.type, document.querySelector(`[deer-id="${msg.type}"]`), message)
+    document.dispatchEvent(msg)
+ }
  
- export { EntityMap, Entity, Annotation,objectMatch }
+ export { EntityMap, Entity, Annotation,objectMatch,postMessage }
 
  

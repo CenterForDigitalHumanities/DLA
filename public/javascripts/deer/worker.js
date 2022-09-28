@@ -1,10 +1,11 @@
 /**
- * Web worker for retreiving and caching data from entities. 
+ * NOT A Web worker for retreiving and caching data from entities. 
  * 
  * @author cubap@slu
  */
 
- import {Entity, EntityMap, objectMatch} from './entities.js'
+ import { DEER } from './deer-utils.js'
+import {Entity, EntityMap, objectMatch, postMessage} from './entities.js'
 
  const IDBSTORE = "deer"
  const db = new Promise((resolve, reject) => {
@@ -29,33 +30,28 @@
      }
  })
  
- self.addEventListener('message', message => {
-     switch (message.data.action) {
-         case "view":
+ document.addEventListener(DEER.EVENTS.NEW_VIEW, message => {
              /**
               * Check for expanded object in the caches. If it exists, return it and check
               * for an update (will postMessage() twice). Otherwise, get and cache it.
               */
-             if (!message.data?.id) break // Nothing to see here
-             if (!EntityMap.has(message.data.id)) {
+             const msg = message.detail
+             if (!msg?.id) return // Nothing to see here
+             if (!EntityMap.has(msg.id)) {
                  postMessage({
-                     id: message.data.id,
+                     id: msg.id,
                      action: "reload",
-                     payload: new Entity(message.data.id, message.data.isLazy)
+                     payload: new Entity(msg.id, msg.isLazy)
                  })
              } else {
+                const ent = EntityMap.get(msg.id)
                  postMessage({
-                     id: message.data.id,
+                     id: msg.id,
                      action: "update",
-                     payload: EntityMap.get(message.data.id)?.assertions
+                     payload: ent.assertions
                  })
              }
-             break
-         case "record":
-             break
-         default:
-     }
- })
+            })
  
  function getItem(id, args = {}) {
      db.then(db => {
@@ -94,14 +90,9 @@
          }
      })
  }
- function postMessage(message) {
-    const msg = new MessageEvent("message", { data: message })
-    document.dispatchEvent(msg)
- }
 
 export default {
     getItem,
-    db,
     postMessage
 }
  

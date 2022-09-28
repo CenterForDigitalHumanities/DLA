@@ -22,24 +22,27 @@ export default class DeerView extends HTMLElement {
         this.template = DEER.TEMPLATES[this.getAttribute(DEER.TEMPLATE)] ?? template
     }
 
+    updateEntity(e) {
+        const msg = e.detail
+        switch (msg.action) {
+            case "reload":
+                this.Entity = msg.payload
+            case "update":
+                this.innerHTML = this.template(msg.payload) ?? this.innerHTML
+                break
+            case "error":
+                this.#handleErrors(msg.payload)
+                break
+            case "complete":
+                this.$final = true
+                this.removeEventListener(this.getAttribute(DEER.ID), this.updateEntity)
+            default:
+        }
+    }
+
     connectedCallback() {
         this.innerHTML = this.innerHTML?.trim() ?? `<small>&copy;2022 Research Computing Group</small>`
-        self.addEventListener('message', e => {
-            if (e.data.id !== this.getAttribute(DEER.ID)) { return }
-            switch (e.data.action) {
-                case "reload":
-                    this.Entity = e.data.payload
-                case "update":
-                    this.innerHTML = this.template(e.data.payload) ?? this.innerHTML
-                    break
-                case "error":
-                    this.#handleErrors(e.data.payload)
-                    break
-                case "complete":
-                    this.$final = true
-                default:
-            }
-        })
+        this.addEventListener(this.getAttribute(DEER.ID), this.updateEntity)
     }
     set $final(bool) {
         this.setAttribute(DEER.FINAL, bool)
@@ -51,13 +54,14 @@ export default class DeerView extends HTMLElement {
     disconnectedCallback() { }
     adoptedCallback() { }
     attributeChangedCallback(name, oldValue, newValue) {
-        switch (name.split('-')[1]) {
+        switch (name) {
             case DEER.ID:
             case DEER.KEY:
             case DEER.LINK:
             case DEER.LIST:
                 let id = this.getAttribute(DEER.ID)
                 if (id === null || this.getAttribute(DEER.COLLECTION)) { return }
+                this.addEventListener(this.getAttribute(DEER.ID), this.updateEntity)
                 UTILS.postView(id, this.getAttribute(DEER.LAZY))
                 break
             case DEER.LISTENING:
