@@ -6,10 +6,10 @@ const fetch = require('node-fetch')
 const pubTok = process.env.RERUM_API
 const RERUM = "http://store.rerum.io/v1"
 
-/* Poem API */
-router.get('/:poemID', function (req, res, next) {
-    if (!req.params.poemID.startsWith("http")) {
-        req.params.poemID = RERUM + "/id/" + req.params.poemID
+/* Collection API */
+router.get('/:collectionID', function (req, res, next) {
+    if (!req.params.collectionID.startsWith("http")) {
+        req.params.collectionID = RERUM + "/id/" + req.params.collectionID
     }
     res.sendFile('index.html', { root: path.join(__dirname, '../components/collection') })
 })
