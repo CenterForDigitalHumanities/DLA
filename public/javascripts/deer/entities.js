@@ -1,41 +1,62 @@
-const EntityMap = new Map() // get over here!
+/**
+ * Web Worker helper for handling Entity expansion and annotation discovery.
+ * 
+ * @author  Patrick Cuba <cubap@slu.edu>
+ * @org     SLU, Research Computing Group
+ */
 
+import { UTILS, DEER } from './deer-utils.js'
+import NoticeBoard from './NoticeBoard.js'
+
+const EntityMap = new Map()
+
+/**
+ * Create a new Entity object, find its annotations, and cache it.
+ * @class
+ * @classdesc Entity is an object described by the documents related to the URI recorded in the 
+ * `deer-id` attribute.
+ * @param {Object} entity Object to be described. Usually from a JSON-LD document.
+ * @param {Boolean} isLazy true if a compound query should not be made.
+ */
 class Entity extends Object {
-    constructor(entity={}) {
+    #isLazy
+
+    constructor(entity = {}, isLazy) {
         super()
         // accomodate Entity(String) and Entity(Object) or Entity(JSONString)
-        if(typeof entity === "string") {
+        if (typeof entity === "string") {
             try {
                 entity = JSON.parse(entity)
-            } catch(e) {
+            } catch (e) {
                 entity = { id: entity }
             }
         }
         const id = entity.id ?? entity["@id"] ?? entity // id is primary key
-        if(!id) { throw new Error("Entity must have an id") }
-        if(EntityMap.has(id)) { throw new Error("Entity already exists")}
+        if (!id) { throw new Error("Entity must have an id") }
+        if (EntityMap.has(id)) { throw new Error("Entity already exists") }
         this.Annotations = new Map()
+        this.#isLazy = Boolean(isLazy)
         this.data = entity
     }
-    
+
     get assertions() {
         let clone = JSON.parse(JSON.stringify(this.data))
         this.Annotations.forEach(annotation => applyAssertions(clone, annotation.normalized))
         this._assertions = clone
         return this._assertions
     }
-    
+
     get data() {
         return this._data
     }
-    
+
     get id() {
         return this.data.id
     }
-    
+
     set data(entity) {
         entity.id = entity.id ?? entity["@id"] ?? entity // id is primary key
-        if(objectMatch(this._data, entity)) {
+        if (objectMatch(this._data, entity)) {
             console.warn("Entity data unchanged")
             return
         }
@@ -43,7 +64,7 @@ class Entity extends Object {
         this._data = entity
         EntityMap.set(this.id, this)
         this.#announceUpdate()
-        if(!objectMatch(oldRecord.id, this.id)) { this.#resolveURI(true).then(this.#findAssertions).then(this.#announceNewEntity) }
+        if (!objectMatch(oldRecord.id, this.id)) { this.#resolveURI(!this.#isLazy).then(this.#announceNewEntity) }
     }
 
     attachAnnotation(annotation) {
@@ -51,89 +72,82 @@ class Entity extends Object {
     }
 
     #findAssertions = (assertions) => {
-        var annos = Array.isArray(assertions) ? Promise.resolve(assertions) : findByTargetId(this.id,[],`http://${this.id.includes("dev")?"tinydev.rerum.io/app":"tinypaul.rerum.io/dla"}/query`)
+        var annos = Array.isArray(assertions) ? Promise.resolve(assertions) : findByTargetId(this.id, [], DEER.URLS.QUERY)
         return annos
-            .then(annotations => annotations.filter(a=>(a.type ?? a['@type'])?.includes("Annotation")).map(anno => new Annotation(anno)))
+            .then(annotations => annotations.filter(a => (a.type ?? a['@type'])?.includes("Annotation")).map(anno => new Annotation(anno)))
             .then(newAssertions => newAssertions?.length ? this.#announceUpdate() : this.#announceComplete())
             .catch(err => console.log(err))
     }
 
-    #resolveURI = (withAssertions) =>{
+    #resolveURI = (withAssertions) => {
         const targetStyle = ["target", "target.@id", "target.id"]
         let historyWildcard = { "$exists": true, "$size": 0 }
-        let obj = { "$or": [{'@id': this.id}], "__rerum.history.next": historyWildcard }
+        let obj = { "$or": [{ '@id': this.id }], "__rerum.history.next": historyWildcard }
         for (let target of targetStyle) {
             let o = {}
             o[target] = this.id
             obj["$or"].push(o)
         }
-        var results = Boolean(withAssertions) ? fetch(`http://${this.id.includes("dev")?"tinydev.rerum.io/app":"tinypaul.rerum.io/dla"}/query`,{
+        var results = Boolean(withAssertions) ? fetch(DEER.URLS.QUERY, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(obj)
         }) : fetch(this.id)
         return results
-        .then(res => res.ok ? res.json() : Promise.reject(res))
-        .then(finds => {
-            if(finds.length === 0) { return Promise.reject({status:404}) }
-            this.data = finds?.find(e => e['@id'] === this.id) ?? finds
-            if (withAssertions) {
-                this.#findAssertions(finds)
-            }
-        })
-        .catch(err => {
-            switch(err.status) {
-                case 404: console.log(`${this.id} not found`)
-                case 500: console.log(`${this.id} encountered a server error`)
-                this.#announceError(err)
-                break
+            .then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(finds => {
+                if (finds.length === 0) { return Promise.reject({ status: 404 }) }
+                const originalObject = finds.find?.(e => e['@id'] === this.id) ?? finds
+                if (!Array.isArray(originalObject) && typeof originalObject === "object") {
+                    this.data = originalObject
+                }
+                withAssertions ? this.#findAssertions(finds) : this.#findAssertions()
+                return
+            })
+            .catch(err => {
+                switch (err.status) {
+                    case 404: console.log(`${this.id} not found`)
+                    case 500: console.log(`${this.id} encountered a server error`)
+                        this.#announceError(err)
+                        break
 
-                default: console.log(err)
-            }
-        })
+                    default: console.log(err)
+                }
+            })
     }
 
-    #announceUpdate = () =>{
-        const updateAnnouncement = new CustomEvent("update", {
-            detail: {
-                action: "update",
-                id: this.id,
-                payload: this.assertions
-            }
+    #announceUpdate = () => {
+        NoticeBoard.publish(this.id, {
+            action: "update",
+            payload: this.assertions
         })
-        document.dispatchEvent(updateAnnouncement)
     }
-    #announceComplete = () =>{
-        const completeAnnouncement = new CustomEvent("complete", {
-            detail: {
-                action: "complete",
-                id: this.id
-            }
+    #announceNewEntity = () => {
+        NoticeBoard.publish(this.id, {
+            action: "reload",
+            payload: this
         })
-        document.dispatchEvent(completeAnnouncement)
     }
-    #announceNewEntity = () =>{
-        const reloadAnnouncement = new CustomEvent("reload", {
-            detail: {
-                action: "reload",
-                id: this.id,
-                payload: this
-            }
+    #announceComplete = () => {
+        NoticeBoard.publish(this.id, {
+            action: "complete",
         })
-        document.dispatchEvent(reloadAnnouncement)
     }
-    #announceError = (err) =>{
-        const errorAnnouncement = new CustomEvent("error", {
-            detail: {
-                action: "error",
-                id: this.id,
-                payload: err
-            }
+    #announceError = (err) => {
+        NoticeBoard.publish(this.id, {
+            action: "error",
+            payload: err
         })
-        document.dispatchEvent(errorAnnouncement)
     }
 }
 
+/**
+ * Create a new Annotation object, attach it to its targets, and cache it.
+ * @class
+ * @classdesc Annotation is an object describing the documents related to the URI recorded in the 
+ * `deer-id` attribute.
+ * @param {Object} annotation document asserting a value or relationship. Usually from a JSON-LD document.
+ */
 class Annotation extends Object {
     constructor(annotation) {
         super()
@@ -151,17 +165,17 @@ class Annotation extends Object {
     }
 
     get id() {
-        return this.data.id
+        return this.data.id ?? this.data['@id'] // id is primary key
     }
 
     #registerTargets = () => {
         let targets = this.data.target
-        if(!Array.isArray(targets)) { targets = [targets] }
+        if (!Array.isArray(targets)) { targets = [targets] }
 
         targets.forEach(target => {
             target = target.id ?? target['@id'] ?? target.toString()
             if (!target) { return }
-            const targetEntity = EntityMap.has(target) ? EntityMap.get(target) : new Entity({id: target})
+            const targetEntity = EntityMap.has(target) ? EntityMap.get(target) : new Entity({ id: target })
             targetEntity.attachAnnotation(this)
         })
     }
@@ -176,12 +190,12 @@ async function expand(entity = new Entity({}), matchOn) {
     let findId = entity.data["@id"] ?? entity.data.id ?? entity.data
     if (typeof findId !== "string") { return Promise.resolve(entity.data) }
     let obj = fetch(findId).then(res => res.json()).then(res => Object.assign(entity.data, res))
-    let annos = findByTargetId(findId,[],`http://${findId.includes("dev")?"tinydev":"tiny"}.rerum.io/app/query`).then(res => res.map(anno => new Annotation(anno)))
+    let annos = findByTargetId(findId, [], DEER.URLS.QUERY).then(res => res.map(anno => new Annotation(anno)))
     await Promise.all([obj, annos]).then(res => {
         annos = res[1]
         obj = res[0]
     })
-    annos.forEach(a=>a.assertOn(entity.data, matchOn))
+    annos.forEach(a => a.assertOn(entity.data, matchOn))
     return entity.data
 }
 
@@ -192,21 +206,24 @@ async function expand(entity = new Entity({}), matchOn) {
  * @param string matchOn key to match on.
  * @returns Object with assertions value of the assertion.
  */
-function applyAssertions(assertOn, annotation, matchOn) {
-    if (Array.isArray(annotation)) { return annotation.map(a=>applyAssertions(assertOn,a,matchOn)) }
+function applyAssertions(assertOn, annotationBody, matchOn) {
+    if (Array.isArray(annotationBody)) { return annotationBody.forEach(a => applyAssertions(assertOn, a, matchOn)) }
 
-    if (!annotation.hasOwnProperty('body')) { return }
-    if (!checkMatch(assertOn, annotation, matchOn)) { return }
+    if (checkMatch(assertOn, annotationBody, matchOn)) { return }
 
     const assertions = {}
-    Object.entries(annotation.body).forEach(([k, v]) => {
-        if(v === undefined) { return }
+    Object.entries(annotationBody).forEach(([k, v]) => {
+        if (v === undefined) { return }
         if (assertOn.hasOwnProperty(k) && assertOn[k] !== undefined && assertOn[k] !== null && assertOn[k] !== "" && assertOn[k] !== []) {
             Array.isArray(assertions[k]) ? assertions[k].push(v) : assertions[k] = [v]
         } else {
             assertions[k] = v
         }
     })
+
+    // Simplify any arrays of length 1, which may not be a good idea.
+    Object.entries(assertions).forEach(([k, v]) => { if (Array.isArray(v) && v.length === 1) { v = v[0] } })
+
     return Object.assign(assertOn, assertions)
 }
 
@@ -222,8 +239,8 @@ function applyAssertions(assertOn, annotation, matchOn) {
  **/
 function checkMatch(expanding, asserting, matchOn = ["__rerum.generatedBy", "creator"]) {
     for (const m of matchOn) {
-        let obj_match = m.split('.').reduce((o, i) => o[i], expanding)
-        let anno_match = m.split('.').reduce((o, i) => o[i], asserting)
+        let obj_match = m.split('.').reduce((o, i) => o?.[i], expanding)
+        let anno_match = m.split('.').reduce((o, i) => o?.[i], asserting)
         if (obj_match === undefined || anno_match === undefined) {
             // Matching is not violated if one of the checked values is missing from a comparator,
             // but it is not a match without any positive matches.
@@ -249,13 +266,32 @@ function checkMatch(expanding, asserting, matchOn = ["__rerum.generatedBy", "cre
     return false
 }
 
+function objectMatch(o1 = {}, o2 = {}) {
+    const keys1 = Object.keys(o1)
+    const keys2 = Object.keys(o2)
+    if (keys1.length !== keys2.length) { return false }
+    for (const k of keys1) {
+        const val1 = o1[k]
+        const val2 = o2[k]
+        const recurseNeeded = isObject(val1) && isObject(val2);
+        if ((recurseNeeded && !this.objectMatch(val1, val2))
+            || (!recurseNeeded && val1 !== val2)) {
+            return false
+        }
+    }
+    return true
+    function isObject(object) {
+        return object != null && typeof object === 'object'
+    }
+}
+
 /**
      * Execute query for any annotations in RERUM which target the
      * id passed in. Promise resolves to an array of annotations.
      * @param {String} id URI for the targeted entity
      * @param [String] targetStyle other formats of resource targeting.  May be null
      */
-async function findByTargetId(id, targetStyle = [], queryUrl = "http://tinydev.rerum.io/app/query") {
+async function findByTargetId(id, targetStyle = [], queryUrl = DEER.URLS.QUERY) {
     if (!Array.isArray(targetStyle)) {
         targetStyle = [targetStyle]
     }
@@ -298,64 +334,10 @@ function buildValueObject(val, fromAnno) {
         citationNote: fromAnno.label || fromAnno.name || "Composed object from DEER",
         comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/deer"
     }
-    valueObject.value = val.value || getValue(val)
+    valueObject.value = val.value || UTILS.getValue(val)
     valueObject.evidence = val.evidence || fromAnno.evidence || ""
     return valueObject
 }
 
-function getValue(property, alsoPeek = [], asType) {
-    // TODO: There must be a best way to do this...
-    let prop;
-    if (!property) {
-        console.error("Value of property to lookup is missing!")
-        return undefined
-    }
-    if (Array.isArray(property)) {
-        // It is an array of things, we can only presume that we want the array.  If it needs to become a string, local functions take on that responsibility.
-        return property
-    }
+export { EntityMap, Entity, Annotation, objectMatch }
 
-    if (typeof property === "object") {
-        // TODO: JSON-LD insists on "@value", but this is simplified in a lot
-        // of contexts. Reading that is ideal in the future.
-        if (!Array.isArray(alsoPeek)) {
-            alsoPeek = [alsoPeek]
-        }
-        alsoPeek = alsoPeek.concat(["@value", "value", "$value", "val"])
-        for (let k of alsoPeek) {
-            if (property.hasOwnProperty(k)) {
-                prop = property[k]
-                break
-            } else {
-                prop = property
-            }
-        }
-    } else {
-        prop = property
-    }
-    try {
-        switch (asType.toUpperCase()) {
-            case "STRING":
-                prop = prop.toString();
-                break
-            case "NUMBER":
-                prop = parseFloat(prop);
-                break
-            case "INTEGER":
-                prop = parseInt(prop);
-                break
-            case "BOOLEAN":
-                prop = !Boolean(["false", "no", "0", "", "undefined", "null"].indexOf(String(prop).toLowerCase().trim()));
-                break
-            default:
-        }
-    } catch (err) {
-        if (asType) {
-            throw new Error("asType: '" + asType + "' is not possible.\n" + err.message)
-        } else {
-            // no casting requested
-        }
-    } finally {
-        return (prop.length === 1) ? prop[0] : prop
-    }
-}

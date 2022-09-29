@@ -1,5 +1,5 @@
-import { default as UTILS } from '../../deer-utils.js'
-import { default as DEER } from '../../deer-config.js'
+import { UTILS, DEER } from '../../deer-utils.js'
+import NoticeBoard from '../../NoticeBoard.js'
 
 const template = (obj, options = {}) => {
     let indent = options.indent ?? 4
@@ -15,37 +15,39 @@ const template = (obj, options = {}) => {
 }
 
 export default class DeerView extends HTMLElement {
-    static get observedAttributes() { return [`${DEER.PREFIX}-id`, `${DEER.PREFIX}-final`, `${DEER.PREFIX}-lazy`, `${DEER.PREFIX}-key`, `${DEER.PREFIX}-list`, `${DEER.PREFIX}-link`, `${DEER.PREFIX}-listening`]; }
+    static get observedAttributes() { return [DEER.ID, DEER.FINAL, DEER.LAZY, DEER.KEY, DEER.LIST, DEER.LINK, DEER.LISTENING]; }
     #final = false
 
     constructor() {
         super()
-        this.template = DEER.TEMPLATES[this.getAttribute(`${DEER.PREFIX}-template`)] ?? template
+        this.template = DEER.TEMPLATES[this.getAttribute(DEER.TEMPLATE)] ?? template
+    }
+
+    #updateEntity(e) {
+        const msg = e.detail
+        switch (msg.action) {
+            case "reload":
+                this.Entity = msg.payload
+                this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
+                break
+            case "update":
+                this.innerHTML = this.template(msg.payload) ?? this.innerHTML
+                break
+            case "error":
+                this.#handleErrors(msg.payload)
+                break
+            case "complete":
+                this.$final = true
+                NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
+            default:
+        }
     }
 
     connectedCallback() {
         this.innerHTML = this.innerHTML?.trim() ?? `<small>&copy;2022 Research Computing Group</small>`
-        UTILS.worker.addEventListener('message', e => {
-            if (e.data.id !== this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)) { return }
-            switch (e.data.action) {
-                case "update":
-                    this.innerHTML = this.template(e.data.payload) ?? this.innerHTML
-                    break
-                case "reload":
-                    this.Entity = e.data.payload
-                    break
-                case "error":
-                    this.#handleErrors(e.data.payload)
-                    break
-                case "complete":
-                    this.$final = true
-                default:
-            }
-        })
     }
-
     set $final(bool) {
-        this.setAttribute(`${DEER.PREFIX}-final`, bool)
+        this.setAttribute(DEER.FINAL, bool)
         this.#final = Boolean(bool)
     }
 
@@ -54,14 +56,18 @@ export default class DeerView extends HTMLElement {
     disconnectedCallback() { }
     adoptedCallback() { }
     attributeChangedCallback(name, oldValue, newValue) {
-        switch (name.split('-')[1]) {
+        switch (name) {
             case DEER.ID:
             case DEER.KEY:
             case DEER.LINK:
             case DEER.LIST:
-                let id = this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)
+                const id = this.getAttribute(DEER.ID)
                 if (id === null || this.getAttribute(DEER.COLLECTION)) { return }
-                UTILS.postView(id, this.getAttribute(`${DEER.PREFIX}-lazy`))
+                NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
+                NoticeBoard.publish(DEER.EVENTS.NEW_VIEW, {
+                    id,
+                    isLazy: this.getAttribute(DEER.LAZY)
+                })
                 break
             case DEER.LISTENING:
                 let listensTo = this.getAttribute(DEER.LISTENING)
@@ -73,19 +79,20 @@ export default class DeerView extends HTMLElement {
                 }
         }
     }
+
     #handleErrors(err) {
         switch (err.status) {
             case 404:
-                this.innerHTML = `<small>ID ${this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)} could not be loaded.</small>`
+                this.innerHTML = `<small>ID ${this.getAttribute(DEER.ID)} could not be loaded.</small>`
                 break
             case 500:
-                this.innerHTML = `<small>A server error occurred while loading ${this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)}.</small>`
+                this.innerHTML = `<small>A server error occurred while loading ${this.getAttribute(DEER.ID)}.</small>`
                 break
             default:
-                this.innerHTML = `<small>An unknown error occurred while loading ${this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)}.</small>`
+                this.innerHTML = `<small>An unknown error occurred while loading ${this.getAttribute(DEER.ID)}.</small>`
         }
         console.error(err)
     }
 }
 
-customElements.define(`${DEER.PREFIX}-${DEER.VIEW}`, DeerView)
+customElements.define(DEER.VIEW, DeerView)

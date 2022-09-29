@@ -33,22 +33,6 @@ self.addEventListener('activate', event => {
             )
         })
     )
-    event.waitUntil(() => {
-        let opening = new Promise()
-        var DBOpenRequest = self.indexedDB.open(IDBSTORE, 1)
-        DBOpenRequest.onsuccess = event => db = DBOpenRequest.result
-
-        DBOpenRequest.onerror = event => opening.reject(console.error(event))
-
-        DBOpenRequest.onupgradeneeded = event => {
-            db = event.target.result
-            // Create an objectStore for this database
-            objectStore = db.createObjectStore(IDBSTORE, { keyPath: "id" })
-            console.log("Successfully upgraded db")
-            opening.resolve(db)
-        }
-        return opening
-    })
 })
 
 self.addEventListener('fetch', event => {

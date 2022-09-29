@@ -10,13 +10,13 @@
  * @see tiny.rerum.io
  */
 
-// import * as CryptoJS from "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
 import { default as DEER } from './deer-config.js'
 
-var worker = new Worker('/javascripts/deer/worker.js')
+import { default as worker } from '/javascripts/deer/worker.js'
+
+import NoticeBoard from './NoticeBoard.js'
 
 const utils = {
-    worker: worker,
     listFromCollection: function (collectionId) {
         let queryObj = {
             body: {
@@ -25,6 +25,7 @@ const utils = {
         }
         return fetch(DEER.URLS.QUERY, {
             method: "POST",
+            mode: "cors",
             body: JSON.stringify(queryObj)
         }).then(response => response.json())
             .then(function (pointers) {
@@ -108,31 +109,6 @@ const utils = {
             }
             return label || noLabel
         }
-    },
-    postView(entity, lazy = false) {
-        let UTILS = this
-        const id = entity["@id"] ?? entity.id ?? entity
-        if (typeof id !== "string") {
-            UTILS.warning("Unable to find URI in object:", entity)
-            return entity
-        }
-        const message = {
-            id,
-            action: "view",
-            args: {
-                lazy,
-                entity
-            }
-        }
-        this.worker.postMessage(message)
-    },
-
-    /**
-     * Broadcast a message about DEER
-     */
-    broadcast: function (event = {}, type, element, obj = {}) {
-        let e = new CustomEvent(type, { detail: Object.assign(obj, { target: event.target }), bubbles: true })
-        element.dispatchEvent(e)
     },
 
     /**
@@ -225,7 +201,7 @@ const utils = {
      * The input is a representative for the annotation so the values should match.  Hidden elements will never have user interaction, they
      * must be marked dirty if the values do not match or if there is no annotation mapped to its DEER.KEY attribute.
      * Values should not be hard coded into non-hidden input fields, they will be overwritten by the annotation value without being marked dirty.
-
+ 
      * @param elem The input HTML element the value is being asserted on
      * @param val The string value to be asserted onto an input HTML element
      * @param fromAnno Boolean for if the value is from a DEER annotation as opposed to part of the object (noted in deer-id on the form) directly.
@@ -410,4 +386,4 @@ const utils = {
     }
 }
 
-export default utils
+export { DEER, utils as UTILS }

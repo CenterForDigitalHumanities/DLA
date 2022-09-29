@@ -12,4 +12,4 @@ doc/
 .env
 .notes
 fixtures
-.vscode/settings.json
+.vscode

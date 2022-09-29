@@ -1,5 +1,4 @@
-import { default as UTILS } from '../../deer-utils.js'
-import { default as DEER } from '../../deer-config.js'
+import { DEER, UTILS } from '../../deer-utils.js'
 import DeerView from './view.js'
 
 let progress
@@ -13,7 +12,7 @@ const template = obj => `
         </div>`
 
 export default class DLA_Record extends DeerView {
-    static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-listening`] }
+    static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
 
     constructor() {
         super()
@@ -23,7 +22,7 @@ export default class DLA_Record extends DeerView {
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
         switch (name) {
-            case `${DEER.PREFIX}-final`: this.#renderRecord.bind(this)
+            case DEER.FINAL: this.#renderRecord.bind(this)
         }
     }
 
@@ -81,4 +80,4 @@ export default class DLA_Record extends DeerView {
 }
 
 
-customElements.define(`${DEER.PREFIX}-record`, DLA_Record)
+customElements.define(`dla-record`, DLA_Record)

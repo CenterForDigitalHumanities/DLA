@@ -1,5 +1,5 @@
-import { default as UTILS } from '../../deer-utils.js'
-import { default as DEER } from '../../deer-config.js'
+import { DEER } from '../../deer-utils.js'
+import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
 let progress
@@ -234,7 +234,7 @@ const template = (obj,options={}) => {
 }
 
 export default class DLA_Collection extends DeerView {
-    static get observedAttributes() { return [`${DEER.PREFIX}-id`,`${DEER.PREFIX}-listening`] }
+    static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
 
     constructor() {
         super()
@@ -246,24 +246,25 @@ export default class DLA_Collection extends DeerView {
 
     connectedCallback() {
         super.connectedCallback()
-        UTILS.worker.addEventListener('message', e => {
-            if (e.data.id !== this.getAttribute(`${DEER.PREFIX}-${DEER.ID}`)) { return }
-            switch (e.data.action) {
+        const facetRecords = e => {
+            switch (e.detail.action) {
                 case "complete":
                     this.querySelector('button[type="reset"]')?.addEventListener("click", ev => {
                         Array.from(document.querySelectorAll(".clicked")).forEach(el => el.dispatchEvent(new Event("click")))
                         query.value = ""
                         query.dispatchEvent(new Event("input"))
-                    })        
+                    })
                     this.$final = true
+                    this.removeEventListener(this.getAttribute(DEER.ID), facetRecords)
                 default:
             }
-        })
+        }
+        NoticeBoard.subscribe(this.getAttribute(DEER.ID), facetRecords.bind(this))
     }
 
     async #loadRecords(pagination = [0,]) {
-        // const data = await this.#fetchList(this.getAttribute(`${DEER.PREFIX}-id`)).catch(err => this.#flashMessage(err)) ?? {}
-        // return (data[this.getAttribute(`${DEER.PREFIX}-list`) ?? "itemListElement"] ?? []).slice(pagination[0], pagination[1])
+        // const data = await this.#fetchList(this.getAttribute(DEER.ID)).catch(err => this.#flashMessage(err)) ?? {}
+        // return (data[this.getAttribute(DEER.LIST) ?? "itemListElement"] ?? []).slice(pagination[0], pagination[1])
     }
 
     async #renderRecords(dataRecords) {
@@ -375,4 +376,4 @@ export default class DLA_Collection extends DeerView {
 }
 
 
-customElements.define(`${DEER.PREFIX}-collection`, DLA_Collection)
+customElements.define(DEER.COLLECTION, DLA_Collection)
