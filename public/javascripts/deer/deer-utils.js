@@ -123,7 +123,7 @@ const utils = {
                 entity: entity
             }
         }
-        worker.postMessage(message)
+        worker.postMsg(message)
     },
 
     /**

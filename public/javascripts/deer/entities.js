@@ -116,27 +116,27 @@
      }
  
      #announceUpdate = () =>{
-         postMessage( {
+         postMsg( {
                  action: "update",
                  id: this.id,
                  payload: this.assertions
          })
      }
      #announceNewEntity = () =>{
-         postMessage( {
+         postMsg( {
                  action: "reload",
                  id: this.id,
                  payload: this
          })
      }
      #announceComplete = () =>{
-         postMessage({
+         postMsg({
                  action: "complete",
                  id: this.id
          })
      }
      #announceError = (err) =>{
-         postMessage({
+         postMsg({
                  action: "error",
                  id: this.id,
                  payload: err
@@ -342,12 +342,12 @@
      return valueObject
  }
 
- function postMessage(message) {
+ function postMsg(message) {
     const msg = new CustomEvent(message.type ?? message.id ?? message.action ?? "mystery-post", { detail: message }) //TODO: ?.split("://")[1] for HTTPS insensitivity?
     console.info("Posting message: ", msg.type, document.querySelector(`[deer-id="${msg.type}"]`), message)
     document.dispatchEvent(msg)
  }
  
- export { EntityMap, Entity, Annotation,objectMatch,postMessage }
+ export { EntityMap, Entity, Annotation,objectMatch,postMsg }
 
  

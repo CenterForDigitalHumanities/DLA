@@ -22,7 +22,7 @@ export default class DeerView extends HTMLElement {
         this.template = DEER.TEMPLATES[this.getAttribute(DEER.TEMPLATE)] ?? template
     }
 
-    updateEntity(e) {
+    #updateEntity(e) {
         const msg = e.detail
         switch (msg.action) {
             case "reload":
@@ -35,14 +35,14 @@ export default class DeerView extends HTMLElement {
                 break
             case "complete":
                 this.$final = true
-                this.removeEventListener(this.getAttribute(DEER.ID), this.updateEntity)
+                this.removeEventListener(this.getAttribute(DEER.ID), this.#updateEntity)
             default:
         }
     }
 
     connectedCallback() {
         this.innerHTML = this.innerHTML?.trim() ?? `<small>&copy;2022 Research Computing Group</small>`
-        this.addEventListener(this.getAttribute(DEER.ID), this.updateEntity)
+        document.addEventListener(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
     }
     set $final(bool) {
         this.setAttribute(DEER.FINAL, bool)
@@ -61,7 +61,7 @@ export default class DeerView extends HTMLElement {
             case DEER.LIST:
                 let id = this.getAttribute(DEER.ID)
                 if (id === null || this.getAttribute(DEER.COLLECTION)) { return }
-                this.addEventListener(this.getAttribute(DEER.ID), this.updateEntity)
+                document.addEventListener(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
                 UTILS.postView(id, this.getAttribute(DEER.LAZY))
                 break
             case DEER.LISTENING:

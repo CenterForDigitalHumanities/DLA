@@ -5,7 +5,7 @@
  */
 
  import { DEER } from './deer-utils.js'
-import {Entity, EntityMap, objectMatch, postMessage} from './entities.js'
+import {Entity, EntityMap, objectMatch, postMsg} from './entities.js'
 
  const IDBSTORE = "deer"
  const db = new Promise((resolve, reject) => {
@@ -38,14 +38,14 @@ import {Entity, EntityMap, objectMatch, postMessage} from './entities.js'
              const msg = message.detail
              if (!msg?.id) return // Nothing to see here
              if (!EntityMap.has(msg.id)) {
-                 postMessage({
+                 postMsg({
                      id: msg.id,
                      action: "reload",
                      payload: new Entity(msg.id, msg.isLazy)
                  })
              } else {
                 const ent = EntityMap.get(msg.id)
-                 postMessage({
+                 postMsg({
                      id: msg.id,
                      action: "update",
                      payload: ent.assertions
@@ -58,7 +58,7 @@ import {Entity, EntityMap, objectMatch, postMessage} from './entities.js'
          let lookup = db.transaction(IDBSTORE, "readonly").objectStore(IDBSTORE).get(id).onsuccess = (event) => {
              let item = event.target.result
              if (item) {
-                 postMessage({
+                 postMsg({
                      item,
                      action: "expanded",
                      id: item.id
@@ -72,7 +72,7 @@ import {Entity, EntityMap, objectMatch, postMessage} from './entities.js'
                  const enterRecord = db.transaction(IDBSTORE, "readwrite").objectStore(IDBSTORE)
                  const insertionRequest = enterRecord.put(obj.data)
                  insertionRequest.onsuccess = function (event) {
-                     postMessage({
+                     postMsg({
                          item: obj.data,
                          action: "expanded",
                          id: obj.data.id
@@ -80,7 +80,7 @@ import {Entity, EntityMap, objectMatch, postMessage} from './entities.js'
                  }
                  insertionRequest.onerror = function (event) {
                      console.log("Error: ", event)
-                     postMessage({
+                     postMsg({
                          error: event,
                          action: "error",
                          id: obj.data.id
@@ -93,7 +93,7 @@ import {Entity, EntityMap, objectMatch, postMessage} from './entities.js'
 
 export default {
     getItem,
-    postMessage
+    postMsg
 }
  
  
