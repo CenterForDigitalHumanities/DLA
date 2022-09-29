@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 const fetch = require('node-fetch')
 
 const pubTok = process.env.RERUM_API
@@ -24,7 +24,7 @@ router.post('/update', function(req, res, next) {
     redirect: "follow",
     body:req.body
   }).then(response=>response.ok?response.json():Promise.reject(response))
-});
+})
 
 
-module.exports = router;
+module.exports = router

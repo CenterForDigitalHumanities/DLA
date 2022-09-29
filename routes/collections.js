@@ -10,6 +10,6 @@ const COLLECTIONS = "http://store.rerum.io/v1/id/615b724650c86821e60b11fa"
 /* Collections API */
 router.get('/', function(req, res, next) {
  res.sendFile('index.html', { root: path.join(__dirname, '../components/collections') })
-});
+})
 
-module.exports = router;
+module.exports = router
