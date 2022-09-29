@@ -4,6 +4,7 @@
  */
 
 const NoticeBoard = new EventTarget()
+const {default:{EVENTS:{NEW_VIEW:VIEW}}} = await import('./deer-config.js')
 
 Object.assign(NoticeBoard, {
     subscribe: (...args) => NoticeBoard.addEventListener(...args),
@@ -11,7 +12,8 @@ Object.assign(NoticeBoard, {
         const msg = new CustomEvent(eventType, { detail: eventPayload }) //TODO: ? for HTTPS insensitivity?
         NoticeBoard.dispatchEvent(msg)
     },
+    request: (id) => NoticeBoard.publish(VIEW,{id}),
+    unsubscribe: (...args) => NoticeBoard.removeEventListener(...args),
 })
-
 
 export default NoticeBoard

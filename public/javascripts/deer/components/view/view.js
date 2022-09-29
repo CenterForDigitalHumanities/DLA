@@ -38,7 +38,7 @@ export default class DeerView extends HTMLElement {
                 break
             case "complete":
                 this.$final = true
-                this.removeEventListener(this.getAttribute(DEER.ID), this.#updateEntity)
+                NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
             default:
         }
     }
