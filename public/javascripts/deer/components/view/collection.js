@@ -247,8 +247,7 @@ export default class DLA_Collection extends DeerView {
     connectedCallback() {
         super.connectedCallback()
         const facetRecords = e => {
-            if (e.data.id !== this.getAttribute(DEER.ID)) { return }
-            switch (e.data.action) {
+            switch (e.detail.action) {
                 case "complete":
                     this.querySelector('button[type="reset"]')?.addEventListener("click", ev => {
                         Array.from(document.querySelectorAll(".clicked")).forEach(el => el.dispatchEvent(new Event("click")))
