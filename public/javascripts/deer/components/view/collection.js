@@ -1,4 +1,5 @@
-import { DEER, UTILS } from '../../deer-utils.js'
+import { DEER } from '../../deer-utils.js'
+import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
 let progress
@@ -259,7 +260,7 @@ export default class DLA_Collection extends DeerView {
                 default:
             }
         }
-        this.addEventListener(this.getAttribute(DEER.ID), facetRecords)
+        NoticeBoard.subscribe(this.getAttribute(DEER.ID), facetRecords.bind(this))
     }
 
     async #loadRecords(pagination = [0,]) {
