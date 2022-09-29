@@ -1,4 +1,5 @@
 import { UTILS, DEER } from '../../deer-utils.js'
+import NoticeBoard from '../../NoticeBoard.js'
 
 const template = (obj, options = {}) => {
     let indent = options.indent ?? 4
@@ -27,6 +28,8 @@ export default class DeerView extends HTMLElement {
         switch (msg.action) {
             case "reload":
                 this.Entity = msg.payload
+                this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
+                break
             case "update":
                 this.innerHTML = this.template(msg.payload) ?? this.innerHTML
                 break
@@ -42,7 +45,6 @@ export default class DeerView extends HTMLElement {
 
     connectedCallback() {
         this.innerHTML = this.innerHTML?.trim() ?? `<small>&copy;2022 Research Computing Group</small>`
-        document.addEventListener(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
     }
     set $final(bool) {
         this.setAttribute(DEER.FINAL, bool)
@@ -59,10 +61,13 @@ export default class DeerView extends HTMLElement {
             case DEER.KEY:
             case DEER.LINK:
             case DEER.LIST:
-                let id = this.getAttribute(DEER.ID)
+                const id = this.getAttribute(DEER.ID)
                 if (id === null || this.getAttribute(DEER.COLLECTION)) { return }
-                document.addEventListener(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
-                UTILS.postView(id, this.getAttribute(DEER.LAZY))
+                NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
+                NoticeBoard.publish(DEER.EVENTS.NEW_VIEW, {
+                    id,
+                    isLazy: this.getAttribute(DEER.LAZY)
+                })
                 break
             case DEER.LISTENING:
                 let listensTo = this.getAttribute(DEER.LISTENING)

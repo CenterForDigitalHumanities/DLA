@@ -5,7 +5,8 @@
  */
 
  import { DEER } from './deer-utils.js'
-import {Entity, EntityMap, objectMatch, postMsg} from './entities.js'
+import {Entity, EntityMap, objectMatch} from './entities.js'
+import NoticeBoard from './NoticeBoard.js'
 
  const IDBSTORE = "deer"
  const db = new Promise((resolve, reject) => {
@@ -30,23 +31,20 @@ import {Entity, EntityMap, objectMatch, postMsg} from './entities.js'
      }
  })
  
- document.addEventListener(DEER.EVENTS.NEW_VIEW, message => {
+ NoticeBoard.addEventListener(DEER.EVENTS.NEW_VIEW, message => {
              /**
               * Check for expanded object in the caches. If it exists, return it and check
               * for an update (will postMessage() twice). Otherwise, get and cache it.
               */
              const msg = message.detail
-             if (!msg?.id) return // Nothing to see here
              if (!EntityMap.has(msg.id)) {
-                 postMsg({
-                     id: msg.id,
+                NoticeBoard.publish(msg.id, {
                      action: "reload",
                      payload: new Entity(msg.id, msg.isLazy)
                  })
              } else {
                 const ent = EntityMap.get(msg.id)
-                 postMsg({
-                     id: msg.id,
+                NoticeBoard.publish(msg.id, {
                      action: "update",
                      payload: ent.assertions
                  })
@@ -58,10 +56,9 @@ import {Entity, EntityMap, objectMatch, postMsg} from './entities.js'
          let lookup = db.transaction(IDBSTORE, "readonly").objectStore(IDBSTORE).get(id).onsuccess = (event) => {
              let item = event.target.result
              if (item) {
-                 postMsg({
-                     item,
+                NoticeBoard.publish(item.id, {
+                    item,
                      action: "expanded",
-                     id: item.id
                  })
              }
              item = new Entity(item ?? { id })
@@ -72,16 +69,15 @@ import {Entity, EntityMap, objectMatch, postMsg} from './entities.js'
                  const enterRecord = db.transaction(IDBSTORE, "readwrite").objectStore(IDBSTORE)
                  const insertionRequest = enterRecord.put(obj.data)
                  insertionRequest.onsuccess = function (event) {
-                     postMsg({
-                         item: obj.data,
+                    NoticeBoard.publish(obj.data.id, {
+                        item: obj.data,
                          action: "expanded",
-                         id: obj.data.id
                      })
                  }
                  insertionRequest.onerror = function (event) {
                      console.log("Error: ", event)
-                     postMsg({
-                         error: event,
+                     NoticeBoard.publish(obj.data.id, {
+                        error: event,
                          action: "error",
                          id: obj.data.id
                      })
@@ -92,8 +88,7 @@ import {Entity, EntityMap, objectMatch, postMsg} from './entities.js'
  }
 
 export default {
-    getItem,
-    postMsg
+    getItem
 }
  
  

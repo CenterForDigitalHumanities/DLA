@@ -14,6 +14,8 @@ import { default as DEER } from './deer-config.js'
 
 import { default as worker } from '/javascripts/deer/worker.js'
 
+import NoticeBoard from './NoticeBoard.js'
+
 const utils = {
     listFromCollection: function (collectionId) {
         let queryObj = {
@@ -107,31 +109,6 @@ const utils = {
             }
             return label || noLabel
         }
-    },
-    postView(entity, matchOn = ["__rerum.generatedBy", "creator"]) {
-        const id = entity["@id"] ?? entity.id ?? entity
-        if (typeof id !== "string") {
-            this.warning("Unable to find URI in object:", entity)
-            return entity
-        }
-        const message = {
-            type: DEER.EVENTS.NEW_VIEW,
-            id,
-            action: "view",
-            args: {
-                matchOn: matchOn,
-                entity: entity
-            }
-        }
-        worker.postMsg(message)
-    },
-
-    /**
-     * Broadcast a message about DEER
-     */
-    broadcast: function (event = {}, type, element, obj = {}) {
-        let e = new CustomEvent(type, { detail: Object.assign(obj, { target: event.target }), bubbles: true })
-        document.dispatchEvent(e)
     },
 
     /**

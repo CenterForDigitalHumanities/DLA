@@ -1,4 +1,5 @@
 import { UTILS, DEER } from '../../deer-utils.js'
+import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
 const template = (obj, options = {}) => {
@@ -36,7 +37,7 @@ const OGtemplate = (obj, options = {}) => {
         cards.classList.add("row")
         cards.innerHTML = expressionConnections.map(conn => expressionCard(conn)).join('')
         elem.append(cards)
-        UTILS.broadcast(undefined, config.EVENTS.NEW_VIEW, elem, { set: cards.children })
+        NoticeBoard.publish(undefined, config.EVENTS.NEW_VIEW, elem, { set: cards.children })
     }
     return { html, then }
 }

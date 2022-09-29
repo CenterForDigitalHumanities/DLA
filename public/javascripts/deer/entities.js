@@ -6,6 +6,7 @@
  */
 
  import { UTILS, DEER } from './deer-utils.js'
+import NoticeBoard from './NoticeBoard.js'
 
  const EntityMap = new Map()
  
@@ -116,29 +117,25 @@
      }
  
      #announceUpdate = () =>{
-         postMsg( {
+         NoticeBoard.publish(this.id, {
                  action: "update",
-                 id: this.id,
                  payload: this.assertions
          })
      }
      #announceNewEntity = () =>{
-         postMsg( {
-                 action: "reload",
-                 id: this.id,
+        NoticeBoard.publish(this.id, {
+            action: "reload",
                  payload: this
          })
      }
      #announceComplete = () =>{
-         postMsg({
-                 action: "complete",
-                 id: this.id
+        NoticeBoard.publish(this.id, {
+            action: "complete",
          })
      }
      #announceError = (err) =>{
-         postMsg({
-                 action: "error",
-                 id: this.id,
+        NoticeBoard.publish(this.id, {
+            action: "error",
                  payload: err
          })
      }
@@ -341,13 +338,7 @@
      valueObject.evidence = val.evidence || fromAnno.evidence || ""
      return valueObject
  }
-
- function postMsg(message) {
-    const msg = new CustomEvent(message.type ?? message.id ?? message.action ?? "mystery-post", { detail: message }) //TODO: ?.split("://")[1] for HTTPS insensitivity?
-    console.info("Posting message: ", msg.type, document.querySelector(`[deer-id="${msg.type}"]`), message)
-    document.dispatchEvent(msg)
- }
  
- export { EntityMap, Entity, Annotation,objectMatch,postMsg }
+ export { EntityMap, Entity, Annotation,objectMatch }
 
  

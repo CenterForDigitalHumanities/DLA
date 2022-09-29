@@ -8,6 +8,7 @@ export default {
     TEMPLATE:       namespace + "-template", // attribute, enum for custom template
     VIEW:           namespace + "-view", // basic element
     LAZY:           namespace + "-lazy", // set to true for slower rendering
+    FINAL:          namespace + "-final", // attribute, set to true when data query is complete
     KEY:            namespace + "-key", // attribute, key to use for annotation
     LABEL:          namespace + "-title", // attribute, alternate label for properties
     CONTEXT:        namespace + "-context", // attribute, JSON-LD @context, scoped
