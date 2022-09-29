@@ -219,7 +219,7 @@ const template = (obj,options={}) => {
             <div id="Records" class="grow wrap">
             ${(obj[options.list ?? "itemListElement"] ?? [])?.reduce((a, b) => a += `
             <deer-record class="record" deer-id="${b['@id']}">
-            <h4><a href="./record.html?id=${b['@id']}">${b.label ?? b['@id']}</a></h4>
+            <h4><a href="./record/${(b.id ?? b['@id']).split("/").pop()}">${b.label ?? b['@id']}</a></h4>
             </deer-record>`, ``)}
             </div>
             <div class="sidebar">

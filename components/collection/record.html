@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Record Detail — Dunbar Library & Archive</title>
+  <meta property="og:title" content="Dunbar Library and Archive">
+  <meta property="og:type" content="website">
+  <!-- <meta property="og:url" content=""> -->
+  <meta property="og:image" content="/images/dla.png">
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="apple-touch-icon" href="/images/dla.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="/stylesheets/normalize.css">
+  <link rel="stylesheet" href="/stylesheets/main.css">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <meta name="theme-color" content="#fafafa">
+  <script src="/javascripts/deer/deer.js" type="module"></script>
+  <script src="/javascripts/plugins.js" defer></script>
+  <script src="/javascripts/main.js" defer></script>
+</head>
+
+<body>
+  <dla-header></dla-header>
+  <div class="container content">
+    <deer-view deer-lazy="true" id="recordDetail">
+      loading...
+    </deer-view>
+  </div>
+  <dla-footer></dla-footer>
+  <script>
+    const RERUM = "http://store.rerum.io/v1"
+
+    window.addEventListener('load', () => {
+      let id = location.href.split('/').pop()
+
+      if (!id.startsWith("http")) {
+        id = RERUM + "/id/" + id
+      }
+      recordDetail?.setAttribute('deer-id', id)
+    })
+  </script>
+</body>
+
+</html>
