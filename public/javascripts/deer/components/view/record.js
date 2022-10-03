@@ -1,4 +1,5 @@
 import { DEER, UTILS } from '../../deer-utils.js'
+import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
 let progress
@@ -11,7 +12,7 @@ const recordCardTemplate = obj => `
             </dl>
         </div>`
 
-export default class DLA_RecordCard extends DeerView {
+export default class DlaRecordCard extends DeerView {
     static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
 
     constructor() {
@@ -79,5 +80,30 @@ export default class DLA_RecordCard extends DeerView {
     }
 }
 
+const recordTemplate = obj => `
+    <div>
+        <h4>${UTILS.getLabel(obj)}</h4>
+        This is a Record.
+    </div>
+`
 
-customElements.define(`dla-record-card`, DLA_RecordCard)
+export class DlaRecord extends DeerView {
+    constructor() {
+        super()
+        this.template = recordTemplate
+    }
+    attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue)
+        switch (name) {
+            case DEER.ID: 
+                NoticeBoard.subscribe(this.getAttribute(DEER.ID), ev=>{
+                    if(ev.detail.type === "final") {
+                        
+                    }
+                })
+        }
+    }
+}
+
+customElements.define(`dla-record-card`, DlaRecordCard)
+customElements.define(`dla-record`, DlaRecord)

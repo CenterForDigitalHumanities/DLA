@@ -86,9 +86,9 @@ nav a:focus {
   padding: var(--body-padding);
   background-color: hsl(0, 100%, 100%);
   font-size: 1.2rem;
-  columns: 2;
+  /* columns: 2;
   column-gap: 2rem;
-  column-width: 40em;
+  column-width: 40em; */
 }
 
 row {
