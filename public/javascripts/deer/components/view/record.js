@@ -4,19 +4,19 @@ import DeerView from './view.js'
 let progress
 
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
-const template = obj => `
+const recordCardTemplate = obj => `
     <h4><a href="./record.html?id=${obj.id}">${UTILS.getLabel(obj)}</a></h4>
         <div class="row">
             <dl>
             </dl>
         </div>`
 
-export default class DLA_Record extends DeerView {
+export default class DLA_RecordCard extends DeerView {
     static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
 
     constructor() {
         super()
-        this.template = template
+        this.template = recordCardTemplate
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -80,4 +80,4 @@ export default class DLA_Record extends DeerView {
 }
 
 
-customElements.define(`dla-record`, DLA_Record)
+customElements.define(`dla-record-card`, DLA_RecordCard)
