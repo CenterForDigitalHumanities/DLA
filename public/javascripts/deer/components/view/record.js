@@ -1,5 +1,6 @@
 import { DEER, UTILS } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
+import DlaPoemDetail from './poem.js'
 import DeerView from './view.js'
 
 let progress
@@ -98,7 +99,10 @@ export class DlaRecord extends DeerView {
             case DEER.ID: 
                 NoticeBoard.subscribe(this.getAttribute(DEER.ID), ev=>{
                     if(ev.detail.type === "final") {
-                        
+                        // some logic to discover what it is.
+                        // match poem => DlaPoemDetail
+                        // match letter => DlaLetterDetail
+                        // match record => DlaRecordDetail
                     }
                 })
         }
