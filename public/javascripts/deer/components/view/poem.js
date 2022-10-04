@@ -75,7 +75,7 @@ export default class DlaPoemDetail extends DeerView {
         const expressionCard = c => `<deer-entity class="card col" deer-template="entity" deer-link="poem-expression.html#" deer-id="${c}">${c}</deer-entity>`
         const cards = document.createElement('div')
         cards.classList.add("row")
-        expressionConnections.then(expr=>cards.innerHTML = expr.map(conn => expressionCard(conn)).join(''))
+        expressionConnections.then(expr=>cards.innerHTML = Array.from(expr.values()).map(conn => expressionCard(conn)).join(''))
         this.after(cards)
     }
 }
