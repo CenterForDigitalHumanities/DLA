@@ -98,17 +98,17 @@ export default class DlaRecordCard extends DeerView {
  */ 
 const recordTemplate = obj => {
     let list = ``
-    let t = obj.type ?? obj["@type"] ?? "No Type"
-    const at = obj.additionalType ?? ""
-    if(t && at) {
-        t += `, specifically a ${at.split("/").pop()}`
+    let type = obj.type ?? obj["@type"] ?? "No Type"
+    const additionalType = obj.additionalType ?? ""
+    if(type && additionalType) {
+        type += `, specifically a ${additionalType.split("/").pop()}`
     }
     const projects = obj.tpenProject ?? []
     let projectList
     let thumbnailList = []
     // This commented block causes the template to only ever return [object Promise]
     //if(projects.length){
-        // We will need to troubleshoot this to support thumbnails, as they force this function to be async
+        // We will need to troubleshoot this to support thumbnails, as they force this template to be async
         // if(projects.length){
         //     // Right now this is only of length 0 or 1, but that could change in the future
         //     for await (const pid of projects){
@@ -134,23 +134,23 @@ const recordTemplate = obj => {
         })
         projectList = projectList.join(", ")
     }
-    let tc = UTILS.getValue(obj.targetCollection, [], "string") ?? ""
-    let tcl = ""
-    if(tc.indexOf("Poems Collection") > -1){
-        tcl = "/collection/615b724650c86821e60b11fa"
+    let targetCollection = UTILS.getValue(obj.targetCollection, [], "string") ?? ""
+    let targetCollectionLink = ""
+    if(targetCollection.indexOf("Poems Collection") > -1){
+        targetCollectionLink = "/collection/615b724650c86821e60b11fa"
     }
-    else if(tc.indexOf("Correspondence") > -1){
-        tcl = "/collection/61ae693050c86821e60b5d13"
+    else if(targetCollection.indexOf("Correspondence") > -1){
+        targetCollectionLink = "/collection/61ae693050c86821e60b5d13"
     }
-    list += `<dt>Record Type: </dt><dd>${t}</dd>`
+    list += `<dt>Record Type: </dt><dd>${type}</dd>`
     list += obj.description ? 
         `<dt>Record Description: </dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>` : ""
     list += (obj.depiction || obj.image) ?
-        `<img title="${t}" src="${obj.depiction ? UTILS.getValue(obj.depiction) : UTILS.getValue(obj.image)}"/>` : ""
+        `<img title="${type}" src="${obj.depiction ? UTILS.getValue(obj.depiction) : UTILS.getValue(obj.image)}"/>` : ""
     list += projects.length ?
         `<dt>T-PEN Manifest(s): </dt><dd> ${projectList} </dd>` : ""
     list += obj.targetCollection ?
-        `<dt>Find it in Collection: </dt><dd><a target="_blank" href="${tcl}">${tc}</a></dd>` : ""
+        `<dt>Find it in Collection: </dt><dd><a target="_blank" href="${targetCollectionLink}">${targetCollection}</a></dd>` : ""
     
     return `
        <header>
