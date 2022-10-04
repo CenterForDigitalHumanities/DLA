@@ -1,6 +1,5 @@
 import { UTILS, DEER } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
-import DlaRecord from './record.js'
 import DeerView from './view.js'
 
 const template = (obj, options = {}) => {
@@ -43,7 +42,7 @@ const OGtemplate = (obj, options = {}) => {
     return { html, then }
 }
 
-export default class DlaPoemDetail extends DlaRecord {
+export default class DlaPoemDetail extends DeerView {
     static get observedAttributes() { return [DEER.ID,DEER.LAZY] }
 
     constructor() {
@@ -82,7 +81,11 @@ export default class DlaPoemDetail extends DlaRecord {
 
 customElements.define(`dla-poem-detail`, DlaPoemDetail)
 
-
+export function isPoem(elem){
+    if(!elem.Entity) { return false }
+    const obj = elem.Entity.data
+    return obj.type?.includes("Work") && obj.additionalType?.includes("dcmitype/Text")
+}
 
 // poemDetail: (obj, options = {}) => {
 //     const html = `<h2>${UTILS.getLabel(obj)}</h2> 
