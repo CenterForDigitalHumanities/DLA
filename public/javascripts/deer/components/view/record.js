@@ -81,12 +81,58 @@ export default class DlaRecordCard extends DeerView {
     }
 }
 
-const recordTemplate = obj => `
-    <div>
-        <h4>${UTILS.getLabel(obj)}</h4>
-        This is a Record.
-    </div>
-`
+/**
+ * A simple generic view for a piece of data with metadata.
+ * The goal is to consider the most generic things one would expect to be in all data (like 'label')
+ * The view should be simple, like something that comes back from a search through a bucket of information.
+ * Generic fields to consider
+ * type/@type
+ * id/@id
+ * label/name
+ * description/summary
+ * collection it belongs to (targetCollection)
+ * thumbnail
+ * existing transcription (tpenProject)
+ * 
+ * @param obj - The piece of data with as much metadata as could be found
+ */ 
+const recordTemplate = obj => {
+    let list = ``
+    let t = obj.type ?? obj["@type"] ?? "No Type"
+    const at = obj.additionalType ?? ""
+    if(t && at) {
+        t += `, specifically a ${at.split("/").pop()}`
+    }
+    const projects = obj.tpenProject ?? []
+    let projectList
+    if(projects.length){
+        projectList = projects.map(pid => {
+            const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
+            return link
+        })
+        projectList = projectList.join(", ")
+    }
+    list += `<dt>Record Type: </dt><dd>${t}</dd>`
+    list += obj.description ? 
+        `<dt>Record Description: </dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>` : ""
+    list += (obj.depiction || obj.image) ?
+        `<img title="${t}" src="${obj.depiction ? UTILS.getValue(obj.depiction) : UTILS.getValue(obj.image)}"/>` : ""
+    list += projects.length ?
+        `<dt>T-PEN Manifest(s): </dt><dd> ${projectList} </dd>` : ""
+    list += obj.targetCollection ?
+        `<dt>Find it in Collection: </dt><dd> ${UTILS.getValue(obj.targetCollection, [], "string")} </dd>` : ""
+    
+    return `
+       <header>
+          <h4><a href="/record/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${UTILS.getLabel(obj)}</a></h4>
+       </header>
+       <dl>
+          ${list}
+       <dl>
+    `
+}
+
+
 
 export class DlaRecord extends DeerView {
     constructor() {
