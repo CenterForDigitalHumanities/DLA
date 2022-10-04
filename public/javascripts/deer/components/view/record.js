@@ -121,7 +121,12 @@ const recordTemplate = obj => {
     //                 thumbnail = `<img src="${image}" />`
     //             }
     //         }
-    //         projectList.push(thumbnail ?? link)
+    //         if(thumbnail){
+    //             projectList.push(thumbnail)
+    //         }
+    //         else{
+    //             projectList.push(link)
+    //         }
     //     }
     //     projectList = projectList.join(", ")
     // }    
