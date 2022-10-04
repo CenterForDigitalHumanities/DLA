@@ -136,11 +136,14 @@ const recordTemplate = obj => {
     }
     let targetCollection = UTILS.getValue(obj.targetCollection, [], "string") ?? ""
     let targetCollectionLink = ""
+    let linkOut = "record"
     if(targetCollection.indexOf("Poems Collection") > -1){
         targetCollectionLink = "/collection/615b724650c86821e60b11fa"
+        linkOut = "poem"
     }
     else if(targetCollection.indexOf("Correspondence") > -1){
         targetCollectionLink = "/collection/61ae693050c86821e60b5d13"
+        linkOut = "letter"
     }
     list += `<dt>Record Type: </dt><dd>${type}</dd>`
     list += obj.description ? 
@@ -154,7 +157,7 @@ const recordTemplate = obj => {
     
     return `
        <header>
-          <h4><a href="/record/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${UTILS.getLabel(obj)}</a></h4>
+          <h4><a href="/${linkOut}/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${UTILS.getLabel(obj)}</a></h4>
        </header>
        <dl>
           ${list}
