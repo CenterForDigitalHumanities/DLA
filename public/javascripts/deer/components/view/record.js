@@ -105,12 +105,43 @@ const recordTemplate = obj => {
     }
     const projects = obj.tpenProject ?? []
     let projectList
+    let thumbnailList = []
     if(projects.length){
-        projectList = projects.map(pid => {
-            const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
-            return link
-        })
+        // This commented block causes the template to only ever return [object Promise]
+        // We will need to troubleshoot this to support thumbnails, as they force this function to be async
+        // if(projects.length){
+        //     // Right now this is only of length 0 or 1, but that could change in the future
+        //     for await (const pid of projects){
+        //         const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
+        //         const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
+        //         let thumbnail = ""
+        //         if(projData){
+        //             const canvas = projData.sequences[0].canvases[0]
+        //             const image = canvas.images ? canvas.images[0].resource["@id"] : ""
+        //             if(image){
+        //                 thumbnail = `<img src="${image}" />`
+        //             }
+        //         }
+        //         projectList.push(thumbnail ?? link)
+        //     }
+        //     projectList = projectList.join(", ")
+        // }
+        if(projects.length){
+            projectList = projects.map(pid => {
+                const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
+                return link
+            })
+            projectList = projectList.join(", ")
+        }
         projectList = projectList.join(", ")
+    }
+    let tc = UTILS.getValue(obj.targetCollection, [], "string") ?? ""
+    let tcl = ""
+    if(tc.indexOf("Poems Collection") > -1){
+        tcl = "/collection/615b724650c86821e60b11fa"
+    }
+    else if(tc.indexOf("Correspondence") > -1){
+        tcl = "/collection/61ae693050c86821e60b5d13"
     }
     list += `<dt>Record Type: </dt><dd>${t}</dd>`
     list += obj.description ? 
@@ -120,7 +151,7 @@ const recordTemplate = obj => {
     list += projects.length ?
         `<dt>T-PEN Manifest(s): </dt><dd> ${projectList} </dd>` : ""
     list += obj.targetCollection ?
-        `<dt>Find it in Collection: </dt><dd> ${UTILS.getValue(obj.targetCollection, [], "string")} </dd>` : ""
+        `<dt>Find it in Collection: </dt><dd><a target="_blank" href="${tcl}">${tc}</a></dd>` : ""
     
     return `
        <header>
