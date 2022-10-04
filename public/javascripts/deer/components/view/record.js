@@ -106,8 +106,8 @@ const recordTemplate = obj => {
     const projects = obj.tpenProject ?? []
     let projectList
     let thumbnailList = []
-    if(projects.length){
-        // This commented block causes the template to only ever return [object Promise]
+    // This commented block causes the template to only ever return [object Promise]
+    //if(projects.length){
         // We will need to troubleshoot this to support thumbnails, as they force this function to be async
         // if(projects.length){
         //     // Right now this is only of length 0 or 1, but that could change in the future
@@ -125,14 +125,13 @@ const recordTemplate = obj => {
         //         projectList.push(thumbnail ?? link)
         //     }
         //     projectList = projectList.join(", ")
-        // }
-        if(projects.length){
-            projectList = projects.map(pid => {
-                const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
-                return link
-            })
-            projectList = projectList.join(", ")
-        }
+        // }    
+    //}
+    if(projects.length){
+        projectList = projects.map(pid => {
+            const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
+            return link
+        })
         projectList = projectList.join(", ")
     }
     let tc = UTILS.getValue(obj.targetCollection, [], "string") ?? ""
