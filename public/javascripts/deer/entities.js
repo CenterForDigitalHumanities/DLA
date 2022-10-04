@@ -75,7 +75,10 @@ class Entity extends Object {
         var annos = Array.isArray(assertions) ? Promise.resolve(assertions) : findByTargetId(this.id, [], DEER.URLS.QUERY)
         return annos
             .then(annotations => annotations.filter(a => (a.type ?? a['@type'])?.includes("Annotation")).map(anno => new Annotation(anno)))
-            .then(newAssertions => newAssertions?.length ? this.#announceUpdate() : this.#announceComplete())
+            .then(newAssertions => {
+                if (newAssertions?.length) {this.#announceUpdate()}
+                this.#announceComplete()
+            })
             .catch(err => console.log(err))
     }
 
