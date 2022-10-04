@@ -84,7 +84,7 @@ customElements.define(`dla-poem-detail`, DlaPoemDetail)
 export function isPoem(elem){
     if(!elem.Entity) { return false }
     const obj = elem.Entity.data
-    return obj.type.includes("Work") && obj.additionalType.includes("dcmitype/Text")
+    return obj.type?.includes("Work") && obj.additionalType?.includes("dcmitype/Text")
 }
 
 // poemDetail: (obj, options = {}) => {
