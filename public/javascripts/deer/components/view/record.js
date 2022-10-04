@@ -107,26 +107,24 @@ const recordTemplate = obj => {
     let projectList
     let thumbnailList = []
     // This commented block causes the template to only ever return [object Promise]
-    //if(projects.length){
-        // We will need to troubleshoot this to support thumbnails, as they force this template to be async
-        // if(projects.length){
-        //     // Right now this is only of length 0 or 1, but that could change in the future
-        //     for await (const pid of projects){
-        //         const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
-        //         const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
-        //         let thumbnail = ""
-        //         if(projData){
-        //             const canvas = projData.sequences[0].canvases[0]
-        //             const image = canvas.images ? canvas.images[0].resource["@id"] : ""
-        //             if(image){
-        //                 thumbnail = `<img src="${image}" />`
-        //             }
-        //         }
-        //         projectList.push(thumbnail ?? link)
-        //     }
-        //     projectList = projectList.join(", ")
-        // }    
-    //}
+    // We will need to troubleshoot this to support thumbnails, as they force this template to be async
+    // if(projects.length){
+    //     // Right now this is only of length 0 or 1, but that could change in the future
+    //     for await (const pid of projects){
+    //         const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
+    //         const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
+    //         let thumbnail = ""
+    //         if(projData){
+    //             const canvas = projData.sequences[0].canvases[0]
+    //             const image = canvas.images ? canvas.images[0].resource["@id"] : ""
+    //             if(image){
+    //                 thumbnail = `<img src="${image}" />`
+    //             }
+    //         }
+    //         projectList.push(thumbnail ?? link)
+    //     }
+    //     projectList = projectList.join(", ")
+    // }    
     if(projects.length){
         projectList = projects.map(pid => {
             const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
