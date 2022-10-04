@@ -146,8 +146,6 @@ const recordTemplate = obj => {
     list += `<dt>Record Type: </dt><dd>${type}</dd>`
     list += obj.description ? 
         `<dt>Record Description: </dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>` : ""
-    list += (obj.depiction || obj.image) ?
-        `<img title="${type}" src="${obj.depiction ? UTILS.getValue(obj.depiction) : UTILS.getValue(obj.image)}"/>` : ""
     list += projects.length ?
         `<dt>T-PEN Manifest(s): </dt><dd> ${projectList} </dd>` : ""
     list += obj.targetCollection ?
