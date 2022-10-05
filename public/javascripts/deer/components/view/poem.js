@@ -51,12 +51,13 @@ export default class DlaPoemDetail extends DeerView {
     }
 
     connectedCallback() {
+        super.connectedCallback()
         const historyWildcard = { "$exists": true, "$size": 0 }
         const exprQuery = {
             $or: [{
-                "body.isRealizationOf": this.id
+                "body.isRealizationOf": this.Entity?.id
             }, {
-                "body.isRealizationOf.value": this.id
+                "body.isRealizationOf.value": this.Entity?.id
             }],
             "__rerum.history.next": historyWildcard
         }
@@ -67,14 +68,14 @@ export default class DlaPoemDetail extends DeerView {
         })
             .then(response => response.json())
             .then(annos => {
-                return annos.map(anno => {
-                    return { "annoId": UTILS.getValue(anno["@id"] ?? anno.id), "expId": UTILS.getValue(anno.target) }
-                })
+                const expressions = new Set()
+                annos.forEach(anno => expressions.add(UTILS.getValue(anno.target)))
+                return expressions
             })
-        const expressionCard = c => `<deer-view class="card col" deer-template="simpleExpression" deer-link="poem-expression.html#" anno-id="${c.annoId}" deer-id="${c.expId}">${c.expId}</deer-view>`
+        const expressionCard = c => `<deer-entity class="card col" deer-template="entity" deer-link="poem-expression.html#" deer-id="${c}">${c}</deer-entity>`
         const cards = document.createElement('div')
         cards.classList.add("row")
-        expressionConnections.then(expr=>cards.innerHTML = expr.map(conn => expressionCard(conn)).join(''))
+        expressionConnections.then(expr=>cards.innerHTML = Array.from(expr.values()).map(conn => expressionCard(conn)).join(''))
         this.after(cards)
     }
 }
