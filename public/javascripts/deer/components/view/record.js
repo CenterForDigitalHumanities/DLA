@@ -96,9 +96,9 @@ export default class DlaRecordCard extends DeerView {
  * 
  * @param obj - The piece of data with as much metadata as could be found
  */ 
-const recordTemplate = obj => {
-    
-}
+const recordTemplate = obj => `
+    <h4>DLA Record</h4>
+`
 import { isPoem } from './poem.js'
 
 export class DlaRecord extends DeerView {
@@ -109,8 +109,9 @@ export class DlaRecord extends DeerView {
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
         switch (name) {
-            case DEER.ID:
-                NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#poemSwap.bind(this))
+            switch (name) {
+                case DEER.FINAL: this.#renderGenericRecord.bind(this)
+            }
         }
     }
     #replaceElement(tagName) {
@@ -131,8 +132,6 @@ export class DlaRecord extends DeerView {
     async #renderGenericRecord() {
         const dataRecord = this.Entity?.assertions
         if (!dataRecord) { return }
-
-        
         let type = dataRecord.type ?? dataRecord["@type"] ?? "No Type"
         const additionalType = dataRecord.additionalType ?? ""
         if(type && additionalType) {
@@ -188,6 +187,8 @@ export class DlaRecord extends DeerView {
         generic_template += dataRecord.targetCollection ?
             `<dt>Find it in Collection: </dt><dd><a target="_blank" href="${targetCollectionLink}">${targetCollection}</a></dd>` : ""
         generic_template += `</dl>`
+
+        this.querySelector("h4").replaceWith = generic_template
         
         return generic_template
     }
