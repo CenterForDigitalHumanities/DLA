@@ -97,73 +97,7 @@ export default class DlaRecordCard extends DeerView {
  * @param obj - The piece of data with as much metadata as could be found
  */ 
 const recordTemplate = obj => {
-    let list = ``
-    let type = obj.type ?? obj["@type"] ?? "No Type"
-    const additionalType = obj.additionalType ?? ""
-    if(type && additionalType) {
-        type += `, specifically a ${additionalType.split("/").pop()}`
-    }
-    const projects = obj.tpenProject ?? []
-    let projectList
-    let thumbnailList = []
-    // This commented block causes the template to only ever return [object Promise]
-    // We will need to troubleshoot this to support thumbnails, as they force this template to be async
-    // if(projects.length){
-    //     // Right now this is only of length 0 or 1, but that could change in the future
-    //     for await (const pid of projects){
-    //         const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
-    //         const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
-    //         let thumbnail = ""
-    //         if(projData){
-    //             const canvas = projData.sequences[0].canvases[0]
-    //             const image = canvas.images ? canvas.images[0].resource["@id"] : ""
-    //             if(image){
-    //                 thumbnail = `<img src="${image}" />`
-    //             }
-    //         }
-    //         if(thumbnail){
-    //             projectList.push(thumbnail)
-    //         }
-    //         else{
-    //             projectList.push(link)
-    //         }
-    //     }
-    //     projectList = projectList.join(", ")
-    // }    
-    if(projects.length){
-        projectList = projects.map(pid => {
-            const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
-            return link
-        })
-        projectList = projectList.join(", ")
-    }
-    let targetCollection = UTILS.getValue(obj.targetCollection, [], "string") ?? ""
-    let targetCollectionLink = ""
-    let linkOut = "record"
-    if(targetCollection.indexOf("Poems Collection") > -1){
-        targetCollectionLink = "/collection/615b724650c86821e60b11fa"
-        linkOut = "poem"
-    }
-    else if(targetCollection.indexOf("Correspondence") > -1){
-        targetCollectionLink = "/collection/61ae693050c86821e60b5d13"
-        linkOut = "letter"
-    }
-    list += `<dt>Record Type: </dt><dd>${type}</dd>`
-    list += obj.description ? 
-        `<dt>Record Description: </dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>` : ""
-    list += projects.length ?
-        `<dt>T-PEN Manifest(s): </dt><dd> ${projectList} </dd>` : ""
-    list += obj.targetCollection ?
-        `<dt>Find it in Collection: </dt><dd><a target="_blank" href="${targetCollectionLink}">${targetCollection}</a></dd>` : ""
     
-    return `
-       <header>
-          <h4><a href="/${linkOut}/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${UTILS.getLabel(obj)}</a></h4>
-       </header>
-       <dl>
-          ${list}
-       <dl>
-    `
 }
 import { isPoem } from './poem.js'
 
@@ -193,6 +127,69 @@ export class DlaRecord extends DeerView {
                 this.#replaceElement("dla-poem-detail")
             }
         }
+    }
+    async #renderGenericRecord() {
+        const dataRecord = this.Entity?.assertions
+        if (!dataRecord) { return }
+
+        
+        let type = dataRecord.type ?? dataRecord["@type"] ?? "No Type"
+        const additionalType = dataRecord.additionalType ?? ""
+        if(type && additionalType) {
+            type += `, specifically a ${additionalType.split("/").pop()}`
+        }
+        const projects = dataRecord.tpenProject ?? []
+        let projectList
+        let thumbnailList = []
+        if(projects.length){
+            // Right now this is only of length 0 or 1, but that could change in the future
+            for await (const pid of projects){
+                const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
+                const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
+                let thumbnail = ""
+                if(projData){
+                    const canvas = projData.sequences[0].canvases[0]
+                    const image = canvas.images ? canvas.images[0].resource["@id"] : ""
+                    if(image){
+                        thumbnail = `<img src="${image}" />`
+                    }
+                }
+                if(thumbnail){
+                    projectList.push(thumbnail)
+                }
+                else{
+                    projectList.push(link)
+                }
+            }
+            projectList = projectList.join(", ")
+        }    
+        let targetCollection = UTILS.getValue(dataRecord.targetCollection, [], "string") ?? ""
+        let targetCollectionLink = ""
+        let linkOut = "record"
+        if(targetCollection.indexOf("Poems Collection") > -1){
+            targetCollectionLink = "/collection/615b724650c86821e60b11fa"
+            linkOut = "poem"
+        }
+        else if(targetCollection.indexOf("Correspondence") > -1){
+            targetCollectionLink = "/collection/61ae693050c86821e60b5d13"
+            linkOut = "letter"
+        }
+        let generic_template = `
+            <header>
+              <h4><a href="/${linkOut}/${encodeURIComponent(obj.id.split('/').pop(), "UTF-8")}">${UTILS.getLabel(obj)}</a></h4>
+           </header>
+           <dl>
+        `
+        generic_template += `<dt>Record Type: </dt><dd>${type}</dd>`
+        generic_template += dataRecord.description ? 
+            `<dt>Record Description: </dt><dd>${UTILS.getValue(dataRecord.description, [], "string")}</dd>` : ""
+        generic_template += projects.length ?
+            `<dt>T-PEN Manifest(s): </dt><dd> ${projectList} </dd>` : ""
+        generic_template += dataRecord.targetCollection ?
+            `<dt>Find it in Collection: </dt><dd><a target="_blank" href="${targetCollectionLink}">${targetCollection}</a></dd>` : ""
+        generic_template += `</dl>`
+        
+        return generic_template
     }
 }
 
