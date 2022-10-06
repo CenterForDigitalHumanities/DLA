@@ -96,10 +96,20 @@ import { isPoem } from './poem.js'
  * thumbnail
  * existing transcription (tpenProject)
  * 
+ * Since this will be the template that essentially works as the preloader
+ * 
  * @param obj - The piece of data with as much metadata as could be found
  */ 
 const recordTemplate = (obj, options = {}) => {
-    return `<h4> A record bro </h4>`
+    return `<h4>${UTILS.getLabel(obj)}</h4>
+        <div class="row">
+            <dl class="placein">
+                <dd></dd>
+                <dd></dd>
+                <dd></dd>
+                <dd></dd>
+            </dl>
+        </div>`
 }
 
 export class DlaRecord extends DeerView {
@@ -111,25 +121,11 @@ export class DlaRecord extends DeerView {
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
         console.log("AC")
-        switch (name) {
-            case DEER.FINAL: 
-                //We can wait for the final like this
-                //this.#renderGenericRecord()
-            break
-            case DEER.ID: 
-                //Or once we know the deer-id we can subscribe to the NoticeBoard events for this entity
-                //hmm would I only do this if we didn't subscribe in the connectedCallback()?  How could I check?
-                NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
-            break
-            default:
-        }
-    }
-    connectedCallback() {
-        super.connectedCallback()
-        //Note that when we get here, this may not have a DEER.ID attribute on it.
-        //If on record.html the dla-record had deer-id, we could do this
-        if(this.hasAttribute("deer-id") && this.getAttribute(DEER.ID)){
-            NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+        if(name === DEER.ID){
+            if(oldValue !== null && oldValue !== newValue){
+                NoticeBoard.unsubscribe(oldValue, this.#renderGenericRecord.bind(this))
+            }
+            NoticeBoard.subscribe(newValue, this.#renderGenericRecord.bind(this))
         }
     }
     async #renderGenericRecord(ev) {
@@ -138,22 +134,22 @@ export class DlaRecord extends DeerView {
         let type = dataRecord.type ?? dataRecord["@type"] ?? "No Type"
         const additionalType = dataRecord.additionalType ?? ""
         if(type && additionalType) {
-            type += `, specifically a ${additionalType.split("/").pop()}`
+            type += ` : ${additionalType.split("/").pop()}`
         }
         const projects = dataRecord.tpenProject ?? []
         let projectList = []
-        let thumbnailList = []
         if(projects.length){
-            // Right now this is only of length 0 or 1, but that could change in the future
+            // Right now this is only of length 0 or 1
+            // We still loop it, anticipating a future where there are more than 1.
             for await (const pid of projects){
-                const link = `<a src="http://t-pen.org/TPEN/manifest/${pid.value}" target="_blank"> ${pid.value} </a>`
+                const link = `<a src="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}" target="_blank"> T-PEN Project ${pid.value} </a>`
                 const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
                 let thumbnail = ""
                 if(projData.sequences[0].canvases && projData.sequences[0].canvases.length){
                     const canvas = projData.sequences[0].canvases[0]
                     const image = (canvas.images && canvas.images.length) ? canvas.images[0].resource["@id"] : ""
                     if(image){
-                        thumbnail = `<img src="${image}" />`
+                        thumbnail = `<a target="_blank" href="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}"><img class="thumbnail" src="${image}" /></a>`
                     }
                 }
                 if(thumbnail){
@@ -167,28 +163,26 @@ export class DlaRecord extends DeerView {
         }    
         let targetCollection = UTILS.getValue(dataRecord.targetCollection, [], "string") ?? ""
         let targetCollectionLink = ""
-        let linkOut = "record"
         if(targetCollection.indexOf("Poems Collection") > -1){
             targetCollectionLink = "/collection/615b724650c86821e60b11fa"
-            linkOut = "poem"
         }
         else if(targetCollection.indexOf("Correspondence") > -1){
             targetCollectionLink = "/collection/61ae693050c86821e60b5d13"
-            linkOut = "letter"
         }
         let generic_template = `
             <header>
-              <h4><a href="/${linkOut}/${encodeURIComponent(dataRecord.id.split('/').pop(), "UTF-8")}">${UTILS.getLabel(dataRecord)}</a></h4>
+              <h4>
+                <a target="_blank" href="${targetCollectionLink}">${targetCollection}</a><br>      
+                <dd>&#8811; ${UTILS.getLabel(dataRecord)}</dd>
+              </h4>
            </header>
            <dl>
         `
-        generic_template += `<dt>Record Type: </dt><dd>${type}</dd>`
+        generic_template += `<dt>Record Type </dt><dd>${type}</dd>`
         generic_template += dataRecord.description ? 
-            `<dt>Record Description: </dt><dd>${UTILS.getValue(dataRecord.description, [], "string")}</dd>` : ""
+            `<dt>Record Description </dt><dd>${UTILS.getValue(dataRecord.description, [], "string")}</dd>` : ""
         generic_template += projects.length ?
-            `<dt>T-PEN Manifest(s): </dt><dd> ${projectList} </dd>` : ""
-        generic_template += dataRecord.targetCollection ?
-            `<dt>Find it in Collection: </dt><dd><a target="_blank" href="${targetCollectionLink}">${targetCollection}</a></dd>` : ""
+            `<dt>T-PEN Manifest(s) </dt><dd> ${projectList} </dd>` : ""
         generic_template += `</dl>`
         this.innerHTML = generic_template
         NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
