@@ -112,17 +112,29 @@ export class DlaRecord extends DeerView {
         super.attributeChangedCallback(name, oldValue, newValue)
         console.log("AC")
         switch (name) {
-            case DEER.FINAL: this.#renderGenericRecord()
+            case DEER.FINAL: 
+                //We can wait for the final like this
+                //this.#renderGenericRecord()
+            break
+            case DEER.ID: 
+                //Or once we know the deer-id we can subscribe to the NoticeBoard events for this entity
+                //hmm would I only do this if we didn't subscribe in the connectedCallback()?  How could I check?
+                NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+            break
+            default:
         }
     }
     connectedCallback() {
         super.connectedCallback()
-        console.log("CC")
-        //NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+        //Note that when we get here, this may not have a DEER.ID attribute on it.
+        //If on record.html the dla-record had deer-id, we could do this
+        if(this.hasAttribute("deer-id") && this.getAttribute(DEER.ID)){
+            NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+        }
     }
-    async #renderGenericRecord() {
+    async #renderGenericRecord(ev) {
+        if (!["complete"].includes(ev.detail.action)) {return}
         const dataRecord = this.Entity?.assertions
-        if (!dataRecord) { return }
         let type = dataRecord.type ?? dataRecord["@type"] ?? "No Type"
         const additionalType = dataRecord.additionalType ?? ""
         if(type && additionalType) {
@@ -178,8 +190,8 @@ export class DlaRecord extends DeerView {
         generic_template += dataRecord.targetCollection ?
             `<dt>Find it in Collection: </dt><dd><a target="_blank" href="${targetCollectionLink}">${targetCollection}</a></dd>` : ""
         generic_template += `</dl>`
-
         this.innerHTML = generic_template
+        NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
     }
 }
 
