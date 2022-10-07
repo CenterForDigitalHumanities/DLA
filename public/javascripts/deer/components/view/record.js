@@ -87,18 +87,19 @@ import { isPoem } from './poem.js'
  * A simple generic view for a piece of data with metadata.
  * The goal is to consider the most generic things one would expect to be in all data (like 'label')
  * The view should be simple, like something that comes back from a search through a bucket of information.
- * Generic fields to consider
+ * Generic properties that are considered
  * type/@type
  * id/@id
  * label/name
- * description/summary
- * collection it belongs to (targetCollection)
+ * description
+ * targetCollection (the label not the URI)
  * thumbnail
- * existing transcription (tpenProject)
+ * tpenProject (show thumbnail when available or link to T-PEN project)
  * 
- * Since this will be the template that essentially works as the preloader
+ * Often this will simply act as a pre-loader, and will be overwritten by a specific kind of dla record.
+ * As such, a simple "shadow loader" is classed in via the .placein CSS class.
  * 
- * @param obj - The piece of data with as much metadata as could be found
+ * @param obj - The initial JSON entity, possibly with a label already.
  */ 
 const recordTemplate = (obj, options = {}) => {
     return `<h4>${UTILS.getLabel(obj)}</h4>
@@ -120,7 +121,6 @@ export class DlaRecord extends DeerView {
     }
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
-        console.log("AC")
         if(name === DEER.ID){
             if(oldValue !== null && oldValue !== newValue){
                 NoticeBoard.unsubscribe(oldValue, this.#renderGenericRecord.bind(this))
@@ -131,23 +131,19 @@ export class DlaRecord extends DeerView {
     async #renderGenericRecord(ev) {
         if (!["complete"].includes(ev.detail.action)) {return}
         const dataRecord = this.Entity?.assertions
-        let type = dataRecord.type ?? dataRecord["@type"] ?? "No Type"
-        const additionalType = dataRecord.additionalType ?? ""
-        if(type && additionalType) {
-            type += ` : ${additionalType.split("/").pop()}`
-        }
         const projects = dataRecord.tpenProject ?? []
         let projectList = []
         if(projects.length){
             // Right now this is only of length 0 or 1
             // We still loop it, anticipating a future where there are more than 1.
+            // Show the thumbnail when available, otherwise show the link to the T-PEN project.
             for await (const pid of projects){
                 const link = `<a src="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}" target="_blank"> T-PEN Project ${pid.value} </a>`
                 const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
                 let thumbnail = ""
-                if(projData.sequences[0].canvases && projData.sequences[0].canvases.length){
+                if(projData.sequences[0]?.canvases.length){
                     const canvas = projData.sequences[0].canvases[0]
-                    const image = (canvas.images && canvas.images.length) ? canvas.images[0].resource["@id"] : ""
+                    const image = (canvas?.images.length) ? canvas.images[0].resource["@id"] : ""
                     if(image){
                         thumbnail = `<a target="_blank" href="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}"><img class="thumbnail" src="${image}" /></a>`
                     }
@@ -162,12 +158,16 @@ export class DlaRecord extends DeerView {
             projectList = projectList.join(", ")
         }    
         let targetCollection = UTILS.getValue(dataRecord.targetCollection, [], "string") ?? ""
-        let targetCollectionLink = ""
-        if(targetCollection.indexOf("Poems Collection") > -1){
-            targetCollectionLink = "/collection/615b724650c86821e60b11fa"
-        }
-        else if(targetCollection.indexOf("Correspondence") > -1){
-            targetCollectionLink = "/collection/61ae693050c86821e60b5d13"
+        let targetCollectionLink = 
+            (targetCollection.indexOf("Poems Collection") > -1) ?
+                "/collection/615b724650c86821e60b11fa" : 
+            (targetCollection.indexOf("Correspondence") > -1) ?
+                "/collection/61ae693050c86821e60b5d13" :
+            ""
+        let type = dataRecord.type ?? dataRecord["@type"] ?? "No Type"
+        const additionalType = dataRecord.additionalType ?? ""
+        if(type && additionalType) {
+            type += ` : ${additionalType.split("/").pop()}`
         }
         let generic_template = `
             <header>
