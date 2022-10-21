@@ -61,22 +61,22 @@ export default class DlaPoemDetail extends DeerView {
             }],
             "__rerum.history.next": historyWildcard
         }
-        const expressionConnections = fetch(DEER.URLS.QUERY, {
+        const expressionCard = c => `<dla-simple-expression class="card col" deer-template="entity" deer-link="poem-expression.html#" deer-id="${c}">${c}</dla-simple-expression>`
+        const cards = document.createElement('div')
+        cards.classList.add("row")
+        this.after(cards)
+        fetch(DEER.URLS.QUERY, {
             method: "POST",
             mode: "cors",
             body: JSON.stringify(exprQuery)
         })
-            .then(response => response.json())
-            .then(annos => {
-                const expressions = new Set()
-                annos.forEach(anno => expressions.add(UTILS.getValue(anno.target)))
-                return expressions
-            })
-        const expressionCard = c => `<deer-entity class="card col" deer-template="entity" deer-link="poem-expression.html#" deer-id="${c}">${c}</deer-entity>`
-        const cards = document.createElement('div')
-        cards.classList.add("row")
-        expressionConnections.then(expr=>cards.innerHTML = Array.from(expr.values()).map(conn => expressionCard(conn)).join(''))
-        this.after(cards)
+        .then(response => response.json())
+        .then(annos => {
+            const expressions = new Set()
+            annos.forEach(anno => expressions.add(UTILS.getValue(anno.target)))
+            return expressions
+        })
+        .then(expr=>cards.innerHTML = Array.from(expr.values()).map(conn => expressionCard(conn)).join(''))
     }
 }
 
@@ -233,3 +233,55 @@ export function isPoem(elem){
 //     }
 //     return { html, then }
 // }
+
+const simpleExpressionTemplate = (obj) => `
+<style>
+dla-simple-expression {
+    display: inline-block;
+    box-sizing: border-box;
+    box-shadow: #000 1px 1px 5px;
+    margin: 0.32em;
+    padding: 0.68em;
+}
+</style>
+    <header><h4>${UTILS.getLabel(obj)}</h4></header>
+    <h6>View links below for connected content</h6>
+    <div class="row manifestation-url"></div>
+    <h6> Control this Expression </h6>
+    <div class="row">
+        <a class="tag is-small" style="color:darkgrey" href="poem-expression.html#${UTILS.getValue(obj["@id"])}">full view</a>
+        <a class="tag is-small" href="expression.html#${UTILS.getValue(obj["@id"])}">edit details</a>
+    </div>
+    `
+    // ^^ If we want to offer a delete button, here's an OK one
+    //<a class="tag is-small" style="color:red" onclick="removeExpressionFromWork('${UTILS.getLabel(obj)}', '${UTILS.getValue(obj["@id"])}', this)">disconnect from poem</a>
+class simpleExpression extends DeerView {
+    constructor() {
+        super()
+        this.template = simpleExpressionTemplate
+    }
+    
+    connectedCallback() {
+        const mURL = manId => `<a href="${manId}" target="_blank">${manId}</a>`
+        const historyWildcard = { "$exists": true, "$size": 0 }
+        const manQuery = {
+            $or: [{
+                "body.isEmbodimentOf": this.id
+            }, {
+                "body.isEmbodimentOf.value": this.id
+            }],
+            "__rerum.history.next": historyWildcard
+        }
+        const manifestationIds = fetch(config.URLS.QUERY, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(manQuery)
+        })
+        .then(response => response.json())
+        .then(annos => annos.map(anno => UTILS.getValue(anno.target)))
+        .then(ids => ids.map(id => id.selector ? `${id?.source}#${id.selector.value}` : id))
+        .then(manifestationIds => document.querySelector(".manifestation-url").innerHTML = manifestationIds.map(manId => mURL(manId)).join(''))
+    }
+}
+
+customElements.define("dla-simple-expression", simpleExpression)
