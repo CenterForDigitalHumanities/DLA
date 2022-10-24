@@ -3,43 +3,77 @@ import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
 const template = (obj, options = {}) => {
-    return `<p>Review the connected published versions of this poem, listed below.  The same poem can appear in many forms of publication.</p>`
+    return `
+    <style>
+    .textSample {
+        width: fit-content;
+      }
+      
+      .textSample lg {
+        padding: 0.68em 0;
+      }
+      
+      .textSample stanza, .textSample line {
+        display: block;
+      }
+      .textSample stanza {
+        margin-bottom: 0.68em;
+        min-width: 25em;
+      }
+      .textSample line {
+        width: 100%;
+        background-color: hsl(0deg 0% 90%);
+        border-radius: 0.5em;
+        line-height: 1.2;
+        height: 1em;
+        margin: 0.15em;
+        box-shadow: inset 0 0 2px white;
+        animation: loaderColor alternate 500ms;
+      }
+      .textSample line:last-of-type {
+        width: 80%;
+      }
+      @keyframes loaderColor {
+        0% {
+          background-color: hsl(0deg 0% 95%);
+        }
+        100% {
+          background-color: hsl(0deg 0% 85%);
+        }
+      }
+      
+/* TEI pseudoXSLT */
+.textSample {
+  font-variant: small-caps;
+  font-weight: bold;
+}
+.textSample lg[type='stanza'],.textSample l {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-variant: initial;
+  font-weight: initial;
+  display: block;
+  width: 100%;
 }
 
-const OGtemplate = (obj, options = {}) => {
-    const html = `
-    <p>Review the connected published versions of this poem, listed below.  The same poem can appear in many forms of publication.</p>`
-
-    const then = async (elem, obj, options) => {
-        const workId = obj['@id']
-        const historyWildcard = { "$exists": true, "$size": 0 }
-        const exprQuery = {
-            $or: [{
-                "body.isRealizationOf": workId
-            }, {
-                "body.isRealizationOf.value": workId
-            }],
-            "__rerum.history.next": historyWildcard
-        }
-        const expressionConnections = await fetch(config.URLS.QUERY, {
-            method: "POST",
-            mode: "cors",
-            body: JSON.stringify(exprQuery)
-        })
-            .then(response => response.json())
-            .then(annos => {
-                return annos.map(anno => {
-                    return { "annoId": UTILS.getValue(anno["@id"]), "expId": UTILS.getValue(anno.target) }
-                })
-            })
-        const expressionCard = c => `<deer-view class="card col" deer-template="simpleExpression" deer-link="poem-expression.html#" anno-id="${c.annoId}" deer-id="${c.expId}">${c.expId}</deer-view>`
-        const cards = document.createElement('div')
-        cards.classList.add("row")
-        cards.innerHTML = expressionConnections.map(conn => expressionCard(conn)).join('')
-        elem.append(cards)
-        NoticeBoard.publish(undefined, config.EVENTS.NEW_VIEW, elem, { set: cards.children })
-    }
-    return { html, then }
+      </style>
+    <p>Review the connected published versions of this poem, listed below.  The same poem can appear in many forms of publication.</p>
+    <div class="textSample card">
+    ${false ? true : `
+    [ Text Sample ]
+    <stanza>
+        <line></line>
+        <line></line>
+        <line></line>
+        <line></line>
+    </stanza>
+    <stanza>
+        <line></line>
+        <line></line>
+        <line></line>
+        <line></line>
+    </stanza>`}
+</div>
+    `
 }
 
 export default class DlaPoemDetail extends DeerView {
@@ -61,7 +95,7 @@ export default class DlaPoemDetail extends DeerView {
             }],
             "__rerum.history.next": historyWildcard
         }
-        const expressionCard = c => `<dla-simple-expression class="card col" deer-template="entity" deer-link="poem-expression.html#" deer-id="${c}">${c}</dla-simple-expression>`
+        const expressionCard = c => `<dla-simple-expression class="card col" deer-link="poem-expression.html#" deer-id="${c}">${c}</dla-simple-expression>`
         const cards = document.createElement('div')
         cards.classList.add("row")
         this.after(cards)
@@ -90,21 +124,7 @@ export function isPoem(elem){
 
 // poemDetail: (obj, options = {}) => {
 //     const html = `<h2>${UTILS.getLabel(obj)}</h2> 
-//     <div id="textSample" class="card">
-//         [ Text Sample ]
-//         <stanza>
-//             <line></line>
-//             <line></line>
-//             <line></line>
-//             <line></line>
-//         </stanza>
-//         <stanza>
-//             <line></line>
-//             <line></line>
-//             <line></line>
-//             <line></line>
-//         </stanza>
-//     </div>
+    
 //     <h4>Around the Globe</h4>
 //     <p>These are various published versions of this poem.</p>`
 //     const then = async (elem, obj, options) => {
@@ -234,45 +254,36 @@ export function isPoem(elem){
 //     return { html, then }
 // }
 
-const simpleExpressionTemplate = (obj) => `
-<style>
-dla-simple-expression {
-    display: inline-block;
-    box-sizing: border-box;
-    box-shadow: #000 1px 1px 5px;
-    margin: 0.32em;
-    padding: 0.68em;
-}
-</style>
-    <header><h4>${UTILS.getLabel(obj)}</h4></header>
-    <h6>View links below for connected content</h6>
-    <div class="row manifestation-url"></div>
-    <h6> Control this Expression </h6>
-    <div class="row">
-        <a class="tag is-small" style="color:darkgrey" href="poem-expression.html#${UTILS.getValue(obj["@id"])}">full view</a>
-        <a class="tag is-small" href="expression.html#${UTILS.getValue(obj["@id"])}">edit details</a>
-    </div>
-    `
-    // ^^ If we want to offer a delete button, here's an OK one
-    //<a class="tag is-small" style="color:red" onclick="removeExpressionFromWork('${UTILS.getLabel(obj)}', '${UTILS.getValue(obj["@id"])}', this)">disconnect from poem</a>
+// ^^ If we want to offer a delete button, here's an OK one
+//<a class="tag is-small" style="color:red" onclick="removeExpressionFromWork('${UTILS.getLabel(obj)}', '${UTILS.getValue(obj["@id"])}', this)">disconnect from poem</a>
 class simpleExpression extends DeerView {
+    #simpleExpressionTemplate = (obj) => `
+        <header><h4>${UTILS.getLabel(obj)}</h4></header>
+        <h6>View links below for connected content</h6>
+        <div class="row manifestation-url">
+        ${this?.manifestations?.length ? this.manifestations.map(manId => `<a href="${manId}" target="_blank">${manId}</a>`).join('') : ``}
+        </div>
+        <div class="row">
+            <a class="tag is-small" style="color:darkgrey" href="poem-expression.html#${UTILS.getValue(obj["@id"])}">full view</a>
+        </div>
+        `
     constructor() {
         super()
-        this.template = simpleExpressionTemplate
+        this.template = this.#simpleExpressionTemplate
     }
     
     connectedCallback() {
-        const mURL = manId => `<a href="${manId}" target="_blank">${manId}</a>`
+        super.connectedCallback()
         const historyWildcard = { "$exists": true, "$size": 0 }
         const manQuery = {
             $or: [{
-                "body.isEmbodimentOf": this.id
+                "body.isEmbodimentOf": this.Entity.id
             }, {
-                "body.isEmbodimentOf.value": this.id
+                "body.isEmbodimentOf.value": this.Entity.id
             }],
             "__rerum.history.next": historyWildcard
         }
-        const manifestationIds = fetch(config.URLS.QUERY, {
+        const manifestationIds = fetch(DEER.URLS.QUERY, {
             method: "POST",
             mode: "cors",
             body: JSON.stringify(manQuery)
@@ -280,7 +291,25 @@ class simpleExpression extends DeerView {
         .then(response => response.json())
         .then(annos => annos.map(anno => UTILS.getValue(anno.target)))
         .then(ids => ids.map(id => id.selector ? `${id?.source}#${id.selector.value}` : id))
-        .then(manifestationIds => document.querySelector(".manifestation-url").innerHTML = manifestationIds.map(manId => mURL(manId)).join(''))
+        .then(manifestationIds => {
+            this.manifestations = manifestationIds
+            if (manifestationIds?.[0].includes("xml")) {
+                const parentPoemTextSlot = document?.querySelector(".textSample")
+                if(!parentPoemTextSlot) return
+                try {
+                    SaxonJS.getResource({
+                        location: manifestationIds[0],
+                        type: 'xml'
+                    })
+                    .then(sampleSource => {
+                    const poemText = SaxonJS.XPath.evaluate("/" + manifestationIds[0].split("#")[1], sampleSource, { xpathDefaultNamespace: 'http://www.tei-c.org/ns/1.0' })
+                    parentPoemTextSlot.innerHTML = poemText.innerHTML
+                    })
+                } catch (err) {
+                    parentPoemTextSlot.innerHTML = `Select a version below to view the poem text.`
+                }
+            }
+        })
     }
 }
 

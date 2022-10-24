@@ -11,6 +11,7 @@
   --action: hsla(242, 100%, 76%, 1);
   --site-dark: hsla(33, 67%, 36%, 1);
   --accent: hsla(141, 18%, 54%, 1);
+  --bg-color: hsla(0, 0%, 100%, 1);
 }
 
 body {
@@ -91,11 +92,18 @@ nav a:focus {
   column-width: 40em; */
 }
 
-row {
+row, .row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
   margin-bottom: 2rem;
+}
+
+card, .card {
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  background: var(--bg-color);
+  box-shadow: 0 1px 3px var(--shade);
 }

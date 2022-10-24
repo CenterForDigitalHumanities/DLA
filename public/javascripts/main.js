@@ -41,7 +41,7 @@ class DLAPublicFooter extends HTMLElement {
         <gm-footer>
             <div>
                 <a target="_blank" href="https://www.slu.edu/research/faculty-resources/research-computing.php">
-                    <img class="brand" src="../images/rcg-logo.jpg"> 
+                    <img class="brand" src="/images/rcg-logo.jpg"> 
                     ©2022 Research Computing Group
                 </a>
             </div>
@@ -119,7 +119,7 @@ class DLAPublicHeader extends HTMLElement {
         </nav>
         `
         this.querySelector(`.tabs a[href*="${location.pathname.split('/')[1]}"]`)?.classList.add("active")
-        this.querySelector(`logoimg img`).setAttribute("src", `../images/logo-${location.pathname.split('/')[1].replace(".html","")}.jpg`)
+        this.querySelector(`logoimg img`).setAttribute("src", `/images/logo-${location.pathname.split('/')[1].replace(".html","")}.jpg`)
     }
 }
 customElements.define("dla-header", DLAPublicHeader)
