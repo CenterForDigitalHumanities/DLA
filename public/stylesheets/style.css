@@ -107,3 +107,19 @@ card, .card {
   background: var(--bg-color);
   box-shadow: 0 1px 3px var(--shade);
 }
+
+.button {
+  background-color: var(--accent);  
+  border-radius: 5px;
+  color: var(--site-light);
+  padding: .5em;
+  text-decoration: none;
+  font-variant: initial;
+  font-weight: initial;
+  cursor: pointer;
+}
+
+.button:focus,
+.button:hover {
+  background-color: var(--action);
+}

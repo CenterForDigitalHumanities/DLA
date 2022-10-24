@@ -2,8 +2,7 @@ import { UTILS, DEER } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
-const template = (obj, options = {}) => {
-    return `
+const template = (obj, options = {}) => `
     <style>
     .textSample {
         width: fit-content;
@@ -56,25 +55,35 @@ const template = (obj, options = {}) => {
 }
 
       </style>
-    <p>Review the connected published versions of this poem, listed below.  The same poem can appear in many forms of publication.</p>
-    <div class="textSample card">
-    ${false ? true : `
-    [ Text Sample ]
-    <stanza>
-        <line></line>
-        <line></line>
-        <line></line>
-        <line></line>
-    </stanza>
-    <stanza>
-        <line></line>
-        <line></line>
-        <line></line>
-        <line></line>
-    </stanza>`}
-</div>
+    <h1>${UTILS.getLabel(obj)}</h1>
+    <em class="publication-info"></em>
+    <row>
+        <div class="textSample card col">
+        ${false ? true : `
+        [ Text Sample ]
+        <stanza>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+        </stanza>
+        <stanza>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+        </stanza>`}
+        </div>
+        <div class="col">
+            <div class="audioSample card">
+            </div>
+
+            <div class="poemProps card">
+            </div>
+        </div>
+    </row>
     `
-}
+
 
 export default class DlaPoemDetail extends DeerView {
     static get observedAttributes() { return [DEER.ID,DEER.LAZY] }
@@ -293,6 +302,23 @@ class simpleExpression extends DeerView {
         .then(ids => ids.map(id => id.selector ? `${id?.source}#${id.selector.value}` : id))
         .then(manifestationIds => {
             this.manifestations = manifestationIds
+            if (manifestationIds?.[0].includes("ecommons")) {
+                const parentPoemPropsSlot = document?.querySelector(".poemProps")
+                if(!parentPoemPropsSlot) return
+                getCachedPoemByUrl(manifestationIds[0]).then(poem=>{
+                    document.querySelector('.audioSample').innerHTML = `<audio controls><source src="${poem.download_link}" type="audio/mpeg"></audio>
+                    ${poem.configured_field_t_publication_information}`
+                    document.querySelector('.publication-info').innerHTML = `${poem.author_display} (${(new Date(poem.publication_date)).getFullYear()})`
+                    parentPoemPropsSlot.innerHTML = poem.music ? `
+                    <h3>Musical Setting</h3>
+                    <cite>${poem.music.author_display} (${(new Date(poem.music.publication_date)).getFullYear()})</cite>
+                    <a href="${poem.music.fulltext_url}" target="_blank">
+                        <object data="${poem.music.fulltext_url}" type="application/pdf" width="100%" height="500px">View pdf</object>
+                    </a>
+                    <a class="button" target="_blank" src="${poem.music.url}">Original Setting</a>
+                    ` : ``
+                })
+            }
             if (manifestationIds?.[0].includes("xml")) {
                 const parentPoemTextSlot = document?.querySelector(".textSample")
                 if(!parentPoemTextSlot) return
@@ -303,7 +329,7 @@ class simpleExpression extends DeerView {
                     })
                     .then(sampleSource => {
                     const poemText = SaxonJS.XPath.evaluate("/" + manifestationIds[0].split("#")[1], sampleSource, { xpathDefaultNamespace: 'http://www.tei-c.org/ns/1.0' })
-                    parentPoemTextSlot.innerHTML = poemText.innerHTML
+                    parentPoemTextSlot.innerHTML = `${poemText.innerHTML} <a target="_blank" class="button" src="${manifestationIds[0]}">View eBook</a>`
                     })
                 } catch (err) {
                     parentPoemTextSlot.innerHTML = `Select a version below to view the poem text.`
@@ -314,3 +340,18 @@ class simpleExpression extends DeerView {
 }
 
 customElements.define("dla-simple-expression", simpleExpression)
+
+/** Poem Utils */
+
+/**
+ * Use the cached export from the eCommons repository to find linked poems.
+ * @param {URL} poemUrl University of Dayton eCommons URL for a poem
+ */
+const getCachedPoemByUrl = (poemUrl) => {
+    return fetch(`/cache/ecommons-poems.json`)
+    .then(response => response.json())
+    .then(res=>{
+        const poems = res.results
+        return Object.assign(poems.find(poem => poem.url === poemUrl),{music:poems.find(record=>record.configured_field_t_response_to_url)})
+    })
+}
