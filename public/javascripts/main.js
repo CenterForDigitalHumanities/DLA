@@ -46,9 +46,8 @@ class DLAPublicFooter extends HTMLElement {
                 </a>
             </div>
             <div>
-                <a target="_blank" href="https://www.slu.edu/research/faculty-resources/research-computing.php">
-                    <img class="brand" src="https://www.slu.edu/marcom/tools-downloads/imgs/logo/left-aligned/slu_logoleftaligned_rgb.png">
-                    Saint Louis University
+                <a target="_blank" href="https://udayton.edu/blogs/artssciences/2022-stories/22-08-16-dunbar-video.php">
+                    <img class="brand" src="/images/ud-logo-horizontal.jpg">
                 </a>
             </div>
         </gm-footer>

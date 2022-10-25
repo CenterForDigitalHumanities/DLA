@@ -123,3 +123,7 @@ card, .card {
 .button:hover {
   background-color: var(--action);
 }
+
+.hidden {
+  display: none !important;
+}
