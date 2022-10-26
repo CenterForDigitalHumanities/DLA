@@ -11,6 +11,7 @@
   --action: hsla(242, 100%, 76%, 1);
   --site-dark: hsla(33, 67%, 36%, 1);
   --accent: hsla(141, 18%, 54%, 1);
+  --bg-color: hsla(0, 0%, 100%, 1);
 }
 
 body {
@@ -91,18 +92,15 @@ nav a:focus {
   column-width: 40em; */
 }
 
-row {
+row, .row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: stretch;
   margin-bottom: 2rem;
 }
 
-/**
- * A shadowy placeholder effect for dla-record objects
- */ 
 dl.placein{
   border: 2px dotted gray;
   padding: 5px;
@@ -121,4 +119,30 @@ dl.placein dd:before {
 }
 img.thumbnail{
   max-height: 12rem;
+}
+card, .card {
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  background: var(--bg-color);
+  box-shadow: 0 1px 3px var(--shade);
+}
+
+.button {
+  background-color: var(--accent);  
+  border-radius: 5px;
+  color: var(--site-light);
+  padding: .5em;
+  text-decoration: none;
+  font-variant: initial;
+  font-weight: initial;
+  cursor: pointer;
+}
+
+.button:focus,
+.button:hover {
+  background-color: var(--action);
+}
+
+.hidden {
+  display: none !important;
 }

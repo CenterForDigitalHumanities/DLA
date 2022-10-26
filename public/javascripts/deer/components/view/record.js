@@ -6,8 +6,8 @@ import DeerView from './view.js'
 let progress
 
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
-const recordCardTemplate = obj => `
-    <h4><a href="./record.html?id=${obj.id}">${UTILS.getLabel(obj)}</a></h4>
+const recordCardTemplate = obj => (obj.label ?? obj.name) && `
+    <h4><a href="./record/${obj.id.split('/'.pop())}">${UTILS.getLabel(obj)}</a></h4>
         <div class="row">
             <dl>
             </dl>
