@@ -101,25 +101,6 @@ row, .row {
   margin-bottom: 2rem;
 }
 
-dl.placein{
-  border: 2px dotted gray;
-  padding: 5px;
-}
-dl.placein dd{
-  border: 2px solid black;
-  margin: 2px 0px;
-  padding: 2px;
-  height: 2rem;
-  background-color: rgb(1,1,1,0.25);
-}
-dl.placein dd:before {
-  font-style:  italic;
-  color: darkgrey;
-  content: "Lorem ipsum...";
-}
-img.thumbnail{
-  max-height: 12rem;
-}
 card, .card {
   padding: 1rem 2rem;
   border-radius: 4px;
@@ -145,4 +126,24 @@ card, .card {
 
 .hidden {
   display: none !important;
+}
+
+dl.placein{
+  border: 2px dotted gray;
+  padding: 5px;
+}
+dl.placein dd{
+  border: 2px solid black;
+  margin: 2px 0px;
+  padding: 2px;
+  height: 2rem;
+  background-color: rgb(1,1,1,0.25);
+}
+dl.placein dd:before {
+  font-style:  italic;
+  color: darkgrey;
+  content: "Lorem ipsum...";
+}
+img.thumbnail{
+  max-height: 12rem;
 }
