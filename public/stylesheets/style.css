@@ -97,7 +97,7 @@ row, .row {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: stretch;
   margin-bottom: 2rem;
 }
 
