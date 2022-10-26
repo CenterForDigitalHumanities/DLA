@@ -2,7 +2,8 @@ import { UTILS, DEER } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
-const template = (obj, options = {}) => `
+const template = (obj, options = {}) => {
+    return `
     <style>
     .textSample {
         width: fit-content;
@@ -53,48 +54,26 @@ const template = (obj, options = {}) => `
   display: block;
   width: 100%;
 }
-h1+.publication-info {
-    top: -1.32em;
-    position: relative;
-    left: 1.32em;
-    font-style: italic;
-}
-.poemMusic small+small {
-    display: block;
-    text-align: right;
-}
-
       </style>
-    <h1>${UTILS.getLabel(obj)}</h1>
-    <span class="publication-info"></span>
-    <row>
-        <div class="textSample card col">
-        ${false ? true : `
-        [ Text Sample ]
-        <stanza>
-            <line></line>
-            <line></line>
-            <line></line>
-            <line></line>
-        </stanza>
-        <stanza>
-            <line></line>
-            <line></line>
-            <line></line>
-            <line></line>
-        </stanza>`}
-        </div>
-        <div class="col">
-            <div class="audioSample card">
-                <h3>Spoken Performance</h3>
-            </div>
-
-            <div class="poemMusic card">
-            </div>
-        </div>
-    </row>
+    <p>Review the connected published versions of this poem, listed below.  The same poem can appear in many forms of publication.</p>
+    <div class="textSample card">
+    ${false ? true : `
+    [ Text Sample ]
+    <stanza>
+        <line></line>
+        <line></line>
+        <line></line>
+        <line></line>
+    </stanza>
+    <stanza>
+        <line></line>
+        <line></line>
+        <line></line>
+        <line></line>
+    </stanza>`}
+</div>
     `
-
+}
 
 export default class DlaPoemDetail extends DeerView {
     static get observedAttributes() { return [DEER.ID,DEER.LAZY] }
@@ -115,7 +94,7 @@ export default class DlaPoemDetail extends DeerView {
             }],
             "__rerum.history.next": historyWildcard
         }
-        const expressionCard = c => `<dla-simple-expression class="hidden" deer-link="poem-expression.html#" deer-id="${c}">${c}</dla-simple-expression>`
+        const expressionCard = c => `<dla-simple-expression class="card col" deer-link="poem-expression.html#" deer-id="${c}">${c}</dla-simple-expression>`
         const cards = document.createElement('div')
         cards.classList.add("row")
         this.after(cards)
@@ -313,29 +292,6 @@ class simpleExpression extends DeerView {
         .then(ids => ids.map(id => id.selector ? `${id?.source}#${id.selector.value}` : id))
         .then(manifestationIds => {
             this.manifestations = manifestationIds
-            if (manifestationIds?.[0].includes("ecommons")) {
-                getCachedPoemByUrl(manifestationIds[0]).then(poem=>{
-                    if(!poem) return
-                    document.querySelector('.publication-info').innerHTML += `${poem.author_display} (${(new Date(poem.publication_date)).getFullYear()})`
-                    if(poem.download_link) {
-                        document.querySelector('.audioSample').innerHTML += `
-                        <audio controls><source src="${poem.download_link}" type="audio/mpeg"></audio>
-                        <a target="_blank" title="View on eCommons 🡕" href="${poem.url}">${poem.configured_field_t_publication_information}</a>`
-                    }
-                    if(poem.music){
-                        let musicHTML = `<h3>Musical Setting${poem.music.length===1?``:`s`}</h3>`
-
-                        musicHTML += poem.music.reduce((a,b)=>a+=`
-                        <p>
-                        <a target="_blank" title="View on eCommons 🡕" href="${b.url}"><cite>${b.author_display} (${(new Date(b.publication_date)).getFullYear()})</cite></a>
-                        <small><a href="${b.fulltext_url}" target="_blank">
-                            <object data="${b.fulltext_url}" type="application/pdf" width="100%" height="500px">PDF 🡕</object>
-                        </a></small>
-                        </p>`,``)
-                        document.querySelector(".poemMusic").innerHTML = musicHTML
-                    }
-                })
-            }
             if (manifestationIds?.[0].includes("xml")) {
                 const parentPoemTextSlot = document?.querySelector(".textSample")
                 if(!parentPoemTextSlot) return
@@ -346,7 +302,7 @@ class simpleExpression extends DeerView {
                     })
                     .then(sampleSource => {
                     const poemText = SaxonJS.XPath.evaluate("/" + manifestationIds[0].split("#")[1], sampleSource, { xpathDefaultNamespace: 'http://www.tei-c.org/ns/1.0' })
-                    parentPoemTextSlot.innerHTML = `${poemText.innerHTML} <small><a target="_blank" class="button" href="${manifestationIds[0]}">TEI-XML 🡕</a></small>`
+                    parentPoemTextSlot.innerHTML = poemText.innerHTML
                     })
                 } catch (err) {
                     parentPoemTextSlot.innerHTML = `Select a version below to view the poem text.`
@@ -357,30 +313,3 @@ class simpleExpression extends DeerView {
 }
 
 customElements.define("dla-simple-expression", simpleExpression)
-
-/** Poem Utils */
-
-/**
- * Use the cached export from the eCommons repository to find linked poems.
- * @param {URL} poemUrl University of Dayton eCommons URL for a poem
- */
-const getCachedPoemByUrl = (poemUrl) => {
-    return fetch(`/cache/ecommons-poems.json`)
-    .then(response => response.json())
-    .then(res=>{
-        const poems = res.results
-        const thisPoem = poems.find(poem => poem.url === poemUrl)
-        if(!thisPoem.document_type.includes("collected_poetry")) { return }
-        return Object.assign(thisPoem,{music:poems.filter(record=>isUrlVariant(record.configured_field_t_response_to_url?.[0],poemUrl))})
-    })
-}
-
-/**
- * Find both URLs with and without a terminal slash.
- * @param {URL} url value to test
- * @param {URL} control value to test against
- * @returns {Boolean} true if the two URLs are the same
- */
-const isUrlVariant = (url="", control) => {
-    return url.replaceAll("/","").toLowerCase() === control.replaceAll("/","").toLowerCase()
-}

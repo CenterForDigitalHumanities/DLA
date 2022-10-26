@@ -128,8 +128,20 @@ export class DlaRecord extends DeerView {
             NoticeBoard.subscribe(newValue, this.#renderGenericRecord.bind(this))
         }
     }
+    #replaceElement(tagName) {
+        const swap = document.createElement(tagName)
+        swap.Entity = this.Entity
+        this.getAttributeNames().forEach(attr => swap.setAttribute(attr, this.getAttribute(attr)))
+        this.replaceWith(swap)
+        this.remove()
+    }
     async #renderGenericRecord(ev) {
         if (!["complete"].includes(ev.detail.action)) {return}
+        if (isPoem(this)) {
+            NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+            this.#replaceElement("dla-poem-detail")
+            return
+        }
         const dataRecord = this.Entity?.assertions
         const projects = dataRecord.tpenProject ?? []
         let projectList = []
@@ -184,6 +196,11 @@ export class DlaRecord extends DeerView {
         generic_template += projects.length ?
             `<dt>T-PEN Manifest(s) </dt><dd> ${projectList} </dd>` : ""
         generic_template += `</dl>`
+        //this.#updateEntity upstream is firing, which again overwrites this innerHTML.  We need to correct template set.
+        //I believe #updateEntity is supposed to be unsubscribed, but it is not.
+        this.template = (obj, options = {}) => {
+            return generic_template
+        }
         this.innerHTML = generic_template
         NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
     }
