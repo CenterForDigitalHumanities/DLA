@@ -13,6 +13,10 @@ const recordCardTemplate = obj => (obj.label ?? obj.name) && `
             </dl>
         </div>`
 
+/**
+ * These appear to represent entries in a collection.  They need to be filterable.
+ * They are intentionally simple.
+ */ 
 export default class DlaRecordCard extends DeerView {
     static get observedAttributes() { return [DEER.ID, DEER.LISTENING] }
 
@@ -20,7 +24,7 @@ export default class DlaRecordCard extends DeerView {
         super()
         this.template = recordCardTemplate
     }
-
+  
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
         switch (name) {
@@ -81,24 +85,51 @@ export default class DlaRecordCard extends DeerView {
     }
 }
 
-const recordTemplate = obj => `
-    <div>
-        <h4>${UTILS.getLabel(obj)}</h4>
-        This is a Record.
-    </div>
-`
 import { isPoem } from './poem.js'
 
+/**
+ * A simple generic view for a piece of data with metadata.
+ * The goal is to consider the most generic things one would expect to be in all data (like 'label')
+ * The view should be simple, like something that comes back from a search through a bucket of information.
+ * Generic properties that are considered
+ * type/@type
+ * id/@id
+ * label/name
+ * description
+ * targetCollection (the label not the URI)
+ * thumbnail
+ * tpenProject (show thumbnail when available or link to T-PEN project)
+ * 
+ * Often this will simply act as a pre-loader, and will be overwritten by a specific kind of dla record.
+ * As such, a simple "shadow loader" is classed in via the .placein CSS class.
+ * 
+ * @param obj - The initial JSON entity, possibly with a label already.
+ */ 
+const recordTemplate = (obj, options = {}) => {
+    return `<h4>${UTILS.getLabel(obj)}</h4>
+        <div class="row">
+            <dl class="placein">
+                <dd></dd>
+                <dd></dd>
+                <dd></dd>
+                <dd></dd>
+            </dl>
+        </div>`
+}
+
 export class DlaRecord extends DeerView {
+    static get observedAttributes() { return [DEER.FINAL,DEER.ID,DEER.LAZY] }
     constructor() {
         super()
         this.template = recordTemplate
     }
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
-        switch (name) {
-            case DEER.ID:
-                NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#poemSwap.bind(this))
+        if(name === DEER.ID){
+            if(oldValue !== null && oldValue !== newValue){
+                NoticeBoard.unsubscribe(oldValue, this.#renderGenericRecord.bind(this))
+            }
+            NoticeBoard.subscribe(newValue, this.#renderGenericRecord.bind(this))
         }
     }
     #replaceElement(tagName) {
@@ -108,13 +139,73 @@ export class DlaRecord extends DeerView {
         this.replaceWith(swap)
         this.remove()
     }
-    #poemSwap(ev) {
-        if (["complete"].includes(ev.detail.action)) {
-            if (isPoem(this)) {
-                NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#poemSwap.bind(this))
-                this.#replaceElement("dla-poem-detail")
-            }
+    async #renderGenericRecord(ev) {
+        if (!["complete"].includes(ev.detail.action)) {return}
+        if (isPoem(this)) {
+            NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+            this.#replaceElement("dla-poem-detail")
+            return
         }
+        const dataRecord = this.Entity?.assertions
+        const projects = dataRecord.tpenProject ?? []
+        let projectList = []
+        if(projects.length){
+            // Right now this is only of length 0 or 1. We still loop it, anticipating a future where there are more than 1.
+            // Show the thumbnail when available, otherwise show the link to the T-PEN project.
+            for await (const pid of projects){
+                const link = `<a src="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}" target="_blank"> T-PEN Project ${pid.value} </a>`
+                const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
+                let thumbnail = ""
+                if(projData.sequences[0]?.canvases.length){
+                    const canvas = projData.sequences[0].canvases[0]
+                    const image = (canvas?.images.length) ? canvas.images[0].resource["@id"] : ""
+                    if(image){
+                        thumbnail = `<a target="_blank" href="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}"><img class="thumbnail" src="${image}" /></a>`
+                    }
+                }
+                if(thumbnail){
+                    projectList.push(thumbnail)
+                }
+                else{
+                    projectList.push(link)
+                }
+            }
+            projectList = projectList.join(", ")
+        }    
+        let targetCollection = UTILS.getValue(dataRecord.targetCollection, [], "string") ?? ""
+        let targetCollectionLink = 
+            (targetCollection.indexOf("Poems Collection") > -1) ?
+                "/collection/615b724650c86821e60b11fa" : 
+            (targetCollection.indexOf("Correspondence") > -1) ?
+                "/collection/61ae693050c86821e60b5d13" :
+            ""
+        let type = dataRecord.type ?? dataRecord["@type"] ?? "No Type"
+        const additionalType = dataRecord.additionalType ?? ""
+        if(type && additionalType) {
+            type += ` : ${additionalType.split("/").pop()}`
+        }
+        let generic_template = `
+            <header>
+              <h4>
+                <a target="_blank" href="${targetCollectionLink}">${targetCollection}</a><br>      
+                <dd>&#8811; ${UTILS.getLabel(dataRecord)}</dd>
+              </h4>
+           </header>
+           <dl>
+            <dt>Record Type </dt><dd>${type}</dd>
+        `
+        generic_template += dataRecord.description ? 
+            `<dt>Record Description </dt><dd>${UTILS.getValue(dataRecord.description, [], "string")}</dd>` : ""
+        generic_template += projects.length ?
+            `<dt>T-PEN Manifest(s) </dt><dd> ${projectList} </dd>` : ""
+        generic_template += `</dl>`
+
+        //Set this as our new template to return as this element's template 
+        this.template = (obj, options = {}) => {
+            return generic_template
+        }
+        this.innerHTML = generic_template
+        NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
     }
 }
 

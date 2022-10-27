@@ -63,7 +63,6 @@ h1+.publication-info {
     display: block;
     text-align: right;
 }
-
       </style>
     <h1>${UTILS.getLabel(obj)}</h1>
     <span class="publication-info"></span>
@@ -88,7 +87,6 @@ h1+.publication-info {
             <div class="audioSample card">
                 <h3>Spoken Performance</h3>
             </div>
-
             <div class="poemMusic card">
             </div>
         </div>
