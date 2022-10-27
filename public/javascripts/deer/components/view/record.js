@@ -13,6 +13,10 @@ const recordCardTemplate = obj => (obj.label ?? obj.name) && `
             </dl>
         </div>`
 
+/**
+ * These appear to represent entries in a collection.  They need to be filterable.
+ * They are intentionally simple.
+ */ 
 export default class DlaRecordCard extends DeerView {
     static get observedAttributes() { return [DEER.ID, DEER.LISTENING] }
 
@@ -20,7 +24,7 @@ export default class DlaRecordCard extends DeerView {
         super()
         this.template = recordCardTemplate
     }
-
+  
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
         switch (name) {
@@ -146,8 +150,7 @@ export class DlaRecord extends DeerView {
         const projects = dataRecord.tpenProject ?? []
         let projectList = []
         if(projects.length){
-            // Right now this is only of length 0 or 1
-            // We still loop it, anticipating a future where there are more than 1.
+            // Right now this is only of length 0 or 1. We still loop it, anticipating a future where there are more than 1.
             // Show the thumbnail when available, otherwise show the link to the T-PEN project.
             for await (const pid of projects){
                 const link = `<a src="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}" target="_blank"> T-PEN Project ${pid.value} </a>`
@@ -189,15 +192,15 @@ export class DlaRecord extends DeerView {
               </h4>
            </header>
            <dl>
+            <dt>Record Type </dt><dd>${type}</dd>
         `
-        generic_template += `<dt>Record Type </dt><dd>${type}</dd>`
         generic_template += dataRecord.description ? 
             `<dt>Record Description </dt><dd>${UTILS.getValue(dataRecord.description, [], "string")}</dd>` : ""
         generic_template += projects.length ?
             `<dt>T-PEN Manifest(s) </dt><dd> ${projectList} </dd>` : ""
         generic_template += `</dl>`
-        //this.#updateEntity upstream is firing, which again overwrites this innerHTML.  We need to correct template set.
-        //I believe #updateEntity is supposed to be unsubscribed, but it is not.
+
+        //Set this as our new template to return as this element's template 
         this.template = (obj, options = {}) => {
             return generic_template
         }
