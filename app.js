@@ -11,7 +11,6 @@ var usersRouter = require('./routes/users')
 var managementRouter = require('./routes/management')
 var collectionsRouter = require('./routes/collections')
 var collectionRouter = require('./routes/collection')
-var poemRouter = require('./routes/poem')
 
 var app = express()
 
@@ -25,7 +24,6 @@ app.use('/users', usersRouter)
 app.use('/management', managementRouter)
 app.use('/collections', collectionsRouter)
 app.use('/collection', collectionRouter)
-app.use('/poem', poemRouter)
 app.use(express.static(path.join(__dirname, 'public')))
 
 // catch 404 and forward to error handler

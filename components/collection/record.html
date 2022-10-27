@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collection — Dunbar Library & Archive</title>
+  <title>Record Detail — Dunbar Library & Archive</title>
   <meta property="og:title" content="Dunbar Library and Archive">
   <meta property="og:type" content="website">
   <!-- <meta property="og:url" content=""> -->
@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
 
   <meta name="theme-color" content="#fafafa">
+      <script src="https://www.saxonica.com/saxon-js/documentation/SaxonJS/SaxonJS2.rt.js" defer></script>
   <script src="/javascripts/deer/deer.js" type="module"></script>
   <script src="/javascripts/plugins.js" defer></script>
   <script src="/javascripts/main.js" defer></script>
@@ -27,17 +28,10 @@
 
 <body>
   <dla-header></dla-header>
-  <nav>
-    <a href="/" class="">Home</a>
-    <a href="/collections" class="">Collections</a>
-
-    <a href="/browse" class="">Browse</a>
-    <a href="/about" class="">About</a>
-  </nav>
   <div class="container content">
-    <deer-poem deer-lazy="true">
-      🥨
-    </deer-poem>
+    <dla-record id="recordDetail">
+      loading...
+    </dla-record>
   </div>
   <dla-footer></dla-footer>
   <script>
@@ -49,7 +43,7 @@
       if (!id.startsWith("http")) {
         id = RERUM + "/id/" + id
       }
-      document.getElementsByTagName('deer-collection')[0]?.setAttribute('deer-id', id)
+      recordDetail?.setAttribute('deer-id', id)
     })
   </script>
 </body>
