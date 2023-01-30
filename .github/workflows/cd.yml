@@ -22,7 +22,5 @@ jobs:
                 touch /opt/nodeapps/logs/dlalogs.txt
             fi
             cd /opt/nodeapps/dla-public-site-3001
-            git checkout ci-cd-newprod01
-            git pull
             npm install
             npm start >> /opt/nodeapps/logs/dlalogs.txt 2>&1 &
