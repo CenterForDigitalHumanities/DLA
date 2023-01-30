@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test" : "jest",
+    "runtest" : "node ./bin/testApp.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -14,5 +16,10 @@
     "http-proxy-middleware": "^2.0.0",
     "morgan": "~1.9.1",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "@jest-mock/express": "^1.4.5",
+    "jest": "^27.5.1",
+    "supertest": "^6.2.2"
   }
 }

@@ -1,5 +1,8 @@
 version: 0.0
 os: linux
+on:
+  push:
+    branches: [ ci-cd-newprod01 ]
 files:
   - source: /
     destination: /opt/nodeapps/dla-public-site-3001
