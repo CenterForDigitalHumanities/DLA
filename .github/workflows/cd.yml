@@ -9,7 +9,7 @@ steps:
       with:
         host: ${{ secrets.NEWPRD01HOST }}
         username: ${{ secrets.NEWPROD01USER }}
-        key: ${{ secrets.NEWPRD01PRIVATE_KEY }}
+        key: ${{ secrets.NEWPRD01PRIVATEKEY }}
         port: 22
         script: |
           if [[ ! -e /opt/nodeapps/logs/dlalogs.txt ]]; then
