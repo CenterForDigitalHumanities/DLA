@@ -1,6 +1,5 @@
 version: 0.0
-os: linux
-runs-0n: ubuntu-latest
+runs-on: ubuntu-latest
 on:
   push:
     branches: [ ci-cd-newprod01 ]

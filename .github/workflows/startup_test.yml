@@ -37,3 +37,27 @@ jobs:
       # Finally, run our tests
       - name: Run the tests
         run: npm run runtest
+    start:
+      runs-on: ubuntu-latest
+      on:
+        push:
+          branches: [ ci-cd-newprod01 ]
+      steps:
+          - name: Deploy using ssh
+            uses: appleboy/ssh-action@master
+            with:
+              host: ${{ secrets.NEWPRD01HOST }}
+              username: ${{ secrets.NEWPROD01USER }}
+              key: ${{ secrets.NEWPRD01PRIVATEKEY }}
+              port: 22
+              script: |
+                echo "!!!!!!!  HELLO WORLD   !!!!!"
+                if [[ ! -e /opt/nodeapps/logs/dlalogs.txt ]]; then
+                    mkdir -p /opt/nodeapps/logs
+                    touch /opt/nodeapps/logs/dlalogs.txt
+                fi
+                cd /opt/nodeapps/dla-public-site-3001
+                git checkout ci-cd-newprod01
+                git pull
+                npm install
+                npm start >> /opt/nodeapps/logs/dlalogs.txt 2>&1 &
