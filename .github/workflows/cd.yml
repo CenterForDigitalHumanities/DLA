@@ -11,9 +11,6 @@ jobs:
       # Deploy to newprd01 with SSH
       runs-on: self-hosted
       steps:
-          - uses: actions/checkout@v2
-            with:
-              node-version: "16"
           - run: |
               echo "!!!!!!!  HELLO WORLD   !!!!!"
               if [[ ! -e /opt/nodeapps/logs/dlalogs.txt ]]; then
