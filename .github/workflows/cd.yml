@@ -1,5 +1,6 @@
 version: 0.0
 os: linux
+runs-0n: ubuntu-latest
 on:
   push:
     branches: [ ci-cd-newprod01 ]
@@ -12,6 +13,7 @@ steps:
         key: ${{ secrets.NEWPRD01PRIVATEKEY }}
         port: 22
         script: |
+          echo "!!!!!!!  HELLO WORLD   !!!!!"
           if [[ ! -e /opt/nodeapps/logs/dlalogs.txt ]]; then
               mkdir -p /opt/nodeapps/logs
               touch /opt/nodeapps/logs/dlalogs.txt
