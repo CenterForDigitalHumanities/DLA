@@ -22,5 +22,4 @@ jobs:
             fi
             cd /opt/nodeapps/dla-public-site-3001
             npm install
-            npm start
-            echo "DLA Public Site Node App Started!"
+            npm start >> /opt/nodeapps/logs/dlalogs.txt 2>&1 &
