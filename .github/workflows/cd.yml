@@ -1,0 +1,21 @@
+version: 0.0
+os: linux
+on:
+  push:
+    branches: [ ci-cd-newprod01 ]
+steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.NEWPRD01HOST }}
+        username: ${{ secrets.NEWPROD01USERNAME }}
+        key: ${{ secrets.NEWPRD01PRIVATE_KEY }}
+        port: 22
+        script: |
+          if [[ ! -e /opt/nodeapps/logs/dlalogs.txt ]]; then
+              mkdir -p /opt/nodeapps/logs
+              touch /opt/nodeapps/logs/dlalogs.txt
+          fi
+          cd /opt/nodeapps/dla-public-site-3001
+          npm install
+          npm start >> /opt/nodeapps/logs/dlalogs.txt 2>&1 &
