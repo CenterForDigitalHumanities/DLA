@@ -20,8 +20,8 @@ jobs:
                 mkdir -p /opt/nodeapps/logs
                 touch /opt/nodeapps/logs/dlalogs.txt
             fi
-            cd /opt/nodeapps/dla-public-site-3001
+            cd /opt/nodeapps/dla-public-site-3001/
             pm2 stop www
             npm install
-            pm2 start www
+            pm2 start bin/www
 
