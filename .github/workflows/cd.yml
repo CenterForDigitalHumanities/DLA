@@ -23,5 +23,4 @@ jobs:
             cd /opt/nodeapps/dla-public-site-3001/
             pm2 stop www
             npm install
-            pm2 start bin/www
-
+            pm2 start -i max bin/www
