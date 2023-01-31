@@ -21,5 +21,7 @@ jobs:
                 touch /opt/nodeapps/logs/dlalogs.txt
             fi
             cd /opt/nodeapps/dla-public-site-3001
+            pm2 stop www
             npm install
-            npm start & npx wait-on http://localhost:3001
+            pm2 start www
+
