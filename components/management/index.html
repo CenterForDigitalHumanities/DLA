@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management — Dunbar Library & Archive</title>
+    <meta property="og:title" content="Dunbar Library and Archive">
+    <meta property="og:type" content="website">
+    <!-- <meta property="og:url" content=""> -->
+    <meta property="og:image" content="/images/dla.png">
+
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="apple-touch-icon" href="/images/dla.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="/stylesheets/normalize.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <meta name="theme-color" content="#fafafa">
+    <script src="/javascripts/deer/deer.js" type="module"></script>
+    <script src="/javascripts/plugins.js" defer></script>
+    <script src="/javascripts/main.js" defer></script>
+</head>
+<body>
+    <dla-header></dla-header>
+    <div class="container content">
+        <h1>Curating the DLA</h1>
+        <p>
+            This tool is for project managers designated by the principal investigator to make changes to the 
+            records that are shown in the public collections.
+        </p>
+            <deer-view deer-template="collectionCard" deer-id="http://store.rerum.io/v1/id/6353016612678843589262b0">
+                <header>Dunbar Poems</header>
+                http://store.rerum.io/v1/id/6353016612678843589262b0
+            </deer-view>
+            <deer-view deer-template="collectionCard" deer-id="http://store.rerum.io/v1/id/61ae693050c86821e60b5d13">
+                <header>Dunbar Letters</header>
+                http://store.rerum.io/v1/id/61ae693050c86821e60b5d13
+            </deer-view>
+    </div>
+    <dla-footer></dla-footer>
+</body>
+</html>
