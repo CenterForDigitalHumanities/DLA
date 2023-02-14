@@ -2,14 +2,14 @@ name: DLA Public Site Deploy
 on: 
   push:
     branches:
-      ci-cd-newprod01
+      main
   pull_request:
     branches:
-      ci-cd-newprod01
+      main
 jobs:
     deploy:
       # Deploy to newprd01 with SSH
-      runs-on: self-hosted
+      runs-on: [self-hosted, vlcdhprdp01]
       strategy: 
         matrix:
             node-version: [16]

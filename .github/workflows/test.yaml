@@ -2,10 +2,10 @@ name: DLA Public Site Test
 on: 
   push:
     branches:
-      ci-cd-newprod01
+      main
   pull_request:
     branches:
-      ci-cd-newprod01
+      main
 jobs:
   test:
     runs-on: ubuntu-latest
