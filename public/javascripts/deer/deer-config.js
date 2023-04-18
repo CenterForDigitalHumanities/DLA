@@ -1,5 +1,5 @@
-const base_rr = "http://store.rerum.io/v1"   // RERUM store
-const base_tt = "http://tinypaul.rerum.io/dla"   // Tiny Things  
+const base_rr = "https://store.rerum.io/v1"   // RERUM store
+const base_tt = "https://tinypaul.rerum.io/dla"   // Tiny Things  
 const namespace = "deer"                        // namespace for this projects custom elements
 
 export default {

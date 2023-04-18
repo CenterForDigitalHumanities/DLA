@@ -1,23 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap');
 
 :root {
-  --main-color-100: hsl(20, 100%, 85%);
-  --main-color-300: hsl(20, 100%, 65%);
-  --main-color-500: hsl(20, 100%, 45%);
-  --main-color-800: hsl(20, 100%, 15%);
-  --main-color-900: hsl(20, 100%, 5%);
-  --site-light: hsla(20, 100%, 85%, 1);
-  --shade: hsla(258, 10%, 38%, 1);
-  --action: hsla(242, 100%, 76%, 1);
-  --site-dark: hsla(33, 67%, 36%, 1);
-  --accent: hsla(141, 18%, 54%, 1);
-  --bg-color: hsla(0, 0%, 100%, 1);
+  --ud-blue: #171B48;
+  --ud-secondary: #3F526C;
+  --ud-light: #DAD2B1;
+  --ud-accent: #EAB726;
+  --ud-active: #D28A28;
 }
 
 body {
   padding: var(--body-padding);
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: var(--site-light);
+  background-color: var(--ud-light);
 }
 
 body header {
@@ -36,20 +30,20 @@ body img.hero {
 }
 
 header h1 {
-  text-shadow: .025em .075em .05em var(--shade);
-  color: var(--accent);
+  text-shadow: .025em .075em .05em var(--ud-secondary);
+  color: var(--ud-accent);
   font-size: 4rem;
   font-family: 'Homemade Apple', cursive;
 }
 
 a {
-  color: var(--action);
+  color: var(--ud-active);
 }
 
 nav {
   width: 100%;
   position: relative;
-  background-color: var(--site-dark);
+  background-color: var(--ud-secondary);
   display: flex;
   justify-content: space-evenly;
 }
@@ -59,8 +53,8 @@ nav a {
   text-decoration: none;
   font-size: 1.5rem;
   text-align: center;
-  background-color: var(--accent);
-  outline: solid var(--site-dark) 1px;
+  background-color: var(--ud-accent);
+  outline: solid var(--ud-secondary) 1px;
   padding: .5rem;
   margin: .25rem;
   transition: all .2s ease-in-out;
@@ -68,18 +62,17 @@ nav a {
 }
 
 nav a.active {
-  background-color: var(--accent);
-  color: var(--site-light);
-  outline: solid var(--site-dark) 10px;
+  background-color: var(--ud-active);
+  color: var(--ud-secondary);
+  outline: solid var(--ud-secondary) 10px;
   outline-offset: -2px;
   border-radius: 4px;
 }
 
 nav a:hover,
 nav a:focus {
-  background-color: var(--site-light);
-  color: var(--accent);
-  outline: solid var(--accent) 10px;
+  background-color: var(--ud-light);
+  outline: solid var(--ud-accent) 10px;
   outline-offset: -2px;
 }
 
@@ -104,14 +97,14 @@ row, .row {
 card, .card {
   padding: 1rem 2rem;
   border-radius: 4px;
-  background: var(--bg-color);
-  box-shadow: 0 1px 3px var(--shade);
+  background: var(--ud-light);
+  box-shadow: 0 1px 3px var(--ud-secondary);
 }
 
 .button {
-  background-color: var(--accent);  
+  background-color: var(--ud-accent);  
   border-radius: 5px;
-  color: var(--site-light);
+  color: var(--ud-light);
   padding: .5em;
   text-decoration: none;
   font-variant: initial;
@@ -121,7 +114,7 @@ card, .card {
 
 .button:focus,
 .button:hover {
-  background-color: var(--action);
+  background-color: var(--ud-action);
 }
 
 .hidden {
