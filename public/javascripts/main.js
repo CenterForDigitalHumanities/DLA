@@ -7,7 +7,7 @@ class DLAPublicFooter extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
         <style>
-            gm-footer{
+            footer{
                 display: block;
                 text-align: center;
                 background-color: var(--site-light);
@@ -17,12 +17,12 @@ class DLAPublicFooter extends HTMLElement {
                 width: 100%;
             }
 
-            gm-footer .brand{
+            footer .brand{
                 height: 2em;
                 margin-right: 5px;
             }
 
-            gm-footer a{
+            footer a{
                 text-decoration: none;
                 display: -webkit-box;
                 display: -ms-flexbox;
@@ -34,11 +34,11 @@ class DLAPublicFooter extends HTMLElement {
                 color: var(--color-darkGrey);
             }
 
-            gm-footer div {
+            footer div {
                 display: inline-flex;
             }
         </style>
-        <gm-footer>
+        <footer>
             <div>
                 <a target="_blank" href="https://www.slu.edu/research/faculty-resources/research-computing.php">
                     <img class="brand" src="/images/rcg-logo.jpg"> 
@@ -50,7 +50,7 @@ class DLAPublicFooter extends HTMLElement {
                     <img class="brand" src="/images/ud-logo-horizontal.jpg">
                 </a>
             </div>
-        </gm-footer>
+        </footer>
         `
         this.classList.add('nav', 'nav-center', 'text-primary', 'is-fixed', 'is-full-width', 'is-vertical-align')
     }
