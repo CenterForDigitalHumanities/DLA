@@ -61,57 +61,69 @@ class DLAPublicHeader extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
         <style>
-            gm-header{
-              display: block;
-              height:  10em !important;
+            header{
+              display: flex;
+              justify-items: stretch;
+              height:  10em;
               overflow:  hidden;
               margin-bottom:  2em;
               border-bottom:  2px solid black;
               margin-top:  1em;
-              overflow: hidden !important;
+              position:relative;
             }
 
-            gm-header h1 {
-              text-shadow: .025em .075em .05em var(--shade);
-              color: var(--accent);
+            header h1 {
+              text-shadow: 0 0 1.5px var(--ud-secondary);
+              color: var(--ud-blue);
               font-size: 4rem;
               font-family: 'Homemade Apple', cursive;
+              text-align: center;
+                flex-grow: 4;
+                align-self: center;
             }
 
-            gm-header.small {
+            header.small {
               margin: calc(var(--body-padding) * -1) 0 0px;
               height: 75px;
             }
 
-            gm-header.small h1 {
+            header.small h1 {
               font-size: 2rem;
+            }
+
+            logoimg {
+                overflow:hidden;
+                position:absolute;
+                height:100%;
+                left: calc(-1*var(--body-padding));
+                width: 100vw;
             }
 
             logoimg img {
               position: relative;
-              width: 93%;
-              left: 7%;
               z-index: -1;
             }
-
-            paul{
-              position:  absolute;
+            a:has(img.paul){
+                z-index:1;
             }
-
-            paul img{
-              height: 10em;
+            img.paul{
+              height: 140%;
+              margin: -20%;
+              box-shadow: -2px 2px 5px var(--ud-secondary);
+              border-bottom-right-radius: 25%;
+              border-bottom-left-radius: 25%;
             }
         </style>
-        <gm-header class="small">
-            <paul>
-                <img src="https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:4553/100,0,1100,1100/150,150/0/default.jpg">
-            </paul>
+        <header class="small">
+            <a href="/" title="Home">
+                <img class="paul" src="https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:4553/100,0,1100,1100/150,150/0/default.jpg">
+            </a>
             <logoimg>
                 <img src="" alt="logo">    
             </logoimg>
-        </gm-header>
+            <h1>Dunbar Library & Archive</h1>
+        </header>
         <nav class="tabs">
-            <a href="/index.html" class="">Home</a>
             <a href="/collections">Collections</a>
             <a href="/browse" class="">Browse</a>
             <a href="/about" class="">About</a>

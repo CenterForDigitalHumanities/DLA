@@ -29,13 +29,6 @@ body img.hero {
   z-index: -1;
 }
 
-header h1 {
-  text-shadow: .025em .075em .05em var(--ud-secondary);
-  color: var(--ud-accent);
-  font-size: 4rem;
-  font-family: 'Homemade Apple', cursive;
-}
-
 a {
   color: var(--ud-active);
 }
