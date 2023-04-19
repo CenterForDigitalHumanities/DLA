@@ -10,7 +10,7 @@ class DLAPublicFooter extends HTMLElement {
             footer{
                 display: block;
                 text-align: center;
-                background-color: var(--site-light);
+                background-color: var(--ud-light);
                 z-index: 1;
                 position: fixed;
                 bottom: 0;
@@ -31,7 +31,7 @@ class DLAPublicFooter extends HTMLElement {
                 -ms-flex-align: center;
                 align-items: center;
                 padding: 1rem 2rem;
-                color: var(--color-darkGrey);
+                color: var(--ud-blue);
             }
 
             footer div {
@@ -61,6 +61,11 @@ class DLAPublicHeader extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
         <style>
+            .navbar-brand .scrip {
+                font-family: 'Homemade Apple', cursive;
+                text-shadow: 0 0 1.5px var(--ud-secondary);
+            }
+
             header{
               display: flex;
               justify-items: stretch;
@@ -83,7 +88,6 @@ class DLAPublicHeader extends HTMLElement {
             }
 
             header.small {
-              margin: calc(var(--body-padding) * -1) 0 0px;
               height: 75px;
             }
 
@@ -95,7 +99,7 @@ class DLAPublicHeader extends HTMLElement {
                 overflow:hidden;
                 position:absolute;
                 height:100%;
-                left: calc(-1*var(--body-padding));
+                left: 0;
                 width: 100vw;
             }
 
@@ -114,7 +118,7 @@ class DLAPublicHeader extends HTMLElement {
               border-bottom-left-radius: 25%;
             }
         </style>
-        <header class="small">
+        <!--<header class="small">
             <a href="/" title="Home">
                 <img class="paul" src="https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:4553/100,0,1100,1100/150,150/0/default.jpg">
             </a>
@@ -127,10 +131,62 @@ class DLAPublicHeader extends HTMLElement {
             <a href="/collections">Collections</a>
             <a href="/browse" class="">Browse</a>
             <a href="/about" class="">About</a>
+        </nav> -->
+        <nav class="navbar bg-light">
+            <div class="container-fluid">
+                <a href="/" class="navbar-brand" title="Home">
+                    <img src="https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:4553/100,0,1100,1100/50,50/0/default.jpg">
+                    <span class="scrip">Dunbar Library & Archive</span>
+                </a>
+            </div>
         </nav>
         `
         this.querySelector(`.tabs a[href*="${location.pathname.split('/')[1]}"]`)?.classList.add("active")
-        this.querySelector(`logoimg img`).setAttribute("src", `/images/logo-${location.pathname.split('/')[1].replace(".html","")}.jpg`)
+        this.querySelector(`logoimg img`)?.setAttribute("src", `/images/logo-${location.pathname.split('/')[1].replace(".html","")}.jpg`)
     }
 }
 customElements.define("dla-header", DLAPublicHeader)
+
+class DLAPublicCarousel extends HTMLElement {
+    connectedCallback() {
+        this.innerHTML = `
+        <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active" data-bs-interval="10000">
+            <img src="..." class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>`
+
+      fetch(this.getAttribute('src'))
+        .then(res=>res.json())
+        .then(list => {
+            let itemBuilder =``
+            list.forEach((item,index)=>{
+                new URL(item.id) // break if not retrievable
+                itemBuilder += `
+                <div class="carousel-item${index===0?" active":""}" data-bs-interval="10000">
+                    <img src="${item.id}" class="d-block w-100" alt="">
+                    <div class="carousel-caption d-none d-md-block">
+                        <p>${item.description}</p>
+                    </div>
+                </div>
+                `
+            })
+            this.querySelector('.carousel-inner').innerHTML = itemBuilder
+        })
+        .catch(err=> this.remove())
+    }
+}
+customElements.define("dla-carousel", DLAPublicCarousel)
