@@ -3,112 +3,24 @@
 
 :root {
   --ud-blue: #171B48;
+  --bs-dark-rgb: 23, 27, 72; /* Bootstrap override */
   --ud-secondary: #3F526C;
+  --bs-secondary-rgb: 63, 82, 108; /* Bootstrap override */
   --ud-light: #DAD2B1;
+  --bs-light-rgb: 218, 210, 177; /* Bootstrap override */
   --ud-accent: #EAB726;
   --ud-active: #D28A28;
+  --bs-link-color: #EAB726;
+  --bs-link-hover-color: #D28A28;
+  --bs-body-bg: #171B48;
 }
 
-body {
-  padding: var(--body-padding);
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: var(--ud-blue);
-}
-
-body header {
-  position: relative;
-  overflow: visible;
-}
-
-body img.hero {
-  position: absolute;
-  width: 100vw;
-  left: calc(-1 * var(--body-padding));
-  bottom: 0;
-  pointer-events: none;
-  opacity: .75;
-  z-index: -1;
+.bg-bright{
+  background-color: var(--ud-accent);
 }
 
 a {
   color: var(--ud-active);
-}
-/* 
-nav {
-  width: 100%;
-  position: relative;
-  background-color: var(--ud-secondary);
-  display: flex;
-  justify-content: space-evenly;
-}
-
-nav a {
-  color: var(--site-light);
-  text-decoration: none;
-  font-size: 1.5rem;
-  text-align: center;
-  background-color: var(--ud-accent);
-  outline: solid var(--ud-secondary) 1px;
-  padding: .5rem;
-  margin: .25rem;
-  transition: all .2s ease-in-out;
-  min-width: 15%;
-}
-
-nav a.active {
-  background-color: var(--ud-active);
-  color: var(--ud-secondary);
-  outline: solid var(--ud-secondary) 10px;
-  outline-offset: -2px;
-  border-radius: 4px;
-}
-
-nav a:hover,
-nav a:focus {
-  background-color: var(--ud-light);
-  outline: solid var(--ud-accent) 10px;
-  outline-offset: -2px;
-} */
-
-.content {
-  padding: var(--body-padding);
-  background-color: hsl(0, 100%, 100%);
-  font-size: 1.2rem;
-  /* columns: 2;
-  column-gap: 2rem;
-  column-width: 40em; */
-}
-
-row, .row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: stretch;
-  margin-bottom: 2rem;
-}
-
-card, .card {
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  background: var(--ud-light);
-  box-shadow: 0 1px 3px var(--ud-secondary);
-}
-
-.button {
-  background-color: var(--ud-accent);  
-  border-radius: 5px;
-  color: var(--ud-light);
-  padding: .5em;
-  text-decoration: none;
-  font-variant: initial;
-  font-weight: initial;
-  cursor: pointer;
-}
-
-.button:focus,
-.button:hover {
-  background-color: var(--ud-action);
 }
 
 .hidden {
@@ -159,4 +71,9 @@ dla-carousel {
   text-shadow: 0 0 1.5px #FFF;
   padding: 0;
   bottom: 0;
+}
+
+.scrip {
+  font-family: 'Homemade Apple', cursive;
+  text-shadow: 0 0 1.5px var(--ud-secondary);
 }

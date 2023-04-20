@@ -6,53 +6,81 @@
 class DLAPublicFooter extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
-        <style>
-            footer{
-                display: block;
-                text-align: center;
-                background-color: var(--ud-light);
-                z-index: 1;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
+        <footer class="bg-dark text-center text-white">
+            <!-- Grid container -->
+            <div class="container p-4">
+                <!-- Section: Text -->
+                <section class="mb-4">
+                <p class="text-start">
+                    Funding and support provided by the National Endowment for the Humanities, Mellon Foundation, 
+                    and University of Dayton. The Dunbar Library & Archive web platform has been developed by the 
+                    Research Computing Group at Saint Louis University and is edited by Dr. Minnita Daniel-Cox.
+                </p>
+                </section>
+                <!-- Section: Text -->
 
-            footer .brand{
-                height: 2em;
-                margin-right: 5px;
-            }
+                <!-- Section: Links -->
+                <section class="">
+                <!--Grid row-->
+                <div class="row justify-content-center">
+                    <!--Grid column-->
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0 text-start">
+                    <h5 class="scrip">Dunbar Library & Archive</h5>
 
-            footer a{
-                text-decoration: none;
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-box-align: center;
-                -ms-flex-align: center;
-                align-items: center;
-                padding: 1rem 2rem;
-                color: var(--ud-blue);
-            }
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                        <a href="/collections" class="text-white">View all Collections</a>
+                        </li>
+                        <li>
+                        <a href="/about" class="text-white">About the archive</a>
+                        </li>
+                        <li>
+                        <a href="/contributors" class="text-white">Contributions</a>
+                        </li>
+                    </ul>
+                    </div>
+                    <!--Grid column-->
 
-            footer div {
-                display: inline-flex;
-            }
-        </style>
-        <footer>
-            <div>
-                <a target="_blank" href="https://www.slu.edu/research/faculty-resources/research-computing.php">
-                    <img class="brand" src="/images/rcg-logo.jpg"> 
-                    ©2022 Research Computing Group
-                </a>
+                    <!--Grid column-->
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0 text-start">
+                    <h5 class="text-uppercase">Related Resources</h5>
+
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                        <a href="https://udayton.edu/artssciences/academics/music/dunbar/index.php" class="text-white">Paul Laurence Dunbar Music Archive</a>
+                        </li>
+                        <li>
+                        <a href="https://youtu.be/mCXn9YIYjNs" class="text-white">Dunbar Initiative at UD trailer</a>
+                        </li>
+                        <li>
+                        <a href="https://archive.org/search?query=Paul+Dunbar+poet&and%5B%5D=subject%3A%22Dunbar%2C+Paul+Laurence%2C+1872-1906%22" class="text-white">Internet Archive books</a>
+                        </li>
+                    </ul>
+                    </div>
+                    <!--Grid column-->
+
+                </div>
+                <!--Grid row-->
+                </section>
+                <!-- Section: Links -->
             </div>
-            <div>
-                <a target="_blank" href="https://udayton.edu/blogs/artssciences/2022-stories/22-08-16-dunbar-video.php">
-                    <img class="brand" src="/images/ud-logo-horizontal.jpg">
-                </a>
+            <!-- Grid container -->
+
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2023 Copyright:
+                <a class="text-white" href="https://udayton.edu/">University of Dayton</a>
+                <p>
+                    <small>
+                    Linked records held at external repositories may have rights or restrictions in addition to what is 
+                    offered by the DLA.
+                    </small>
+                </p>
             </div>
-        </footer>
+            <!-- Copyright -->
+            </footer>
         `
-        this.classList.add('nav', 'nav-center', 'text-primary', 'is-fixed', 'is-full-width', 'is-vertical-align')
+        this.classList.add('is-fixed', 'is-full-width', 'is-vertical-align')
     }
 }
 customElements.define("dla-footer", DLAPublicFooter)
