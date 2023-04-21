@@ -7,7 +7,7 @@ let progress
 
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
 const recordCardTemplate = obj => (obj.label ?? obj.name) && `
-    <h4><a href="./record/${obj.id.split('/'.pop())}">${UTILS.getLabel(obj)}</a></h4>
+    <h4><a href="./record/${obj.id.split('/').pop()}">${UTILS.getLabel(obj)}</a></h4>
         <div class="row">
             <dl>
             </dl>
