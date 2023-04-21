@@ -120,24 +120,24 @@ class Entity extends Object {
     }
 
     #announceUpdate = () => {
-        NoticeBoard.publish(this.id, {
+        NoticeBoard.publish(UTILS.normalizeEventType(this.id), {
             action: "update",
             payload: this.assertions
         })
     }
     #announceNewEntity = () => {
-        NoticeBoard.publish(this.id, {
+        NoticeBoard.publish(UTILS.normalizeEventType(this.id), {
             action: "reload",
             payload: this
         })
     }
     #announceComplete = () => {
-        NoticeBoard.publish(this.id, {
+        NoticeBoard.publish(UTILS.normalizeEventType(this.id), {
             action: "complete",
         })
     }
     #announceError = (err) => {
-        NoticeBoard.publish(this.id, {
+        NoticeBoard.publish(UTILS.normalizeEventType(this.id), {
             action: "error",
             payload: err
         })

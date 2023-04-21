@@ -4,7 +4,7 @@
  * @author cubap@slu
  */
 
-import { DEER } from './deer-utils.js'
+import { UTILS, DEER } from './deer-utils.js'
 import { Entity, EntityMap, objectMatch } from './entities.js'
 import NoticeBoard from './NoticeBoard.js'
 
@@ -38,13 +38,13 @@ NoticeBoard.subscribe(DEER.EVENTS.NEW_VIEW, message => {
      */
     const msg = message.detail
     if (!EntityMap.has(msg.id)) {
-        NoticeBoard.publish(msg.id, {
+        NoticeBoard.publish(UTILS.normalizeEventType(msg.id), {
             action: "reload",
             payload: new Entity(msg.id, msg.isLazy)
         })
     } else {
         const ent = EntityMap.get(msg.id)
-        NoticeBoard.publish(msg.id, {
+        NoticeBoard.publish(UTILS.normalizeEventType(msg.id), {
             action: "update",
             payload: ent.assertions
         })
@@ -56,7 +56,7 @@ function getItem(id, args = {}) {
         let lookup = db.transaction(IDBSTORE, "readonly").objectStore(IDBSTORE).get(id).onsuccess = (event) => {
             let item = event.target.result
             if (item) {
-                NoticeBoard.publish(item.id, {
+                NoticeBoard.publish(UTILS.normalizeEventType(item.id), {
                     item,
                     action: "expanded",
                 })
@@ -69,14 +69,14 @@ function getItem(id, args = {}) {
                 const enterRecord = db.transaction(IDBSTORE, "readwrite").objectStore(IDBSTORE)
                 const insertionRequest = enterRecord.put(obj.data)
                 insertionRequest.onsuccess = function (event) {
-                    NoticeBoard.publish(obj.data.id, {
+                    NoticeBoard.publish(UTILS.normalizeEventType(obj.data.id), {
                         item: obj.data,
                         action: "expanded",
                     })
                 }
                 insertionRequest.onerror = function (event) {
                     console.log("Error: ", event)
-                    NoticeBoard.publish(obj.data.id, {
+                    NoticeBoard.publish(UTILS.normalizeEventType(obj.data.id), {
                         error: event,
                         action: "error",
                         id: obj.data.id

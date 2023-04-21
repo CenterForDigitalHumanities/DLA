@@ -1,4 +1,4 @@
-import { DEER } from '../../deer-utils.js'
+import { UTILS, DEER } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
@@ -112,7 +112,7 @@ export default class DLA_Collection extends DeerView {
                 default:
             }
         }
-        NoticeBoard.subscribe(this.getAttribute(DEER.ID), facetRecords.bind(this))
+        NoticeBoard.subscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), facetRecords.bind(this))
     }
 
     async #loadRecords(pagination = [0,]) {
