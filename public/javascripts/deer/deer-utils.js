@@ -138,7 +138,7 @@ const utils = {
         if(typeof eventType !== 'string') return eventType // fail on your own
         let cleanedString = eventType.normalize()
         if (cleanedString.startsWith('http')) {
-            return cleanedString.split('://')
+            return cleanedString.split('://').pop()
         }
         return cleanedString
     },
