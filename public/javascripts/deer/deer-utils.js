@@ -383,12 +383,6 @@ const utils = {
             inputData = this.serialize(data)
         }
         return CryptoJS.MD5(data)
-    },
-    httpsIdLinks: function (id){
-        return [ id.replace(/^https?:/,'https:'), id.replace(/^https?:/,'http:') ]
-    },
-    httpsQueryArray: function (id) {
-        return { $in: this.httpsIdLinks(id) }
     }
 }
 

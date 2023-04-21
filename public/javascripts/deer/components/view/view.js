@@ -38,7 +38,7 @@ export default class DeerView extends HTMLElement {
                 break
             case "complete":
                 this.$final = true
-                NoticeBoard.unsubscribe(this.getAttribute(DEER.ID).split('//:')[1], this.#updateEntity.bind(this))
+                NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
             default:
         }
     }
@@ -63,7 +63,7 @@ export default class DeerView extends HTMLElement {
             case DEER.LIST:
                 const id = this.getAttribute(DEER.ID)
                 if (id === null || this.getAttribute(DEER.COLLECTION)) { return }
-                NoticeBoard.subscribe(this.getAttribute(DEER.ID).split('//:')[1], this.#updateEntity.bind(this))
+                NoticeBoard.subscribe(this.getAttribute(DEER.ID), this.#updateEntity.bind(this))
                 NoticeBoard.publish(DEER.EVENTS.NEW_VIEW, {
                     id,
                     isLazy: this.getAttribute(DEER.LAZY)
