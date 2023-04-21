@@ -112,7 +112,7 @@ export default class DLA_Collection extends DeerView {
                 default:
             }
         }
-        NoticeBoard.subscribe(this.getAttribute(DEER.ID), facetRecords.bind(this))
+        NoticeBoard.subscribe(this.getAttribute(DEER.ID).split('//:')[1], facetRecords.bind(this))
     }
 
     async #loadRecords(pagination = [0,]) {

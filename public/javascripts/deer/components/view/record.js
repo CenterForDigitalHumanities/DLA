@@ -126,10 +126,10 @@ export class DlaRecord extends DeerView {
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
         if(name === DEER.ID){
-            if(oldValue !== null && oldValue !== newValue){
-                NoticeBoard.unsubscribe(oldValue, this.#renderGenericRecord.bind(this))
+            if(oldValue !== null && oldValue !== newValue.split('//:')[1]){
+                NoticeBoard.unsubscribe(oldValue.split('//:')[1], this.#renderGenericRecord.bind(this))
             }
-            NoticeBoard.subscribe(newValue, this.#renderGenericRecord.bind(this))
+            NoticeBoard.subscribe(newValue.split('//:')[1], this.#renderGenericRecord.bind(this))
         }
     }
     #replaceElement(tagName) {
@@ -142,7 +142,7 @@ export class DlaRecord extends DeerView {
     async #renderGenericRecord(ev) {
         if (!["complete"].includes(ev.detail.action)) {return}
         if (isPoem(this)) {
-            NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+            NoticeBoard.unsubscribe(this.getAttribute(DEER.ID).split('//:')[1], this.#renderGenericRecord.bind(this))
             this.#replaceElement("dla-poem-detail")
             return
         }
@@ -205,7 +205,7 @@ export class DlaRecord extends DeerView {
             return generic_template
         }
         this.innerHTML = generic_template
-        NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+        NoticeBoard.unsubscribe(this.getAttribute(DEER.ID).split('//:')[1], this.#renderGenericRecord.bind(this))
     }
 }
 

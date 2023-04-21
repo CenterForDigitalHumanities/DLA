@@ -85,10 +85,10 @@ class Entity extends Object {
     #resolveURI = (withAssertions) => {
         const targetStyle = ["target", "target.@id", "target.id"]
         let historyWildcard = { "$exists": true, "$size": 0 }
-        let obj = { "$or": [{ '@id': this.id }], "__rerum.history.next": historyWildcard }
+        let obj = { "$or": [{ '@id': UTILS.httpsQueryArray(this.id) }], "__rerum.history.next": historyWildcard }
         for (let target of targetStyle) {
             let o = {}
-            o[target] = this.id
+            o[target] = UTILS.httpsQueryArray(this.id)
             obj["$or"].push(o)
         }
         var results = Boolean(withAssertions) ? fetch(DEER.URLS.QUERY, {
@@ -100,7 +100,7 @@ class Entity extends Object {
             .then(res => res.ok ? res.json() : Promise.reject(res))
             .then(finds => {
                 if (finds.length === 0) { return Promise.reject({ status: 404 }) }
-                const originalObject = finds.find?.(e => e['@id'] === this.id) ?? finds
+                const originalObject = finds.find?.(e => e['@id'].split('//:')[1] === this.id.split('//:')[1]) ?? finds
                 if (!Array.isArray(originalObject) && typeof originalObject === "object") {
                     this.data = originalObject
                 }
@@ -120,24 +120,24 @@ class Entity extends Object {
     }
 
     #announceUpdate = () => {
-        NoticeBoard.publish(this.id, {
+        NoticeBoard.publish(this.id.split('//:')[1], {
             action: "update",
             payload: this.assertions
         })
     }
     #announceNewEntity = () => {
-        NoticeBoard.publish(this.id, {
+        NoticeBoard.publish(this.id.split('//:')[1], {
             action: "reload",
             payload: this
         })
     }
     #announceComplete = () => {
-        NoticeBoard.publish(this.id, {
+        NoticeBoard.publish(this.id.split('//:')[1], {
             action: "complete",
         })
     }
     #announceError = (err) => {
-        NoticeBoard.publish(this.id, {
+        NoticeBoard.publish(this.id.split('//:')[1], {
             action: "error",
             payload: err
         })
