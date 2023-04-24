@@ -70,17 +70,18 @@ const template = (obj,options={}) => {
     </style>
     <div class="row">
             <div id="Records" class="col-9 order-last">
+            <ul>
             ${(obj[options.list ?? "itemListElement"] ?? [])?.reduce((a, b) => a += `
-            <dla-record-card class="record card" deer-id="${b['@id'].replace(/^https?:/,'https:')}">
-            <h4><a href="./record/${(b.id ?? b['@id']).split("/").pop()}">${b.label ?? b['@id']}</a></h4>
-            </dla-record-card>`, ``)}
+            <li class="record">
+            <a href="./record/${(b.id ?? b['@id']).split("/").pop()}">${b.label ?? b['@id']}</a>
+            </li>`, ``)}
             </div>
             <div class="col-3 bg-bright">
                 <h5 title="${obj.description??``}">${obj.name}</h5>
                 <hr />
-                <p>Refine Results <button role="button" type="reset" class="btn btn-light btn-sm">clear all</button></p>
+                <p class="d-none">Refine Results <button role="button" type="reset" class="btn btn-light btn-sm">clear all</button></p>
                 <progress value="${obj.numberOfItems??0}" max="${obj.numberOfItems??10}">${obj.numberOfItems??``} of ${obj.numberOfItems??``}</progress>
-                <input id="query" type="text" placeholder="type to filter">
+                <input id="query" disabled class="form-control" type="text" placeholder="type to filter">
                 <section id="facetFilter"></section>
             </div>
     </div>`
@@ -103,6 +104,7 @@ export default class DLA_Collection extends DeerView {
             switch (e.detail.action) {
                 case "complete":
                     query.addEventListener("input", this.#filterQuery.bind(this))
+                    query.removeAttribute('disabled')
                     this.querySelector('button[type="reset"]')?.addEventListener("click", ev => {
                         Array.from(document.querySelectorAll(".clicked")).forEach(el => el.dispatchEvent(new Event("click")))
                         query.value = ""
@@ -139,7 +141,7 @@ export default class DLA_Collection extends DeerView {
     
     #filterQuery(event) {
         const queryString = event.target.value
-        Array.from(this.records).forEach(r => new RegExp(queryString, "i").test(r.getAttribute("data-query")) ? r.classList.remove("hide-query") : r.classList.add("hide-query"))
+        Array.from(this.records).forEach(r => new RegExp(queryString, "i").test(r.textContent) ? r.classList.remove("hide-query") : r.classList.add("hide-query"))
         //Records.querySelectorAll(".record:not([data-query*='"+queryString+"'])")
         this.#updateCount()
     }
