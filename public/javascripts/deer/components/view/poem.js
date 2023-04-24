@@ -4,55 +4,6 @@ import DeerView from './view.js'
 
 const template = (obj, options = {}) => `
     <style>
-    .textSample {
-        width: fit-content;
-      }
-      
-      .textSample lg {
-        padding: 0.68em 0;
-      }
-      
-      .textSample stanza, .textSample line {
-        display: block;
-      }
-      .textSample stanza {
-        margin-bottom: 0.68em;
-        min-width: 25em;
-      }
-      .textSample line {
-        width: 100%;
-        background-color: hsl(0deg 0% 90%);
-        border-radius: 0.5em;
-        line-height: 1.2;
-        height: 1em;
-        margin: 0.15em;
-        box-shadow: inset 0 0 2px white;
-        animation: loaderColor alternate 500ms;
-      }
-      .textSample line:last-of-type {
-        width: 80%;
-      }
-      @keyframes loaderColor {
-        0% {
-          background-color: hsl(0deg 0% 95%);
-        }
-        100% {
-          background-color: hsl(0deg 0% 85%);
-        }
-      }
-      
-/* TEI pseudoXSLT */
-.textSample {
-  font-variant: small-caps;
-  font-weight: bold;
-}
-.textSample lg[type='stanza'],.textSample l {
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  font-variant: initial;
-  font-weight: initial;
-  display: block;
-  width: 100%;
-}
 h1+.publication-info {
     top: -1.32em;
     position: relative;
@@ -70,18 +21,18 @@ h1+.publication-info {
         <div class="textSample card col">
         ${false ? true : `
         [ Text Sample ]
-        <stanza>
-            <line></line>
-            <line></line>
-            <line></line>
-            <line></line>
-        </stanza>
-        <stanza>
-            <line></line>
-            <line></line>
-            <line></line>
-            <line></line>
-        </stanza>`}
+        <div class='row placeholder-wave'>
+            <line class='placeholder col-12'></line>
+            <line class='placeholder col-12'></line>
+            <line class='placeholder col-12'></line>
+            <line class='placeholder col-9'></line>
+        </div>
+        <div class='row placeholder-wave'>
+            <line class='placeholder col-12'></line>
+            <line class='placeholder col-12'></line>
+            <line class='placeholder col-12'></line>
+            <line class='placeholder col-9'></line>
+        </div>`}
         </div>
         <div class="col">
             <div class="audioSample card">
