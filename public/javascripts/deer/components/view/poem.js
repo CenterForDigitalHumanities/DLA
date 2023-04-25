@@ -36,9 +36,11 @@ h1+.publication-info {
         <div class="col">
             <div class="audioSample card hidden">
                 <div class="card-header">Spoken Performance</div>
+                <div class="card-body"></div>
             </div>
-            <div class="card-body"></div>
-            <div class="poemMusic">
+            <div class="poemMusic card hidden">
+                <div class="card-header">Musical Setting</div>
+                <div class="card-body"></div>
             </div>
         </div>
     </div>
@@ -65,7 +67,7 @@ export default class DlaPoemDetail extends DeerView {
             }],
             "__rerum.history.next": historyWildcard
         }
-        const expressionCard = c => `<dla-simple-expression class="" deer-link="poem-expression.html#" deer-id="${c}">${c}</dla-simple-expression>`
+        const expressionCard = c => `<dla-simple-expression class="card col" deer-link="/collection/record/" deer-id="${c}">${c}</dla-simple-expression>`
         const cards = document.createElement('div')
         cards.classList.add("row")
         fetch(DEER.URLS.QUERY, {
@@ -102,7 +104,7 @@ class simpleExpression extends DeerView {
         ${this?.manifestations?.length ? this.manifestations.map(manId => `<a href="${manId}" target="_blank">${manId}</a>`).join('') : ``}
         </div>
         <div class="row">
-            <a class="tag is-small" style="color:darkgrey" href="poem-expression.html#${UTILS.getValue(obj["@id"])}">full view</a>
+            <a class="tag is-small" style="color:darkgrey" href="/collection/record/${UTILS.getValue(obj["@id"])}">full view</a>
         </div>
         `
     constructor() {
@@ -142,8 +144,8 @@ class simpleExpression extends DeerView {
                         <a target="_blank" title="View on eCommons 🡕" href="${poem.url}">${poem.configured_field_t_publication_information}</a>`
                         audioSamples.parentElement.classList.remove('hidden')
                     }
-                    if(poem.music){
-                        let musicHTML = `<h3>Musical Setting${poem.music.length===1?``:`s`}</h3>`
+                    if(poem.music?.length){
+                        let musicHTML = ``
 
                         musicHTML += poem.music.reduce((a,b)=>a+=`
                         <p>
@@ -152,7 +154,10 @@ class simpleExpression extends DeerView {
                             <object data="${b.fulltext_url}" type="application/pdf" width="100%" height="500px">PDF 🡕</object>
                         </a></small>
                         </p>`,``)
-                        document.querySelector(".poemMusic").innerHTML = musicHTML
+
+                        const linkedMusic = document.querySelector('.poemMusic .card-body')
+                        linkedMusic.innerHTML = musicHTML
+                        linkedMusic.parentElement.classList.remove('hidden')
                     }
                 })
             }
