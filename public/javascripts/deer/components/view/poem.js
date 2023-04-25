@@ -34,11 +34,11 @@ h1+.publication-info {
             </div>
         </div>
         <div class="col">
-            <div class="audioSample card hidden">
+            <div class="audioSample card hidden mb-3">
                 <div class="card-header">Spoken Performance</div>
                 <div class="card-body"></div>
             </div>
-            <div class="poemMusic card hidden">
+            <div class="poemMusic card hidden mb-3">
                 <div class="card-header">Musical Setting</div>
                 <div class="card-body"></div>
             </div>
@@ -67,7 +67,7 @@ export default class DlaPoemDetail extends DeerView {
             }],
             "__rerum.history.next": historyWildcard
         }
-        const expressionCard = c => `<dla-simple-expression class="card col" deer-link="/collection/record/" deer-id="${c}">${c}</dla-simple-expression>`
+        const expressionCard = c => `<div class="col"><dla-simple-expression class="card" deer-link="/collection/record/" deer-id="${c}">${c}</dla-simple-expression></div>`
         const cards = document.createElement('div')
         cards.classList.add("row")
         fetch(DEER.URLS.QUERY, {
@@ -98,13 +98,15 @@ export function isPoem(elem){
 
 class simpleExpression extends DeerView {
     #simpleExpressionTemplate = (obj) => `
-        <header><h4>${UTILS.getLabel(obj)}</h4></header>
-        <h6>View links below for connected content</h6>
-        <div class="row manifestation-url">
-        ${this?.manifestations?.length ? this.manifestations.map(manId => `<a href="${manId}" target="_blank">${manId}</a>`).join('') : ``}
+        <header class="card-header"><h4>${UTILS.getLabel(obj,obj.id)}</h4></header>
+        <div class="card-body">
+            <h6>View links below for connected content</h6>
+            <div class="row manifestation-url">
+            ${this?.manifestations?.length ? this.manifestations.map(manId => `<a href="${manId}" target="_blank">${manId}</a>`).join('') : ``}
+            </div>
         </div>
-        <div class="row">
-            <a class="tag is-small" style="color:darkgrey" href="/collection/record/${UTILS.getValue(obj["@id"])}">full view</a>
+        <div class="card-footer">
+            <a class="tag is-small" style="color:darkgrey" href="/collection/record/${(obj["@id"]??obj.id)?.split('/').pop()}">full view</a>
         </div>
         `
     constructor() {
