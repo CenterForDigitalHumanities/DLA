@@ -17,6 +17,13 @@ import { default as worker } from '/javascripts/deer/worker.js'
 import NoticeBoard from './NoticeBoard.js'
 
 const utils = {
+    httpsIdLinks: function (id){
+        return [ id.replace(/^https?:/,'https:'), id.replace(/^https?:/,'http:') ]
+    },
+    
+    httpsQueryArray: function (id) {
+        return { $in: this.httpsIdLinks(id) }
+    },
     listFromCollection: function (collectionId) {
         let queryObj = {
             body: {

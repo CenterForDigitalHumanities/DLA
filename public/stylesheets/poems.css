@@ -1,0 +1,24 @@
+/* TEI pseudo-XSLT */
+
+lg {
+  padding: 0.68em 0;
+}
+
+stanza,
+line {
+  display: block;
+}
+
+stanza {
+  margin-bottom: 0.68em;
+  min-width    : 25em;
+}
+
+lg[type='stanza'],
+l {
+  font-family : Georgia, 'Times New Roman', Times, serif;
+  font-variant: initial;
+  font-weight : initial;
+  display     : block;
+  width       : 100%;
+}

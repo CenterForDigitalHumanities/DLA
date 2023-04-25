@@ -15,33 +15,33 @@ h1+.publication-info {
     text-align: right;
 }
       </style>
-    <h1>${UTILS.getLabel(obj)}</h1>
+<!--    <h1>${UTILS.getLabel(obj)}</h1> -->
     <span class="publication-info"></span>
-    <row>
-        <div class="textSample card col">
-        ${false ? true : `
-        [ Text Sample ]
-        <div class='row placeholder-wave'>
-            <line class='placeholder col-12'></line>
-            <line class='placeholder col-12'></line>
-            <line class='placeholder col-12'></line>
-            <line class='placeholder col-9'></line>
-        </div>
-        <div class='row placeholder-wave'>
-            <line class='placeholder col-12'></line>
-            <line class='placeholder col-12'></line>
-            <line class='placeholder col-12'></line>
-            <line class='placeholder col-9'></line>
-        </div>`}
+    <div class="row">
+        <div class="textSample col">
+            <h4 class='placeholder w-25 rounded'></h4>
+            <div class='row  p-3'>
+                <line class='placeholder col-12 mb-1 rounded'></line>
+                <line class='placeholder col-12 mb-1 rounded'></line>
+                <line class='placeholder col-12 mb-1 rounded'></line>
+                <line class='placeholder col-9 rounded '></line>
+            </div>
+            <div class='row p-3'>
+                <line class='placeholder col-12 mb-1 rounded'></line>
+                <line class='placeholder col-12 mb-1 rounded'></line>
+                <line class='placeholder col-12 mb-1 rounded'></line>
+                <line class='placeholder col-9 rounded '></line>
+            </div>
         </div>
         <div class="col">
-            <div class="audioSample card">
-                <h3>Spoken Performance</h3>
+            <div class="audioSample card hidden">
+                <div class="card-header">Spoken Performance</div>
             </div>
-            <div class="poemMusic card">
+            <div class="card-body"></div>
+            <div class="poemMusic">
             </div>
         </div>
-    </row>
+    </div>
     `
 
 
@@ -55,19 +55,19 @@ export default class DlaPoemDetail extends DeerView {
 
     connectedCallback() {
         super.connectedCallback()
+        this.classList.remove(this.dataset.spinner)
         const historyWildcard = { "$exists": true, "$size": 0 }
         const exprQuery = {
             $or: [{
-                "body.isRealizationOf": this.Entity?.id
+                "body.isRealizationOf": UTILS.httpsQueryArray(this.Entity?.id)
             }, {
-                "body.isRealizationOf.value": this.Entity?.id
+                "body.isRealizationOf.value": UTILS.httpsQueryArray(this.Entity?.id)
             }],
             "__rerum.history.next": historyWildcard
         }
-        const expressionCard = c => `<dla-simple-expression class="hidden" deer-link="poem-expression.html#" deer-id="${c}">${c}</dla-simple-expression>`
+        const expressionCard = c => `<dla-simple-expression class="" deer-link="poem-expression.html#" deer-id="${c}">${c}</dla-simple-expression>`
         const cards = document.createElement('div')
         cards.classList.add("row")
-        this.after(cards)
         fetch(DEER.URLS.QUERY, {
             method: "POST",
             mode: "cors",
@@ -80,6 +80,9 @@ export default class DlaPoemDetail extends DeerView {
             return expressions
         })
         .then(expr=>cards.innerHTML = Array.from(expr.values()).map(conn => expressionCard(conn)).join(''))
+        .then(()=>{
+            this.after(cards)
+        })
     }
 }
 
@@ -112,9 +115,9 @@ class simpleExpression extends DeerView {
         const historyWildcard = { "$exists": true, "$size": 0 }
         const manQuery = {
             $or: [{
-                "body.isEmbodimentOf": this.Entity.id
+                "body.isEmbodimentOf": UTILS.httpsQueryArray(this.Entity?.id)
             }, {
-                "body.isEmbodimentOf.value": this.Entity.id
+                "body.isEmbodimentOf.value": UTILS.httpsQueryArray(this.Entity?.id)
             }],
             "__rerum.history.next": historyWildcard
         }
@@ -129,13 +132,15 @@ class simpleExpression extends DeerView {
         .then(manifestationIds => {
             this.manifestations = manifestationIds
             if (manifestationIds?.[0].includes("ecommons")) {
-                getCachedPoemByUrl(manifestationIds[0]).then(poem=>{
+                getCachedPoemByUrl(manifestationIds[0].replace(/https?:/,'https:')).then(poem=>{
                     if(!poem) return
                     document.querySelector('.publication-info').innerHTML += `${poem.author_display} (${(new Date(poem.publication_date)).getFullYear()})`
                     if(poem.download_link) {
-                        document.querySelector('.audioSample').innerHTML += `
+                        const audioSamples = document.querySelector('.audioSample .card-body')
+                        audioSamples.innerHTML += `
                         <audio controls><source src="${poem.download_link}" type="audio/mpeg"></audio>
                         <a target="_blank" title="View on eCommons 🡕" href="${poem.url}">${poem.configured_field_t_publication_information}</a>`
+                        audioSamples.parentElement.classList.remove('hidden')
                     }
                     if(poem.music){
                         let musicHTML = `<h3>Musical Setting${poem.music.length===1?``:`s`}</h3>`
