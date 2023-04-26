@@ -277,10 +277,11 @@ const markText = (html) => {
     shadow.innerHTML = html.normalize()
     const LINES = shadow.querySelectorAll('l')
     GLOSSARY.forEach(entry=>{
-        if(!(new RegExp(String.raw`${entry.title.normalize()}`, 'i')).test(html)) { return }
+        if(!(new RegExp(String.raw`${entry.title.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"')}`, 'i')).test(html)) { return }
         LINES.forEach(line=>{
             if (line.innerHTML.includes("data-definition")) { return }
-            line.innerHTML = line.innerHTML.replace(new RegExp(String.raw`\b${entry.title}\b`, 'gi'), match => `<a href="${entry.url}" data-ipa="${entry.configured_field_t_ipa[0]}" data-definition="${entry.configured_field_t_definition}" data-sound="${entry.download_link}">${match}</a>${glossaryTip(entry)}`)
+            line.innerHTML = line.innerHTML.replace(new RegExp(String.raw`[\s\b]${entry.title.replace(/[\u2018\u2019]/g, "'")
+            .replace(/[\u201C\u201D]/g, '"')}[\s\b]`, 'gi'), match => ` <a href="${entry.url}" data-ipa="${entry.configured_field_t_ipa[0]}" data-definition="${entry.configured_field_t_definition}" data-sound="${entry.download_link}">${match.trim()}</a>${glossaryTip(entry)} `)
         })
     })
     return shadow.innerHTML
