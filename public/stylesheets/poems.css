@@ -22,3 +22,18 @@ l {
   display     : block;
   width       : 100%;
 }
+
+div.glossaryTip {
+  display: none;
+  position: absolute;
+  background-color: #FFF;
+  box-shadow: 0 0 3em 0 rgba(0,0,0,.3);
+}
+
+.glossaryTip.popover {
+  max-width: 100%;
+}
+
+a:hover+div.glossaryTip, a+div.glossaryTip:hover {
+  display: block;
+}
