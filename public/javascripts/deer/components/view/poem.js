@@ -96,7 +96,7 @@ export function isPoem(elem) {
     return obj.type?.includes("Work") && obj.additionalType?.includes("dcmitype/Text")
 }
 
-class simpleExpression extends DeerView {
+class DlaSimpleExpression extends DeerView {
     #simpleExpressionTemplate = (obj) => `
     <div class="card">
         <p class="card-header card-title"></p>
@@ -220,7 +220,7 @@ class simpleExpression extends DeerView {
     }
 }
 
-customElements.define("dla-simple-expression", simpleExpression)
+customElements.define("dla-simple-expression", DlaSimpleExpression)
 
 /** Poem Utils */
 
