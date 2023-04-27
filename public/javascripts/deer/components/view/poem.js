@@ -67,7 +67,7 @@ export default class DlaPoemDetail extends DeerView {
             }],
             "__rerum.history.next": historyWildcard
         }
-        const expressionCard = c => `<div class="col"><dla-simple-expression class="card" deer-link="/collection/record/" deer-id="${c}">${c}</dla-simple-expression></div>`
+        const expressionCard = c => `<dla-simple-expression class="col" deer-link="/collection/record/" deer-id="${c}">${c}</dla-simple-expression>`
         const cards = document.createElement('div')
         cards.classList.add("row")
         fetch(DEER.URLS.QUERY, {
@@ -98,16 +98,17 @@ export function isPoem(elem) {
 
 class simpleExpression extends DeerView {
     #simpleExpressionTemplate = (obj) => `
-        <header class="card-header"><h4>${UTILS.getLabel(obj, obj.id)}</h4></header>
+    <div class="card">
+        <p class="card-header card-title"></p>
         <div class="card-body">
-            <h6>View links below for connected content</h6>
-            <div class="row manifestation-url">
-            ${this?.manifestations?.length ? this.manifestations.map(manId => `<a href="${manId}" target="_blank">${manId}</a>`).join('') : ``}
-            </div>
+        <div class="label">📚 Published Books</div>
+        <h6>View links below for connected content</h6>
+            <div class="row manifestation-url"></div>
         </div>
         <div class="card-footer">
             <a class="tag is-small" style="color:darkgrey" href="/collection/record/${(obj["@id"] ?? obj.id)?.split('/').pop()}">full view</a>
         </div>
+    </div>
         `
     constructor() {
         super()
@@ -125,61 +126,97 @@ class simpleExpression extends DeerView {
             }],
             "__rerum.history.next": historyWildcard
         }
-        const manifestationIds = fetch(DEER.URLS.QUERY, {
+        fetch(DEER.URLS.QUERY, {
             method: "POST",
             mode: "cors",
             body: JSON.stringify(manQuery)
         })
             .then(response => response.json())
             .then(annos => annos.map(anno => UTILS.getValue(anno.target)))
-            .then(ids => ids.map(id => id.selector ? `${id?.source}#${id.selector.value}` : id))
-            .then(manifestationIds => {
-                this.manifestations = manifestationIds
-                if (manifestationIds?.[0].includes("ecommons")) {
-                    getCachedPoemByUrl(manifestationIds[0].replace(/https?:/, 'https:')).then(poem => {
+            .then(ids => ids.map(id => id.selector ? `${id?.source}#${id.selector.value}` : id).pop())
+            .then(manifestationId => {
+                const manifestationURL = manifestationId?.replace(/^https?:/, 'https:')
+                this.querySelector(".manifestation-url").innerHTML = `<a href="${manifestationURL}" target="_blank">The Complete Poems</a>`
+                this.manifestation = manifestationURL
+                if (manifestationURL.includes("ecommons")) {
+                    getCachedPoemByUrl(manifestationURL.replace(/https?:/, 'https:')).then(poem => {
                         if (!poem) return
                         document.querySelector('.publication-info').innerHTML += `${poem.author_display} (${(new Date(poem.publication_date)).getFullYear()})`
+                        this.querySelector('.card-title').innerHTML = poem.title
                         if (poem.download_link) {
                             const audioSamples = document.querySelector('.audioSample .card-body')
                             audioSamples.innerHTML += `
-                        <audio controls><source src="${poem.download_link}" type="audio/mpeg"></audio>
-                        <a target="_blank" title="View on eCommons 🡕" href="${poem.url}">${poem.configured_field_t_publication_information}</a>`
+                    <audio controls><source src="${poem.download_link}" type="audio/mpeg"></audio>
+                    <a target="_blank" title="View on eCommons 🡕" href="${poem.url}">${poem.configured_field_t_publication_information}</a>`
                             audioSamples.parentElement.classList.remove('hidden')
                         }
                         if (poem.music?.length) {
                             let musicHTML = ``
 
                             musicHTML += poem.music.reduce((a, b) => a += `
-                        <p>
-                        <a target="_blank" title="View on eCommons 🡕" href="${b.url}"><cite>${b.author_display} (${(new Date(b.publication_date)).getFullYear()})</cite></a>
-                        <small><a href="${b.fulltext_url}" target="_blank">
-                            <object data="${b.fulltext_url}" type="application/pdf" width="100%" height="500px">PDF 🡕</object>
-                        </a></small>
-                        </p>`, ``)
+                    <p>
+                    <a target="_blank" title="View on eCommons 🡕" href="${b.url}"><cite>${b.author_display} (${(new Date(b.publication_date)).getFullYear()})</cite></a>
+                    <small><a href="${b.fulltext_url}" target="_blank">
+                        <object data="${b.fulltext_url}" type="application/pdf" width="100%" height="500px">PDF 🡕</object>
+                    </a></small>
+                    </p>`, ``)
 
                             const linkedMusic = document.querySelector('.poemMusic .card-body')
                             linkedMusic.innerHTML = musicHTML
                             linkedMusic.parentElement.classList.remove('hidden')
                         }
+                        this.querySelector(".manifestation-url").innerHTML = `<a href="${manifestationURL}" target="_blank">${poem.institution_title}</a>`
+                        const download_link = poem?.download_link
+                        const types = {}
+                        types[`🎼 Musical Setting, ${poem?.author_display}`] = "musical_setting"
+                        types["🖋 Collected Poems"] = "collected_poetry"
+                        for (const prop in types) {
+                            if (poem?.document_type.includes(types[prop])) {
+                                this.querySelector('.label').innerHTML = prop
+                                break
+                            }
+                        }
+
                     })
                 }
-                if (manifestationIds?.[0].includes("xml")) {
+                if (manifestationURL.includes("xml")) {
+                    this.querySelector(".manifestation-url").setAttribute('href', manifestationURL)
+                    this.querySelector('.card-title').innerHTML = 'DLA Books'
                     const parentPoemTextSlot = document?.querySelector(".textSample")
                     if (!parentPoemTextSlot) return
                     try {
                         SaxonJS.getResource({
-                            location: manifestationIds[0],
+                            location: manifestationURL,
                             type: 'xml'
                         })
                             .then(sampleSource => {
-                                const poemText = SaxonJS.XPath.evaluate("/" + manifestationIds[0].split("#")[1], sampleSource, { xpathDefaultNamespace: 'http://www.tei-c.org/ns/1.0' })
-                                parentPoemTextSlot.innerHTML = `${true ? markText(poemText.innerHTML) : poemText.innerHTML} <small><a target="_blank" class="button" href="${manifestationIds[0]}">TEI-XML 🡕</a></small>`
+                                const poemText = SaxonJS.XPath.evaluate("/" + manifestationURL.split("#")[1], sampleSource, { xpathDefaultNamespace: 'http://www.tei-c.org/ns/1.0' })
+                                parentPoemTextSlot.innerHTML = `${true ? markText(poemText.innerHTML) : poemText.innerHTML} <small><a target="_blank" class="button" href="${manifestationURL}">TEI-XML 🡕</a></small>`
                             })
                     } catch (err) {
                         parentPoemTextSlot.innerHTML = `Select a version below to view the poem text.`
                     }
                 }
             })
+    }
+    #updateEntity(e) {
+        const msg = e.detail
+        switch (msg.action) {
+            case "reload":
+                this.Entity = msg.payload
+                //this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
+                break
+            case "update":
+                //this.innerHTML = this.template(msg.payload) ?? this.innerHTML
+                break
+            case "error":
+                // this.#handleErrors(msg.payload)
+                break
+            case "complete":
+                this.$final = true
+                NoticeBoard.unsubscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#updateEntity.bind(this))
+            default:
+        }
     }
 }
 
@@ -245,25 +282,25 @@ const applyFilter = debounce(200, function (ev) {
         }
     })
     results.forEach(el => {
-            el.innerHTML = el.innerHTML.replace(new RegExp("</?mark>", 'g'), ``)
-            el.innerHTML = el.innerHTML.replace(new RegExp(TERM, 'gi'), match => `<mark>${match}</mark>`)
+        el.innerHTML = el.innerHTML.replace(new RegExp("</?mark>", 'g'), ``)
+        el.innerHTML = el.innerHTML.replace(new RegExp(TERM, 'gi'), match => `<mark>${match}</mark>`)
         setTimeout(() => el.classList.add('found-term'), 0)
     })
 })
 
 function resetClasses(isSearching) {
     document.querySelectorAll('.found-term,.marked').forEach(el => {
-        el?.classList.remove('found-term','.marked')
+        el?.classList.remove('found-term', '.marked')
     })
 }
 
 // Glossary Handling
 const markupLink = (poem) => {
-    if(poem.classList.contains("marked")) { return }
+    if (poem.classList.contains("marked")) { return }
     const LINES = poem.querySelectorAll('l')
-    GLOSSARY.forEach(entry=>{
-        if(!poemContainsTerm(poem,entry.title)) { return }
-        LINES.forEach(line=>{
+    GLOSSARY.forEach(entry => {
+        if (!poemContainsTerm(poem, entry.title)) { return }
+        LINES.forEach(line => {
             // broken to keep interface looking okay
             if (line.innerHTML.includes("data-definition")) { return }
             line.innerHTML = line.innerHTML.replace(new RegExp(String.raw`\b${entry.title}\b`, 'gi'), match => `<a href="${entry.url}" data-ipa="${entry.configured_field_t_ipa[0]}" data-definition="${entry.configured_field_t_definition}" data-sound="${entry.download_link}">${match}</a>${glossaryTip(entry)}`)
@@ -276,19 +313,19 @@ const markText = (html) => {
     const shadow = document.createElement('DIV')
     shadow.innerHTML = html.normalize()
     const LINES = shadow.querySelectorAll('l')
-    GLOSSARY.forEach(entry=>{
-        if(!(new RegExp(String.raw`${entry.title.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"')}`, 'i')).test(html)) { return }
-        LINES.forEach(line=>{
+    GLOSSARY.forEach(entry => {
+        if (!(new RegExp(String.raw`${entry.title.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"')}`, 'i')).test(html)) { return }
+        LINES.forEach(line => {
             if (line.innerHTML.includes("data-definition")) { return }
             line.innerHTML = line.innerHTML.replace(new RegExp(String.raw`([\s\b]|^)${entry.title.replace(/[\u2018\u2019]/g, "'")
-            .replace(/[\u201C\u201D]/g, '"')}([\s\b]|$)`, 'gi'), match => ` <a href="${entry.url}" data-ipa="${entry.configured_field_t_ipa[0]}" data-definition="${entry.configured_field_t_definition}" data-sound="${entry.download_link}">${match.trim()}</a>${glossaryTip(entry)} `)
+                .replace(/[\u201C\u201D]/g, '"')}([\s\b]|$)`, 'gi'), match => ` <a href="${entry.url}" data-ipa="${entry.configured_field_t_ipa[0]}" data-definition="${entry.configured_field_t_definition}" data-sound="${entry.download_link}">${match.trim()}</a>${glossaryTip(entry)} `)
         })
     })
     return shadow.innerHTML
 }
 
 
-let glossaryTip = ({title,url,download_link,configured_field_t_definition,configured_field_t_ipa})=>`
+let glossaryTip = ({ title, url, download_link, configured_field_t_definition, configured_field_t_ipa }) => `
 <div class="glossaryTip popover fade show bs-popover-top rounded">
     <h3 class="popover-header">${title}</h3>
     <div class="popover-body">
@@ -304,4 +341,4 @@ let glossaryTip = ({title,url,download_link,configured_field_t_definition,config
     
 </div>`
 
-const poemContainsTerm = (poem,term)=> (new RegExp(String.raw`\b${term}\b`, 'i')).test(poem.textContent)
+const poemContainsTerm = (poem, term) => (new RegExp(String.raw`\b${term}\b`, 'i')).test(poem.textContent)
