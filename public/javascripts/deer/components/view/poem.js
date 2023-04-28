@@ -99,14 +99,16 @@ export function isPoem(elem) {
 class DlaSimpleExpression extends DeerView {
     #simpleExpressionTemplate = (obj) => `
     <div class="card">
-        <p class="card-header card-title"></p>
+        <p class="card-header card-title">${UTILS.getLabel(obj)}</p>
         <div class="card-body">
-        <div class="label">📚 Published Books</div>
-        <h6>View links below for connected content</h6>
-            <div class="row manifestation-url"></div>
+        <div class="label">
+        ${obj.collection_label}
+        </div>
+            <h6>View links below for connected content</h6>
+            <a href="${obj.manifestationURL}" target="_blank">${obj.institution_title}</a>
         </div>
         <div class="card-footer">
-            <a class="tag is-small" style="color:darkgrey" href="/collection/record/${(obj["@id"] ?? obj.id)?.split('/').pop()}">full view</a>
+            <a class="tag is-small" style="color:darkgrey" href="/collection/record/${(obj.id)?.split('/').pop()}">full view</a>
         </div>
     </div>
         `
@@ -135,14 +137,14 @@ class DlaSimpleExpression extends DeerView {
             .then(annos => annos.map(anno => UTILS.getValue(anno.target)))
             .then(ids => ids.map(id => id.selector ? `${id?.source}#${id.selector.value}` : id).pop())
             .then(manifestationId => {
-                const manifestationURL = manifestationId?.replace(/^https?:/, 'https:')
-                this.querySelector(".manifestation-url").innerHTML = `<a href="${manifestationURL}" target="_blank">The Complete Poems</a>`
-                this.manifestation = manifestationURL
+                const manifestationURL = UTILS.URLasHTTPS(manifestationId)
+                this.Entity._data.manifestationURL = manifestationURL
+                // this.querySelector(".manifestation-url").innerHTML = `<a href="${manifestationURL}" target="_blank">The Complete Poems</a>`
                 if (manifestationURL.includes("ecommons")) {
-                    getCachedPoemByUrl(manifestationURL.replace(/https?:/, 'https:')).then(poem => {
+                    getCachedPoemByUrl(UTILS.URLasHTTPS(manifestationURL)).then(poem => {
                         if (!poem) return
                         document.querySelector('.publication-info').innerHTML += `${poem.author_display} (${(new Date(poem.publication_date)).getFullYear()})`
-                        this.querySelector('.card-title').innerHTML = poem.title
+                        // this.querySelector('.card-title').innerHTML = poem.title
                         if (poem.download_link) {
                             const audioSamples = document.querySelector('.audioSample .card-body')
                             audioSamples.innerHTML += `
@@ -165,23 +167,27 @@ class DlaSimpleExpression extends DeerView {
                             linkedMusic.innerHTML = musicHTML
                             linkedMusic.parentElement.classList.remove('hidden')
                         }
-                        this.querySelector(".manifestation-url").innerHTML = `<a href="${manifestationURL}" target="_blank">${poem.institution_title}</a>`
-                        const download_link = poem?.download_link
+                        this.Entity._data.institution_title = poem.institution_title
+                        // this.querySelector(".manifestation-url").innerHTML = `<a href="${manifestationURL}" target="_blank">${poem.institution_title}</a>`
+                        // const download_link = poem?.download_link
                         const types = {}
                         types[`🎼 Musical Setting, ${poem?.author_display}`] = "musical_setting"
                         types["🖋 Collected Poems"] = "collected_poetry"
                         for (const prop in types) {
                             if (poem?.document_type.includes(types[prop])) {
-                                this.querySelector('.label').innerHTML = prop
+                                this.Entity._data.collection_label = prop
                                 break
                             }
                         }
-
+                        // this.#announceComplete()
                     })
                 }
                 if (manifestationURL.includes("xml")) {
-                    this.querySelector(".manifestation-url").setAttribute('href', manifestationURL)
-                    this.querySelector('.card-title').innerHTML = 'DLA Books'
+                    // this.querySelector(".manifestation-url").setAttribute('href', manifestationURL)
+                    // this.querySelector('.card-title').innerHTML = 'DLA Books'
+                    this.Entity._data.collection_label = '📚 DLA Books'
+                    this.Entity._data.institution_title = 'The Complete Works'
+                    // this.#announceComplete()
                     const parentPoemTextSlot = document?.querySelector(".textSample")
                     if (!parentPoemTextSlot) return
                     try {
@@ -199,15 +205,22 @@ class DlaSimpleExpression extends DeerView {
                 }
             })
     }
+
+    // #announceComplete() {
+    //     NoticeBoard.publish(UTILS.normalizeEventType(this.id), {
+    //         action: "complete",
+    //     })
+    // }
+
     #updateEntity(e) {
         const msg = e.detail
         switch (msg.action) {
             case "reload":
                 this.Entity = msg.payload
-                //this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
+                this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
                 break
             case "update":
-                //this.innerHTML = this.template(msg.payload) ?? this.innerHTML
+                this.innerHTML = this.template(msg.payload) ?? this.innerHTML
                 break
             case "error":
                 // this.#handleErrors(msg.payload)

@@ -21,7 +21,13 @@ Object.assign(NoticeBoard, {
      * @param {String, Object} eventPayload Relevant data based on the {action} of the notice
      */
     publish: (eventType,eventPayload) => {
-        eventPayload.id = UTILS.URLasHTTPS(eventPayload.id)
+        if(eventPayload.id?.startsWith('http:'))             {
+            eventPayload.id = UTILS.URLasHTTPS(eventPayload.id)
+        }
+        if(eventPayload.payload?.id?.startsWith('http:') && (eventPayload.payload.constructor?.name !== 'Entity'))    {
+            // Entity has no setter for `id`
+            eventPayload.payload.id = UTILS.URLasHTTPS(eventPayload.payload.id)
+        }
         const msg = new CustomEvent(eventType, { detail: eventPayload })
         NoticeBoard.dispatchEvent(msg)
     },

@@ -36,6 +36,7 @@ class Entity extends Object {
         if (EntityMap.has(id)) { throw new Error("Entity already exists") }
         this.Annotations = new Map()
         this.#isLazy = Boolean(isLazy)
+        this._data = {}
         this.data = entity
     }
 
@@ -61,7 +62,8 @@ class Entity extends Object {
             return
         }
         const oldRecord = this._data ? JSON.parse(JSON.stringify(this._data)) : {}
-        this._data = entity
+        // this._data = entity
+        Object.assign(this._data,entity)
         EntityMap.set(UTILS.URLasHTTPS(this.id), this)
         this.#announceUpdate()
         if (!objectMatch(oldRecord.id, this.id)) { this.#resolveURI(!this.#isLazy).then(this.#announceNewEntity) }
