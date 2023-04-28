@@ -151,6 +151,15 @@ const utils = {
     },
 
     /**
+     * Simple transformation for accidentally unsecure links.
+     * Does not confirm it is a URL and will silently return unmatchable strings 
+     * but throw for any type without a replace() method.
+     * @param {URL} url URL string intended for matching or fetch() call.
+     * @returns URL as HTTPS
+     */
+    URLasHTTPS: url => url?.replace(/^https?:/,'https:'),
+
+    /**
      * Get the array of data from the container object, so long at it is one of the containers we support (so we know where to look.) 
      */
     getArrayFromObj: function (containerObj, inputElem) {
