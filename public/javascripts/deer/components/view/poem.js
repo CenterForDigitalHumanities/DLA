@@ -139,12 +139,10 @@ class DlaSimpleExpression extends DeerView {
             .then(manifestationId => {
                 const manifestationURL = UTILS.URLasHTTPS(manifestationId)
                 this.Entity._data.manifestationURL = manifestationURL
-                // this.querySelector(".manifestation-url").innerHTML = `<a href="${manifestationURL}" target="_blank">The Complete Poems</a>`
                 if (manifestationURL.includes("ecommons")) {
                     getCachedPoemByUrl(UTILS.URLasHTTPS(manifestationURL)).then(poem => {
                         if (!poem) return
                         document.querySelector('.publication-info').innerHTML += `${poem.author_display} (${(new Date(poem.publication_date)).getFullYear()})`
-                        // this.querySelector('.card-title').innerHTML = poem.title
                         if (poem.download_link) {
                             const audioSamples = document.querySelector('.audioSample .card-body')
                             audioSamples.innerHTML += `
@@ -168,8 +166,6 @@ class DlaSimpleExpression extends DeerView {
                             linkedMusic.parentElement.classList.remove('hidden')
                         }
                         this.Entity._data.institution_title = poem.institution_title
-                        // this.querySelector(".manifestation-url").innerHTML = `<a href="${manifestationURL}" target="_blank">${poem.institution_title}</a>`
-                        // const download_link = poem?.download_link
                         const types = {}
                         types[`🎼 Musical Setting, ${poem?.author_display}`] = "musical_setting"
                         types["🖋 Collected Poems"] = "collected_poetry"
@@ -179,15 +175,11 @@ class DlaSimpleExpression extends DeerView {
                                 break
                             }
                         }
-                        // this.#announceComplete()
                     })
                 }
                 if (manifestationURL.includes("xml")) {
-                    // this.querySelector(".manifestation-url").setAttribute('href', manifestationURL)
-                    // this.querySelector('.card-title').innerHTML = 'DLA Books'
                     this.Entity._data.collection_label = '📚 DLA Books'
                     this.Entity._data.institution_title = 'The Complete Works'
-                    // this.#announceComplete()
                     const parentPoemTextSlot = document?.querySelector(".textSample")
                     if (!parentPoemTextSlot) return
                     try {
@@ -205,12 +197,6 @@ class DlaSimpleExpression extends DeerView {
                 }
             })
     }
-
-    // #announceComplete() {
-    //     NoticeBoard.publish(UTILS.normalizeEventType(this.id), {
-    //         action: "complete",
-    //     })
-    // }
 
     #updateEntity(e) {
         const msg = e.detail
