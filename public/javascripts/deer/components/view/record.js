@@ -86,6 +86,7 @@ export default class DlaRecordCard extends DeerView {
 }
 
 import { isPoem } from './poem.js'
+import { isLetter } from './letter.js'
 
 /**
  * A simple generic view for a piece of data with metadata.
@@ -142,11 +143,19 @@ export class DlaRecord extends DeerView {
     }
     async #renderGenericRecord(ev) {
         if (!["complete"].includes(ev.detail.action)) {return}
+        
         if (isPoem(this)) {
             NoticeBoard.unsubscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#renderGenericRecord.bind(this))
             this.#replaceElement("dla-poem-detail")
             return
         }
+        
+        if (isLetter(this)) {
+            NoticeBoard.unsubscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#renderGenericRecord.bind(this))
+            this.#replaceElement("dla-text-detail")
+            return
+        }
+
         const dataRecord = this.Entity?.assertions
         const projects = dataRecord.tpenProject ?? []
         let projectList = []
