@@ -175,6 +175,7 @@ class DlaSimpleExpression extends DeerView {
                                 break
                             }
                         }
+                        this.#updateEntity({detail:{action:'update',payload:this.Entity.assertions}})
                     })
                 }
                 if (manifestationURL.includes("xml")) {
@@ -190,6 +191,7 @@ class DlaSimpleExpression extends DeerView {
                             .then(sampleSource => {
                                 const poemText = SaxonJS.XPath.evaluate("/" + manifestationURL.split("#")[1], sampleSource, { xpathDefaultNamespace: 'http://www.tei-c.org/ns/1.0' })
                                 parentPoemTextSlot.innerHTML = `${true ? markText(poemText.innerHTML) : poemText.innerHTML} <small><a target="_blank" class="button" href="${manifestationURL}">TEI-XML 🡕</a></small>`
+                                this.#updateEntity({detail:{action:'update',payload:this.Entity.assertions}})
                             })
                     } catch (err) {
                         parentPoemTextSlot.innerHTML = `Select a version below to view the poem text.`
