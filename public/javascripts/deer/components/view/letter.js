@@ -11,9 +11,9 @@ const textTemplate = (obj, options = {}) => `
             to ${UTILS.getValue(obj.toLocation) ?? "(unknown)"} 
             on ${formatDate(UTILS.getValue(obj.date))}.
         </p>
-        <div class="card">
-            ${folioTemplate(obj.manifest)}
         </div>
+        <div class="col">
+            ${folioTemplate(obj.manifest)}
         </div>
     </div>
     `
@@ -46,8 +46,8 @@ export class DlaTextDetail extends DeerView {
 
         fetch(`//t-pen.org/TPEN/manifest/${UTILS.getValue(Array.isArray(tpenProject)?tpenProject[0]:tpenProject)}`)
         .then(response => response.json()).then(manifest=>{
-            this.Entity.data.manifest = manifest
-            NoticeBoard.publish(UTILS.normalizeEventType(this.getAttribute('deer-id')),{action:'update',payload:this.Entity.assertions})
+            this.Entity.data = {manifest}
+            // NoticeBoard.publish(UTILS.normalizeEventType(this.getAttribute('deer-id')),{action:'update',payload:this.Entity.assertions})
         })
         
     }
@@ -70,9 +70,9 @@ const folioTemplate = (manifest) => {
             if (!manifest) { return `[ no project linked yet ]` }
 
     const pages = manifest.sequences[0].canvases.slice(0, 10).reduce((a, b) => a += `
-    <div class="page">
+    <div class="page card mt-1">
         <div class="card-header">
-            <h4 class="card-title">${b.label}</h4>
+            <p class="card-title text-center">${b.label}</p>
         </div>
         <div class="card-body">
             <div class="row">
@@ -82,7 +82,7 @@ const folioTemplate = (manifest) => {
                     ? bb.resource["cnt:chars"].slice(-1) == '-'
                         ? bb.resource["cnt:chars"].substring(0, bb.resource["cnt:chars"].length - 1)
                         : bb.resource["cnt:chars"] + ' '
-                    : " <line class='empty placeholder d-inline-block'></line> ", '')
+                    : " <line class='rounded placeholder d-inline-block'></line> ", '')
                 }
                 </div>
                 <img class="col-6" src="${UTILS.URLasHTTPS(b.images[0].resource['@id'])}">

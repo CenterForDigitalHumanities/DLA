@@ -26,6 +26,22 @@
 
 <body>
   <dla-header></dla-header>
+  <nav aria-label="breadcrumb" class="bg-secondary">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item" aria-current="page">
+        <a href="/">Home</a>
+      </li>
+      <li class="breadcrumb-item" aria-current="page">
+        <a href="/collections">Collections</a>
+      </li>
+      <li class="breadcrumb-item" aria-current="page">
+        <deer-view id="collectionCrumb" deer-key="targetCollection" deer-template="prop">Collection</deer-view>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <deer-view id="recordCrumb" deer-template="label">Record</deer-view>
+      </li>
+    </ol>
+  </nav>
   <div class="container-lg bg-white">
     <dla-record id="recordDetail">
     </dla-record>
@@ -40,7 +56,7 @@
       if (!id.startsWith("http")) {
         id = RERUM + "/id/" + id
       }
-      recordDetail?.setAttribute('deer-id', id)
+      [recordCrumb,collectionCrumb,recordDetail].forEach(i=>i?.setAttribute('deer-id', id))
     })
   </script>
 </body>
