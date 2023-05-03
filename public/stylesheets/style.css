@@ -1,127 +1,26 @@
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap');
 
 :root {
-  --main-color-100: hsl(20, 100%, 85%);
-  --main-color-300: hsl(20, 100%, 65%);
-  --main-color-500: hsl(20, 100%, 45%);
-  --main-color-800: hsl(20, 100%, 15%);
-  --main-color-900: hsl(20, 100%, 5%);
-  --site-light: hsla(20, 100%, 85%, 1);
-  --shade: hsla(258, 10%, 38%, 1);
-  --action: hsla(242, 100%, 76%, 1);
-  --site-dark: hsla(33, 67%, 36%, 1);
-  --accent: hsla(141, 18%, 54%, 1);
-  --bg-color: hsla(0, 0%, 100%, 1);
+  --ud-blue: #171B48;
+  --bs-dark-rgb: 23, 27, 72; /* Bootstrap override */
+  --ud-secondary: #3F526C;
+  --bs-secondary-rgb: 63, 82, 108; /* Bootstrap override */
+  --ud-light: #DAD2B1;
+  --bs-light-rgb: 218, 210, 177; /* Bootstrap override */
+  --ud-accent: #EAB726;
+  --ud-active: #D28A28;
+  --bs-link-color: #EAB726;
+  --bs-link-hover-color: #D28A28;
+  --bs-body-bg: #171B48;
 }
 
-body {
-  padding: var(--body-padding);
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: var(--site-light);
-}
-
-body header {
-  position: relative;
-  overflow: visible;
-}
-
-body img.hero {
-  position: absolute;
-  width: 100vw;
-  left: calc(-1 * var(--body-padding));
-  bottom: 0;
-  pointer-events: none;
-  opacity: .75;
-  z-index: -1;
-}
-
-header h1 {
-  text-shadow: .025em .075em .05em var(--shade);
-  color: var(--accent);
-  font-size: 4rem;
-  font-family: 'Homemade Apple', cursive;
+.bg-bright{
+  background-color: var(--ud-accent);
 }
 
 a {
-  color: var(--action);
-}
-
-nav {
-  width: 100%;
-  position: relative;
-  background-color: var(--site-dark);
-  display: flex;
-  justify-content: space-evenly;
-}
-
-nav a {
-  color: var(--site-light);
-  text-decoration: none;
-  font-size: 1.5rem;
-  text-align: center;
-  background-color: var(--accent);
-  outline: solid var(--site-dark) 1px;
-  padding: .5rem;
-  margin: .25rem;
-  transition: all .2s ease-in-out;
-  min-width: 15%;
-}
-
-nav a.active {
-  background-color: var(--accent);
-  color: var(--site-light);
-  outline: solid var(--site-dark) 10px;
-  outline-offset: -2px;
-  border-radius: 4px;
-}
-
-nav a:hover,
-nav a:focus {
-  background-color: var(--site-light);
-  color: var(--accent);
-  outline: solid var(--accent) 10px;
-  outline-offset: -2px;
-}
-
-.content {
-  padding: var(--body-padding);
-  background-color: hsl(0, 100%, 100%);
-  font-size: 1.2rem;
-  /* columns: 2;
-  column-gap: 2rem;
-  column-width: 40em; */
-}
-
-row, .row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: stretch;
-  margin-bottom: 2rem;
-}
-
-card, .card {
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  background: var(--bg-color);
-  box-shadow: 0 1px 3px var(--shade);
-}
-
-.button {
-  background-color: var(--accent);  
-  border-radius: 5px;
-  color: var(--site-light);
-  padding: .5em;
-  text-decoration: none;
-  font-variant: initial;
-  font-weight: initial;
-  cursor: pointer;
-}
-
-.button:focus,
-.button:hover {
-  background-color: var(--action);
+  color: var(--ud-active);
 }
 
 .hidden {
@@ -146,4 +45,35 @@ dl.placein dd:before {
 }
 img.thumbnail{
   max-height: 12rem;
+}
+
+dla-carousel .carousel-item img {
+  object-fit: cover;
+  object-position:top;
+  height: clamp(12em,70vh,20em);
+  overflow: hidden;
+}
+
+dla-carousel .carousel-item:before {
+  content: "";
+  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5));
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+dla-carousel {
+  display: block;
+}
+.carousel-caption {
+  text-shadow: 0 0 1.5px #FFF;
+  padding: 0;
+  bottom: 0;
+}
+
+.scrip {
+  font-family: 'Homemade Apple', cursive;
+  text-shadow: 0 0 1.5px var(--ud-secondary);
 }

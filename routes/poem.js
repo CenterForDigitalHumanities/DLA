@@ -4,10 +4,11 @@ const path = require('path')
 const fetch = require('node-fetch')
 
 const pubTok = process.env.RERUM_API
-const RERUM = "http://store.rerum.io/v1"
+const RERUM = "https://store.rerum.io/v1"
 
 /* Poem API */
 router.get('/:poemID', function (req, res, next) {
+    req.params.poemID.replace(/^https?/,'https')
     if (!req.params.poemID.startsWith("http")) {
         req.params.poemID = RERUM + "/id/" + req.params.poemID
     }

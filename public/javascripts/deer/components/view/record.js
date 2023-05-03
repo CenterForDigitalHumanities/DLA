@@ -153,14 +153,14 @@ export class DlaRecord extends DeerView {
             // Right now this is only of length 0 or 1. We still loop it, anticipating a future where there are more than 1.
             // Show the thumbnail when available, otherwise show the link to the T-PEN project.
             for await (const pid of projects){
-                const link = `<a src="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}" target="_blank"> T-PEN Project ${pid.value} </a>`
-                const projData = await fetch(`http://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
+                const link = `<a src="https://t-pen.org/TPEN/transcription.html?projectID=${pid.value}" target="_blank"> T-PEN Project ${pid.value} </a>`
+                const projData = await fetch(`https://t-pen.org/TPEN/manifest/${pid.value}`).then(resp => resp.json()).catch(err => {return ""})
                 let thumbnail = ""
                 if(projData.sequences[0]?.canvases.length){
                     const canvas = projData.sequences[0].canvases[0]
                     const image = (canvas?.images.length) ? canvas.images[0].resource["@id"] : ""
                     if(image){
-                        thumbnail = `<a target="_blank" href="http://t-pen.org/TPEN/transcription.html?projectID=${pid.value}"><img class="thumbnail" src="${image}" /></a>`
+                        thumbnail = `<a target="_blank" href="https://t-pen.org/TPEN/transcription.html?projectID=${pid.value}"><img class="thumbnail" src="${image}" /></a>`
                     }
                 }
                 if(thumbnail){
