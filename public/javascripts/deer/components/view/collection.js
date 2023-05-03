@@ -70,9 +70,9 @@ const template = (obj,options={}) => {
     </style>
     <div class="row">
             <div id="Records" class="col-9 order-last">
-            <ul class="list-group">
+            <ul>
             ${(obj[options.list ?? "itemListElement"] ?? [])?.reduce((a, b) => a += `
-            <li class="record list-group-item">
+            <li class="record">
             <a href="./record/${(b.id ?? b['@id']).split("/").pop()}">${b.label ?? b['@id']}</a>
             </li>`, ``)}
             </div>

@@ -17,6 +17,23 @@ import { default as worker } from '/javascripts/deer/worker.js'
 import NoticeBoard from './NoticeBoard.js'
 
 const utils = {
+    httpsIdLinks: function (id){
+        return [ id.replace(/^https?:/,'https:'), id.replace(/^https?:/,'http:') ]
+    },
+    
+    httpsQueryArray: function (id) {
+        return { $in: this.httpsIdLinks(id) }
+    },
+
+    /**
+     * Simple transformation for accidentally unsecure links.
+     * Does not confirm it is a URL and will silently return unmatchable strings 
+     * but throw for any type without a replace() method.
+     * @param {URL} url URL string intended for matching or fetch() call.
+     * @returns URL as HTTPS
+     */
+    URLasHTTPS: url => url?.replace(/^https?:/,'https:'),
+
     listFromCollection: function (collectionId) {
         let queryObj = {
             body: {

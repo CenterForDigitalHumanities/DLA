@@ -1,3 +1,5 @@
+import { UTILS, DEER } from './deer-utils.js'
+
 /**
  * A disconnected target for pubsub events used to update the DOM.
  * Replaces `document` in most cases and creates a sandbox for DEER events.
@@ -12,14 +14,20 @@ Object.assign(NoticeBoard, {
      * @param {URL} id HTTP(S) URL of the resource to be loaded for rendering
      * @returns undefined
      */
-    request: (id) => NoticeBoard.publish(VIEW,{id}),
+    request: (id) => NoticeBoard.publish(VIEW,{id:UTILS.URLasHTTPS(id)}),
     /**
      * Send a general notice to all subscribers. Used for actions like "update" and "complete".
      * @param {String} eventType URI of the entity to be broadcast or status of the transaction
      * @param {String, Object} eventPayload Relevant data based on the {action} of the notice
      */
     publish: (eventType,eventPayload) => {
-
+        if(eventPayload.id?.startsWith('http:'))             {
+            eventPayload.id = UTILS.URLasHTTPS(eventPayload.id)
+        }
+        if(eventPayload.payload?.id?.startsWith('http:') && (eventPayload.payload.constructor?.name !== 'Entity'))    {
+            // Entity has no setter for `id`
+            eventPayload.payload.id = UTILS.URLasHTTPS(eventPayload.payload.id)
+        }
         const msg = new CustomEvent(eventType, { detail: eventPayload })
         NoticeBoard.dispatchEvent(msg)
     },

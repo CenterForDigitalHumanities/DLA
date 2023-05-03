@@ -122,6 +122,7 @@ export class DlaRecord extends DeerView {
     constructor() {
         super()
         this.template = recordTemplate
+        this.classList.add(this.dataset.spinner)
     }
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue)
@@ -204,6 +205,7 @@ export class DlaRecord extends DeerView {
         this.template = (obj, options = {}) => {
             return generic_template
         }
+        this.classList.remove(this.dataset.spinner)
         this.innerHTML = generic_template
         NoticeBoard.unsubscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#renderGenericRecord.bind(this))
     }

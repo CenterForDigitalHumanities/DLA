@@ -21,7 +21,7 @@ const EntityMap = new Map()
 class Entity extends Object {
     #isLazy
 
-    constructor(entity = {}, isLazy) {
+    constructor(entity = {}, isLazy = false) {
         super()
         // accomodate Entity(String) and Entity(Object) or Entity(JSONString)
         if (typeof entity === "string") {
@@ -31,11 +31,12 @@ class Entity extends Object {
                 entity = { id: entity }
             }
         }
-        const id = entity.id ?? entity["@id"] ?? entity // id is primary key
+        const id = UTILS.URLasHTTPS(entity.id ?? entity["@id"] ?? entity) // id is primary key
         if (!id) { throw new Error("Entity must have an id") }
         if (EntityMap.has(id)) { throw new Error("Entity already exists") }
         this.Annotations = new Map()
         this.#isLazy = Boolean(isLazy)
+        this._data = {}
         this.data = entity
     }
 
@@ -55,14 +56,15 @@ class Entity extends Object {
     }
 
     set data(entity) {
-        entity.id = entity.id ?? entity["@id"] ?? entity // id is primary key
+        entity.id = UTILS.URLasHTTPS(entity.id ?? entity["@id"] ?? entity) // id is primary key
         if (objectMatch(this._data, entity)) {
             console.warn("Entity data unchanged")
             return
         }
         const oldRecord = this._data ? JSON.parse(JSON.stringify(this._data)) : {}
-        this._data = entity
-        EntityMap.set(this.id, this)
+        // this._data = entity
+        Object.assign(this._data,entity)
+        EntityMap.set(UTILS.URLasHTTPS(this.id), this)
         this.#announceUpdate()
         if (!objectMatch(oldRecord.id, this.id)) { this.#resolveURI(!this.#isLazy).then(this.#announceNewEntity) }
     }
@@ -72,7 +74,7 @@ class Entity extends Object {
     }
 
     #findAssertions = (assertions) => {
-        var annos = Array.isArray(assertions) ? Promise.resolve(assertions) : findByTargetId(this.id, [], DEER.URLS.QUERY)
+        const annos = Array.isArray(assertions) ? Promise.resolve(assertions) : findByTargetId(this.id, [], DEER.URLS.QUERY)
         return annos
             .then(annotations => annotations.filter(a => (a.type ?? a['@type'])?.includes("Annotation")).map(anno => new Annotation(anno)))
             .then(newAssertions => {
@@ -88,14 +90,14 @@ class Entity extends Object {
         let obj = { "$or": [{ '@id': this.id }], "__rerum.history.next": historyWildcard }
         for (let target of targetStyle) {
             let o = {}
-            o[target] = this.id
+            o[target] = UTILS.httpsQueryArray(this.id)
             obj["$or"].push(o)
         }
-        var results = Boolean(withAssertions) ? fetch(DEER.URLS.QUERY, {
+        const results = withAssertions ? fetch(DEER.URLS.QUERY, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(obj)
-        }) : fetch(this.id)
+        }) : fetch(UTILS.URLasHTTPS(this.id))
         return results
             .then(res => res.ok ? res.json() : Promise.reject(res))
             .then(finds => {
@@ -176,7 +178,7 @@ class Annotation extends Object {
         if (!Array.isArray(targets)) { targets = [targets] }
 
         targets.forEach(target => {
-            target = target.id ?? target['@id'] ?? target.toString()
+            target = UTILS.URLasHTTPS(target.id ?? target['@id'] ?? target.toString())
             if (!target) { return }
             const targetEntity = EntityMap.has(target) ? EntityMap.get(target) : new Entity({ id: target })
             targetEntity.attachAnnotation(this)
@@ -306,7 +308,7 @@ async function findByTargetId(id, targetStyle = [], queryUrl = DEER.URLS.QUERY) 
         //TODO: should we we let the user know we had to ignore something here?
         if (typeof target === "string") {
             let o = {}
-            o[target] = id
+            o[target] = UTILS.httpsQueryArray(id)
             obj["$or"].push(o)
         }
     }
