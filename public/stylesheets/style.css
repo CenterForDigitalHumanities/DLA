@@ -7,6 +7,7 @@
   --ud-secondary: #3F526C;
   --bs-secondary-rgb: 63, 82, 108; /* Bootstrap override */
   --ud-light: #DAD2B1;
+  --bs-breadcrumb-item-active-color: #DAD2B1; /* Bootstrap override */
   --bs-light-rgb: 218, 210, 177; /* Bootstrap override */
   --ud-accent: #EAB726;
   --ud-active: #D28A28;

@@ -40,3 +40,24 @@ a:hover+div.glossaryTip, a+div.glossaryTip:hover {
   visibility: visible;
   opacity: 1;
 }
+
+printed {
+  font-family:serif;
+}
+
+note {
+  font-family:monospace;
+}
+
+unclear {
+  opacity:.4;
+}
+
+line.empty {
+  line-height: 1.6;
+  background-color: #CCC;
+  height: 1em;
+  margin: .4em 0;
+  display:block;
+  border-radius: 4px;
+}
