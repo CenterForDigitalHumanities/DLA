@@ -1,4 +1,4 @@
-import { DEER } from '../../deer-utils.js'
+import { UTILS, DEER } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
@@ -9,90 +9,6 @@ const template = (obj,options={}) => {
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
     return `
     <style scoped>
-        .flex-reverse {
-            box-sizing: border-box;
-            max-width: var(--grid-maxWidth);
-            margin: 0 auto;
-            width: 96%;
-            padding: 0 calc(var(--grid-gutter) / 2);
-            display: flex;
-            flex-direction: row-reverse;
-        }
-
-        .row {
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: flex-start;
-            margin-left: calc(var(--grid-gutter) / -2);
-            margin-right: calc(var(--grid-gutter) / -2);
-            flex-wrap: initial;
-        }
-
-        .col {
-            -webkit-box-flex: 1;
-            -ms-flex: 1;
-            flex: 1;
-        }
-
-        .col,
-        [class*=" col-"],
-        [class^='col-'] {
-            margin: 0 calc(var(--grid-gutter) / 2) calc(var(--grid-gutter) / 2);
-        }
-
-        a.col {
-            max-width: 40vw;
-        }
-
-        a.col img {
-            object-fit: contain;
-            object-position: center;
-            max-width: 100%;
-        }
-
-        p img {
-            width: 100%;
-        }
-
-        .sidebar {
-            max-width: 30em;
-            min-width: 200px;
-            flex-basis: 200px;
-            position: relative;
-            flex-grow: 2;
-        }
-
-        .sidebar ul {
-            margin: 0;
-            padding: 0;
-        }
-
-        .sidebar li {
-            padding: calc(var(--grid-gutter) / 10) 0;
-            margin: 0;
-            display: block;
-            overflow: hidden;
-            text-transform: capitalize;
-            text-overflow: ellipsis;
-            background: var(--site-dark);
-            color: var(--site-light);
-            border-left: var(--site-dark) solid thick;
-        }
-
-        a {
-            text-decoration: none;
-            font-weight: 400;
-            color: var(--color-link);
-            transition: color 0.5s ease;
-        }
-
-        a:hover,
-        a:focus {
-            color: var(--action);
-            text-decoration: none !important;
-            cursor: pointer;
-        }
-
         facet {
             display: block;
             position: relative;
@@ -120,18 +36,6 @@ const template = (obj,options={}) => {
             background-color: rgba(255, 255, 255, .5);
         }
 
-        .sidebar progress,
-        .sidebar input {
-            box-sizing: border-box;
-            width: 100%;
-            transition: width, progress-value .5s ease-out;
-        }
-
-        .sidebar input {
-            line-height: 1.6;
-            margin-bottom: var(--grid-gutter);
-        }
-
         progress::after {
             content: attr(value)" of " attr(max);
             font-size: .6em;
@@ -142,15 +46,6 @@ const template = (obj,options={}) => {
             bottom: 1em;
         }
 
-        .grow {
-            flex-grow: 6;
-        }
-
-        .wrap {
-            flex-wrap: wrap;
-            display: flex;
-        }
-
         .thumbnail {
             object-fit: cover;
             object-position: top center;
@@ -159,77 +54,36 @@ const template = (obj,options={}) => {
             min-width: 5em;
         }
 
-        .record {
-            display: flex;
-            flex-basis: 100%;
-            flex-direction: column;
-            padding: calc(var(--grid-gutter) / 2);
-            box-shadow: -1px -1px 3px rgba(0, 0, 0, .4);
-            margin: calc(var(--grid-gutter) / 4);
-        }
-
         .record[class*='hide-'],
         facet[class*='hide-'] {
             display: none !important;
         }
 
-        dt,
         dd {
-            border-top: 1px solid var(--bg-secondary-color);
-            padding-right: 0;
-            line-height: 1.42857143;
-            margin: 0 auto;
-            color: var(--font-color);
-            display: inline-block;
-            padding-top: 6px;
-            padding-bottom: 4px;
-            box-sizing: border-box;
-            vertical-align: top;
-        }
-
-        dt {
-            font-weight: 700;
-            width: 15%;
-        }
-
-        dd {
-            width: 85%;
             word-break: break-word;
-            padding-left: 40px;
-        }
-
-        dd p {
-            padding: 0;
-            margin: 0;
-        }
-
-        .record h4 {
-            margin: 0 auto;
-            font-size: 1.3em;
-            padding: 0.5em 0em;
         }
 
         #Records {
             overflow: auto;
-            height: calc(100vh - 75px - 52px - var(--body-padding));
+            height: calc(100vh - 60px);
         }
     </style>
-    <div>
-        <div class="flex-reverse">
-            <div id="Records" class="grow wrap">
+    <div class="row">
+            <div id="Records" class="col-9 order-last">
+            <ul class="list-group">
             ${(obj[options.list ?? "itemListElement"] ?? [])?.reduce((a, b) => a += `
-            <dla-record-card class="record" deer-id="${b['@id']}">
-            <h4><a href="./record/${(b.id ?? b['@id']).split("/").pop()}">${b.label ?? b['@id']}</a></h4>
-            </dla-record-card>`, ``)}
+            <li class="record list-group-item">
+            <a href="./record/${(b.id ?? b['@id']).split("/").pop()}">${b.label ?? b['@id']}</a>
+            </li>`, ``)}
             </div>
-            <div class="sidebar">
-                <header title="${obj.description??``}">${obj.name}</header>
-                <h3>Refine Results <button role="button" type="reset">clear all</button></h3>
+            <div class="col-3 bg-bright">
+                <h5 title="${obj.description??``}">${obj.name}</h5>
+                <hr />
+                <p class="d-none">Refine Results <button role="button" type="reset" class="btn btn-light btn-sm">clear all</button></p>
                 <progress value="${obj.numberOfItems??0}" max="${obj.numberOfItems??10}">${obj.numberOfItems??``} of ${obj.numberOfItems??``}</progress>
-                <input id="query" type="text" placeholder="type to filter">
+                <input id="query" disabled class="form-control" type="text" placeholder="type to filter">
                 <section id="facetFilter"></section>
             </div>
-        </div>
     </div>`
 }
 
@@ -249,6 +103,8 @@ export default class DLA_Collection extends DeerView {
         const facetRecords = e => {
             switch (e.detail.action) {
                 case "complete":
+                    query.addEventListener("input", this.#filterQuery.bind(this))
+                    query.removeAttribute('disabled')
                     this.querySelector('button[type="reset"]')?.addEventListener("click", ev => {
                         Array.from(document.querySelectorAll(".clicked")).forEach(el => el.dispatchEvent(new Event("click")))
                         query.value = ""
@@ -259,7 +115,7 @@ export default class DLA_Collection extends DeerView {
                 default:
             }
         }
-        NoticeBoard.subscribe(this.getAttribute(DEER.ID), facetRecords.bind(this))
+        NoticeBoard.subscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), facetRecords.bind(this))
     }
 
     async #loadRecords(pagination = [0,]) {
@@ -285,7 +141,7 @@ export default class DLA_Collection extends DeerView {
     
     #filterQuery(event) {
         const queryString = event.target.value
-        Array.from(this.records).forEach(r => new RegExp(queryString, "i").test(r.getAttribute("data-query")) ? r.classList.remove("hide-query") : r.classList.add("hide-query"))
+        Array.from(this.records).forEach(r => new RegExp(queryString, "i").test(r.textContent) ? r.classList.remove("hide-query") : r.classList.add("hide-query"))
         //Records.querySelectorAll(".record:not([data-query*='"+queryString+"'])")
         this.#updateCount()
     }

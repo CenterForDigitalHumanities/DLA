@@ -7,7 +7,7 @@ let progress
 
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
 const recordCardTemplate = obj => (obj.label ?? obj.name) && `
-    <h4><a href="./record/${obj.id.split('/'.pop())}">${UTILS.getLabel(obj)}</a></h4>
+    <h4><a href="./record/${obj.id.split('/').pop()}">${UTILS.getLabel(obj)}</a></h4>
         <div class="row">
             <dl>
             </dl>
@@ -127,9 +127,9 @@ export class DlaRecord extends DeerView {
         super.attributeChangedCallback(name, oldValue, newValue)
         if(name === DEER.ID){
             if(oldValue !== null && oldValue !== newValue){
-                NoticeBoard.unsubscribe(oldValue, this.#renderGenericRecord.bind(this))
+                NoticeBoard.unsubscribe(UTILS.normalizeEventType(oldValue), this.#renderGenericRecord.bind(this))
             }
-            NoticeBoard.subscribe(newValue, this.#renderGenericRecord.bind(this))
+            NoticeBoard.subscribe(UTILS.normalizeEventType(newValue), this.#renderGenericRecord.bind(this))
         }
     }
     #replaceElement(tagName) {
@@ -142,7 +142,7 @@ export class DlaRecord extends DeerView {
     async #renderGenericRecord(ev) {
         if (!["complete"].includes(ev.detail.action)) {return}
         if (isPoem(this)) {
-            NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+            NoticeBoard.unsubscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#renderGenericRecord.bind(this))
             this.#replaceElement("dla-poem-detail")
             return
         }
@@ -205,7 +205,7 @@ export class DlaRecord extends DeerView {
             return generic_template
         }
         this.innerHTML = generic_template
-        NoticeBoard.unsubscribe(this.getAttribute(DEER.ID), this.#renderGenericRecord.bind(this))
+        NoticeBoard.unsubscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#renderGenericRecord.bind(this))
     }
 }
 

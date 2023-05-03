@@ -128,6 +128,20 @@ const utils = {
             return ["string", "number"].indexOf(typeof arrItem) > -1
         })
     },
+    /**
+     * Trims the protocol off of Event types and cleans characters.
+     * Buffs out problems with encoding for some names for Events.
+     * @param {String} eventType describes the type of Event, often a URI or custom
+     * @returns a predictable String for use in NoticeBoard
+     */
+    normalizeEventType : function(eventType){
+        if(typeof eventType !== 'string') return eventType // fail on your own
+        let cleanedString = eventType.normalize()
+        if (cleanedString.startsWith('http')) {
+            return cleanedString.split('://').pop()
+        }
+        return cleanedString
+    },
 
     /**
      * Get the array of data from the container object, so long at it is one of the containers we support (so we know where to look.) 

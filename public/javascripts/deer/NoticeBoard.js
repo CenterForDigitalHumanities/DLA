@@ -19,7 +19,8 @@ Object.assign(NoticeBoard, {
      * @param {String, Object} eventPayload Relevant data based on the {action} of the notice
      */
     publish: (eventType,eventPayload) => {
-        const msg = new CustomEvent(eventType, { detail: eventPayload }) //TODO: ? for HTTPS insensitivity?
+
+        const msg = new CustomEvent(eventType, { detail: eventPayload })
         NoticeBoard.dispatchEvent(msg)
     },
     /**
