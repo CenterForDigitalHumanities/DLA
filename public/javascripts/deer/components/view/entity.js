@@ -50,3 +50,25 @@ export default class ViewEntity extends DeerView {
 }
 
 customElements.define(`deer-entity`, ViewEntity)
+
+export class CollectionLabel extends DeerView {
+    static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
+
+    constructor() {
+        super()
+        this.template = `${UTILS.getValue(obj.targetCollection)}`
+    }
+}
+
+customElements.define(`deer-collection-label`, CollectionLabel)
+
+export class Label extends DeerView {
+    static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
+
+    constructor() {
+        super()
+        this.template = `${UTILS.getLabel(obj)}`
+    }
+}
+
+customElements.define(`deer-label`, Label)
