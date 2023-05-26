@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/dla_public.js",
-    "test" : "jest",
-    "runtest" : "node ./bin/testApp.js"
+    "test": "jest",
+    "runtest": "node ./bin/testApp.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
-    "express": "~4.16.1",
+    "express": "^4.18.2",
     "http-errors": "~1.6.3",
     "http-proxy-middleware": "^2.0.0",
     "morgan": "~1.9.1",
