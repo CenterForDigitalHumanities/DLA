@@ -21,7 +21,7 @@ jobs:
                 touch /srv/node/logs/dlalogs.txt
             fi
             cd /srv/node/dla-public-site/
-            pm2 stop www
+            pm2 stop dla_public
             git stash
             git pull
             npm install
