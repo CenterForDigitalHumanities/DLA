@@ -51,12 +51,34 @@ export default class ViewEntity extends DeerView {
 
 customElements.define(`deer-entity`, ViewEntity)
 
+
+const collections = new Set([
+    {
+        id: "https://store.rerum.io/v1/id/61ae693050c86821e60b5d13",
+        name: "Correspondence between Paul Laurence Dunbar and Alice Moore Dunbar",
+        itemsKey: "itemListElement"
+    },
+    {
+        id: "https://store.rerum.io/v1/id/6353016612678843589262b0",
+        name: "DLA Poems Collection",
+        itemsKey: "itemListElement"
+    },
+    {
+        id: "https://store.rerum.io/v1/id/62506f071d974d1311abd651",
+        name: "Dunbar at Ohio History Connection",
+        itemsKey: "items"
+    }
+])
 export class CollectionLabel extends DeerView {
     static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
 
     constructor() {
         super()
-        this.template = `${UTILS.getValue(obj.targetCollection)}`
+        this.template = obj => `<a href="../${[...collections].find(r=>r.name === obj.targetCollection)?.id.split('/').pop()}">${UTILS.getValue(obj.targetCollection)}</a>`
+    }
+
+    connectedCallback() {
+        this.innerHTML = this.template
     }
 }
 
@@ -67,7 +89,12 @@ export class Label extends DeerView {
 
     constructor() {
         super()
-        this.template = `${UTILS.getLabel(obj)}`
+        this.template = obj => `${UTILS.getLabel(obj)}`
+        this.classList.add('text-light')
+    }
+
+    connectedCallback() {
+        this.innerHTML = this.template
     }
 }
 

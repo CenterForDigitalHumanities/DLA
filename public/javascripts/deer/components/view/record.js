@@ -157,6 +157,7 @@ export class DlaRecord extends DeerView {
         }
 
         const dataRecord = this.Entity?.assertions
+        if(!dataRecord) return
         const projects = dataRecord.tpenProject ?? []
         let projectList = []
         if(projects.length){
@@ -170,7 +171,7 @@ export class DlaRecord extends DeerView {
                     const canvas = projData.sequences[0].canvases[0]
                     const image = (canvas?.images.length) ? canvas.images[0].resource["@id"] : ""
                     if(image){
-                        thumbnail = `<a target="_blank" href="https://t-pen.org/TPEN/transcription.html?projectID=${pid.value}"><img class="thumbnail" src="${image}" /></a>`
+                        thumbnail = `<a target="_blank" href="https://t-pen.org/TPEN/transcription.html?projectID=${pid.value}"><img alt="thumbnail of page facsimile" class="thumbnail" src="${image}" /></a>`
                     }
                 }
                 if(thumbnail){
