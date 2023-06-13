@@ -148,7 +148,7 @@ class DLAPublicHeader extends HTMLElement {
         </style>
         <!--<header class="small">
             <a href="/" title="Home">
-                <img class="paul" src="https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:4553/100,0,1100,1100/150,150/0/default.jpg">
+                <img class="paul" alt="home link" src="https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:4553/100,0,1100,1100/150,150/0/default.jpg">
             </a>
             <logoimg>
                 <img src="" alt="logo">    
