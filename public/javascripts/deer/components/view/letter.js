@@ -84,6 +84,9 @@ const folioTemplate = (manifest) => {
                         : bb.resource["cnt:chars"] + ' '
                     : " <line class='rounded placeholder d-inline-block'></line> ", '')
                 }
+                ${b.otherContent[0].resources.length ? `` : `<div class="alert alert-info" role="alert">
+                This page is not yet transcribed.
+                    </div>`}
                 </div>
                 <img alt="Letter facsimile ${b.label}" class="col-6" src="${UTILS.URLasHTTPS(b.images[0].resource['@id'])}">
             </div>
