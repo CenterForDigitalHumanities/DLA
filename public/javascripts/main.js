@@ -182,9 +182,6 @@ class DLAPublicCarousel extends HTMLElement {
         <div class="carousel-inner">
           <div class="carousel-item active" data-bs-interval="10000">
             <img src="..." class="d-block w-100" alt="...">
-            <div class="carousel-caption d-none d-md-block">
-
-            </div>
           </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
@@ -204,11 +201,8 @@ class DLAPublicCarousel extends HTMLElement {
             list.forEach((item,index)=>{
                 new URL(item.id) // break if not retrievable
                 itemBuilder += `
-                <div class="carousel-item${index===0?" active":""}" data-bs-interval="10000">
-                    <img src="${item.id}" class="d-block w-100" alt="">
-                    <div class="carousel-caption d-none d-md-block">
-                        <p>${item.description}</p>
-                    </div>
+                <div class="carousel-item${index===0?" active":""}" data-bs-interval="10000" title="${item.description}">
+                    <img src="${item.id}" class="d-block w-100" alt="${item.description}">
                 </div>
                 `
             })
