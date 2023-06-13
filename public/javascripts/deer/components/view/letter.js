@@ -85,7 +85,7 @@ const folioTemplate = (manifest) => {
                     : " <line class='rounded placeholder d-inline-block'></line> ", '')
                 }
                 </div>
-                <img class="col-6" src="${UTILS.URLasHTTPS(b.images[0].resource['@id'])}">
+                <img alt="Letter facsimile ${b.label}" class="col-6" src="${UTILS.URLasHTTPS(b.images[0].resource['@id'])}">
             </div>
         </div>
     </div>
