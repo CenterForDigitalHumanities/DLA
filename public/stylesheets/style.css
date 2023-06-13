@@ -11,17 +11,13 @@
   --bs-light-rgb: 218, 210, 177; /* Bootstrap override */
   --ud-accent: #EAB726;
   --ud-active: #D28A28;
-  --bs-link-color: #EAB726;
-  --bs-link-hover-color: #D28A28;
+  --bs-link-color: #795016;
+  --bs-link-hover-color: #281A06;
   --bs-body-bg: #171B48;
 }
 
 .bg-bright{
   background-color: var(--ud-accent);
-}
-
-a {
-  color: var(--ud-active);
 }
 
 .hidden {
