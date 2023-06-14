@@ -32,7 +32,7 @@ const utils = {
      * @param {URL} url URL string intended for matching or fetch() call.
      * @returns URL as HTTPS
      */
-    URLasHTTPS: url => url?.replace(/^https?:/,'https:'),
+    URLasHTTPS: url => url.startsWith("http") ? url?.replace(/^https?:/,'https:') : `https://${url}`,
 
     listFromCollection: function (collectionId) {
         let queryObj = {

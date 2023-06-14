@@ -106,7 +106,6 @@ class Entity extends Object {
                     this.data = originalObject
                 }
                 withAssertions ? this.#findAssertions(finds) : this.#findAssertions()
-                return
             })
             .catch(err => {
                 switch (err.status) {

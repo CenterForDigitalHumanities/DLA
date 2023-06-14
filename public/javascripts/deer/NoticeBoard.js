@@ -21,10 +21,10 @@ Object.assign(NoticeBoard, {
      * @param {String, Object} eventPayload Relevant data based on the {action} of the notice
      */
     publish: (eventType,eventPayload) => {
-        if(eventPayload.id?.startsWith('http:'))             {
+        if(eventPayload.id?.includes('rerum.io'))             {
             eventPayload.id = UTILS.URLasHTTPS(eventPayload.id)
         }
-        if(eventPayload.payload?.id?.startsWith('http:') && (eventPayload.payload.constructor?.name !== 'Entity'))    {
+        if(eventPayload.payload?.id?.includes('rerum.io') && (eventPayload.payload.constructor?.name !== 'Entity'))    {
             // Entity has no setter for `id`
             eventPayload.payload.id = UTILS.URLasHTTPS(eventPayload.payload.id)
         }

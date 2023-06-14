@@ -61,9 +61,9 @@ export default class DeerView extends HTMLElement {
             case DEER.KEY:
             case DEER.LINK:
             case DEER.LIST:
-                const id = this.getAttribute(DEER.ID)
+                const id = UTILS.normalizeEventType(this.getAttribute(DEER.ID))
                 if (id === null || this.getAttribute(DEER.COLLECTION)) { return }
-                NoticeBoard.subscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#updateEntity.bind(this))
+                NoticeBoard.subscribe(UTILS.normalizeEventType(id), this.#updateEntity.bind(this))
                 NoticeBoard.publish(DEER.EVENTS.NEW_VIEW, {
                     id,
                     isLazy: this.getAttribute(DEER.LAZY)

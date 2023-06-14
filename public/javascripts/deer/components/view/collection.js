@@ -103,8 +103,9 @@ export default class DLA_Collection extends DeerView {
         const facetRecords = e => {
             switch (e.detail.action) {
                 case "complete":
-                    query.addEventListener("input", this.#filterQuery.bind(this))
+                    console.log("disable-undo")
                     query.removeAttribute('disabled')
+                    query.addEventListener("input", this.#filterQuery.bind(this))
                     this.querySelector('button[type="reset"]')?.addEventListener("click", ev => {
                         Array.from(document.querySelectorAll(".clicked")).forEach(el => el.dispatchEvent(new Event("click")))
                         query.value = ""

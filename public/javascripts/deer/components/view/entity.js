@@ -33,7 +33,7 @@ const template = obj => {
             let v = UTILS.getValue(value)
             if (typeof v === "object") { v = UTILS.getLabel(v) }
             if (v === "[ unlabeled ]") { v = v['@id'] || v.id || "[ complex value unknown ]" }
-            list += (value && value['@id']) ? `<dd ${DEER.SOURCE}="${UTILS.getValue(value.source, "citationSource")}"><a href="${options.link || ""}#${value['@id']}">${v}</a></dd>` : `<dd ${DEER.SOURCE}="${UTILS.getValue(value, "citationSource")}">${v}</dd>`
+            list += value?.['@id'] ? `<dd ${DEER.SOURCE}="${UTILS.getValue(value.source, "citationSource")}"><a href="${options.link || ""}#${value['@id']}">${v}</a></dd>` : `<dd ${DEER.SOURCE}="${UTILS.getValue(value, "citationSource")}">${v}</dd>`
         }
     }
     if (list.includes("</dd>")) { tmpl+=`<dl>${list}</dl>` }
