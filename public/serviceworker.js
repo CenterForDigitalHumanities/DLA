@@ -33,22 +33,6 @@ self.addEventListener('activate', event => {
             )
         })
     )
-    // event.waitUntil(() => {
-    //     let opening = new Promise()
-    //     var DBOpenRequest = self.indexedDB.open(IDBSTORE, 1)
-    //     DBOpenRequest.onsuccess = _event => db = DBOpenRequest.result
-
-    //     DBOpenRequest.onerror = _event => opening.reject(console.error(event))
-
-    //     DBOpenRequest.onupgradeneeded = _event => {
-    //         db = event.target.result
-    //         // Create an objectStore for this database
-    //         objectStore = db.createObjectStore(IDBSTORE, { keyPath: "id" })
-    //         console.log("Successfully upgraded db")
-    //         opening.resolve(db)
-    //     }
-    //     return opening
-    // })
 })
 
 self.addEventListener('fetch', event => {
@@ -61,10 +45,10 @@ self.addEventListener('fetch', event => {
                     return response
                 }
                 console.log('Network request for ', event.request.url)
-                return event.waitUntil(_event=>{
-                    fetch(_event.request)
-                    .then(_response => {
-                        if (_response.status === 404) {
+                return event.waitUntil(event=>{
+                    fetch(event.request)
+                    .then(response => {
+                        if (response.status === 404) {
                             return caches.match('pages/404.html')
                         }
                         return caches.open(staticCacheName).then(cache => {

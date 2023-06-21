@@ -1,0 +1,30 @@
+[
+    { 
+        "id" : "https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:29436/5196,2172,4029,3594/full/0/default.jpg",
+        "description": "Paul Laurence Dunbar botanical sketchbook"
+    },
+    { 
+        "id" : "https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:11921/full/full/0/default.jpg",
+        "description": "Paul Laurence Dunbar portrait"
+    },
+    { 
+        "id" : "https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:11926/308,220,2480,1972/full/0/default.jpg",
+        "description": "Paul and Matilda with family"
+    },
+    { 
+        "id" : "https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:10815/67,196,1567,1324/full/0/default.jpg",
+        "description": "Alice Dunbar Nelson photograph"
+    },
+    { 
+        "id" : "https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:4956/28,15,1624,1466/full/0/default.jpg",
+        "description": "&ldquo;Sympathy&rdquo; poem"
+    },
+    { 
+        "id" : "https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:10769/full/full/0/default.jpg",
+        "description": "Dunbar house fireplace photograph"
+    },
+    { 
+        "id" : "https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:10283/full/full/0/default.jpg",
+        "description": "Matilda in her rocker with a book"
+    }
+]

@@ -21,41 +21,82 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
 
   <meta name="theme-color" content="#fafafa">
-  <script src="/javascripts/plugins.js" defer></script>
+  <script src="//unpkg.com/@ungap/custom-elements"></script>
   <script src="/javascripts/main.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous" defer></script>
 </head>
 
 <body>
+  <dla-header></dla-header>
+  <div class="container-lg bg-white">
+    <p class="fs-5 pt-1 ">
+      <b>The DLA</b> honors Paul Laurence Dunbar's life and work by collecting and describing the artifacts 
+      and creative outputs held in repositories throughout the world and creating a space for students, 
+      researchers, and community members to interact with the significant people and places from his time.
+    </p>
+    
+    <div class="row mb-0">
+      <div class="col-md-6 col-xs-12 align-items-center d-flex justify-content-center bg-bright flex-column">
+        <h3>
+          Explore the Collection
+        </h3>
+        <form role="search">
+        <div class="input-group me-2">
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">🔍</button>
+            </div>
+        </div>
+      </form>
+        <small>
+          Discover letters, artifacts, poetry and more
+        </small>
+      </div>
 
-  <header>
-    <h1>
-      Dunbar Library and Archive
-    </h1>
-    <img class="hero"
-      src="https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:13628/15,600,1879,916/full/0/default.jpg"></div>
-  </header>
-  <nav>
-    <a href="/" class="active">Home</a>
-    <a href="/collections" class="">Collections</a>
-    <a href="/browse" class="">Browse</a>
-    <a href="/about" class="">About</a>
-  </nav>
-  <div class="container content">
-    <row>
-      <p>
-        Bridging campus and community, teaching and research, the humanities and other disciplines, the Dunbar
-        Initiative engages
-        students, researchers and community members with many facets of Paul Laurence Dunbar's life.
-      </p>
-      <img
-        src="https://udayton.edu/artssciences/initiatives/dunbar-initiative/_resources/images-docs/dunbar-paul-laurence.jpg"
-        alt="Dunbar Library and Archive">
-    </row>
+       <dla-carousel class="col-md-6 col-xs-12 g-0" src="/cache/IMAGE.json"></dla-carousel>
+
+    </div>
+
+    <div class="row mb-0">
+      <div class="col-md-6 col-xs-12 align-items-center d-flex justify-content-center bg-secondary text-light flex-column">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <h3>
+            Love Letters?
+          </h3>
+          <p class="fs-6">
+            Browse the correspondence between Paul Dunbar and Alice Dunbar Nelson
+          </p>
+          <a href="/collection/61ae693050c86821e60b5d13" class="btn btn-outline-light">view more 🡒</a>
+          </div>
+          <img class="col-6" alt="letter" src="https://t-pen.org/TPEN/pageImage?folio=13252820">
+
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-xs-12 align-items-center d-flex justify-content-center flex-column">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <h3>
+            Every Verse,
+          </h3>
+          <p class="fs-6">
+            Dive into Paul's poetry with performances, reading aids, and connections
+          </p>
+          <a href="/collection/6353016612678843589262b0" class="btn btn-outline-secondary">view more 🡒</a>
+          </div>
+          <img class="col-6" alt="manuscript" src="https://cdm16007.contentdm.oclc.org/iiif/2/p267401coll32:16135/full/,450/0/default.jpg">
+
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-xs-12 align-items-center d-flex justify-content-center bg-light">
+      </div>
+
+    </div>
+
   </div>
-
-  <footer>
-
-  </footer>
+  <dla-footer></dla-footer>
 </body>
 
 </html>

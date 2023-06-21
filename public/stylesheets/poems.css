@@ -1,0 +1,63 @@
+/* TEI pseudo-XSLT */
+
+lg {
+  padding: 0.68em 0;
+}
+
+stanza,
+line {
+  display: block;
+}
+
+stanza {
+  margin-bottom: 0.68em;
+  min-width    : 25em;
+}
+
+lg[type='stanza'],
+l {
+  font-family : Georgia, 'Times New Roman', Times, serif;
+  font-variant: initial;
+  font-weight : initial;
+  display     : block;
+  width       : 100%;
+}
+
+div.glossaryTip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  background-color: #FFF;
+  box-shadow: 0 0 3em 0 rgba(0,0,0,.3);
+  transition: opacity 250ms;
+}
+
+.glossaryTip.popover {
+  max-width: 100%;
+}
+
+a:hover+div.glossaryTip, a+div.glossaryTip:hover {
+  visibility: visible;
+  opacity: 1;
+}
+
+printed {
+  font-family:serif;
+}
+
+note {
+  font-family:monospace;
+}
+
+unclear {
+  opacity:.4;
+}
+
+line.empty {
+  line-height: 1.6;
+  background-color: #CCC;
+  height: 1em;
+  margin: .4em 0;
+  display:block;
+  border-radius: 4px;
+}

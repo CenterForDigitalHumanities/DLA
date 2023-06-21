@@ -4,8 +4,8 @@ const path = require('path')
 const fetch = require('node-fetch')
 
 const pubTok = process.env.RERUM_API
-const RERUM = "http://store.rerum.io/v1"
-const COLLECTIONS = "http://store.rerum.io/v1/id/615b724650c86821e60b11fa"
+const RERUM = "https://store.rerum.io/v1"
+const COLLECTIONS = "https://store.rerum.io/v1/id/6353016612678843589262b0"
 
 /* Collections API */
 router.get('/', function(req, res, next) {

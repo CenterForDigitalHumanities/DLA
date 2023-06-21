@@ -27,7 +27,7 @@ app.use('/collection', collectionRouter)
 app.use(express.static(path.join(__dirname, 'public')))
 
 // catch 404 and forward to error handler
-app.use(function(_req, _res, next) {
+app.use(function(req, res, next) {
   next(createError(404))
 })
 
