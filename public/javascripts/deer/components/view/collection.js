@@ -72,9 +72,9 @@ const template = (obj,options={}) => {
             <div id="Records" class="col-9 order-last">
             <ul>
             ${(obj[options.list ?? "itemListElement"] ?? [])?.reduce((a, b) => a += `
-            <li class="record">
-            <a href="./record/${(b.id ?? b['@id']).split("/").pop()}">${b.label ?? b['@id']}</a>
-            </li>`, ``)}
+            <dla-record-card class="record" deer-id="${b['@id']}">
+            <h4><a href="./record/${(b.id ?? b['@id']).split("/").pop()}">${b.label ?? b['@id']}</a></h4>
+            </dla-record-card>`, ``)}
             </div>
             <div class="col-3 bg-bright">
                 <h5 title="${obj.description??``}">${obj.name}</h5>

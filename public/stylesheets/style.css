@@ -75,15 +75,6 @@ dla-carousel {
   text-shadow: 0 0 1.5px var(--ud-secondary);
 }
 
-header.small {
-  margin: calc(var(--body-padding) * -1) 0 0px;
-  height: 75px;
-}
-
-header.small h1 {
-  font-size: 2rem;
-}
-
 a {
   color: var(--action);
 }
