@@ -75,9 +75,6 @@ dla-carousel {
   text-shadow: 0 0 1.5px var(--ud-secondary);
 }
 
-a {
-  color: var(--action);
-}
 .breadcrumb-item a {
   color: var(--ud-accent);
 }
