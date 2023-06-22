@@ -74,7 +74,7 @@ export class CollectionLabel extends DeerView {
 
     constructor() {
         super()
-        this.template = obj => `<a href="../${[...collections].find(r=>r.name === obj.targetCollection)?.id.split('/').pop()}">${UTILS.getValue(obj.targetCollection)}</a>`
+        this.template = (obj={}) => `<a href="../${[...collections].find(r=>r.name === obj.targetCollection)?.id.split('/').pop()}">${UTILS.getValue(obj.targetCollection)}</a>`
     }
 
     connectedCallback() {

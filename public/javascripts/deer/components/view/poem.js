@@ -1,6 +1,97 @@
 import { DEER, UTILS } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
+
+const template = (obj, options = {}) => `
+    <style>
+    .textSample {
+        width: fit-content;
+      }
+      
+      .textSample lg {
+        padding: 0.68em 0;
+      }
+      
+      .textSample stanza, .textSample line {
+        display: block;
+      }
+      .textSample stanza {
+        margin-bottom: 0.68em;
+        min-width: 25em;
+      }
+      .textSample line {
+        width: 100%;
+        background-color: hsl(0deg 0% 90%);
+        border-radius: 0.5em;
+        line-height: 1.2;
+        height: 1em;
+        margin: 0.15em;
+        box-shadow: inset 0 0 2px white;
+        animation: loaderColor alternate 500ms;
+      }
+      .textSample line:last-of-type {
+        width: 80%;
+      }
+      @keyframes loaderColor {
+        0% {
+          background-color: hsl(0deg 0% 95%);
+        }
+        100% {
+          background-color: hsl(0deg 0% 85%);
+        }
+      }
+      
+/* TEI pseudoXSLT */
+.textSample {
+  font-variant: small-caps;
+  font-weight: bold;
+}
+.textSample lg[type='stanza'],.textSample l {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-variant: initial;
+  font-weight: initial;
+  display: block;
+  width: 100%;
+}
+h1+.publication-info {
+    top: -1.32em;
+    position: relative;
+    left: 1.32em;
+    font-style: italic;
+}
+.poemMusic small+small {
+    display: block;
+    text-align: right;
+}
+      </style>
+    <h1>${UTILS.getLabel(obj)}</h1>
+    <span class="publication-info"></span>
+    <row>
+        <div class="textSample card col">
+        ${false ? true : `
+        [ Text Sample ]
+        <stanza>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+        </stanza>
+        <stanza>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+        </stanza>`}
+        </div>
+        <div class="col">
+            <div class="audioSample card">
+                <h3>Spoken Performance</h3>
+            </div>
+            <div class="poemMusic card">
+            </div>
+        </div>
+    </row>
+    `
 export default class DlaPoemDetail extends DeerView {
     static get observedAttributes() { return [DEER.ID, DEER.LAZY] }
 
@@ -46,7 +137,7 @@ customElements.define(`dla-poem-detail`, DlaPoemDetail)
 
 export function isPoem(elem) {
     if (!elem.Entity) { return false }
-    const obj = elem.Entity.data
+    const obj = elem.Entity.getObject()
     return obj.type?.includes("Work") && obj.additionalType?.includes("dcmitype/Text")
 }
 
@@ -158,11 +249,9 @@ class DlaSimpleExpression extends DeerView {
         const msg = e.detail
         switch (msg.action) {
             case "reload":
+            case "update":
                 this.Entity = msg.payload
                 this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
-                break
-            case "update":
-                this.innerHTML = this.template(msg.payload) ?? this.innerHTML
                 break
             case "error":
                 // this.#handleErrors(msg.payload)

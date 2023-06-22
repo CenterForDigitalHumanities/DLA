@@ -81,7 +81,7 @@ const template = (obj,options={}) => {
                 <hr />
                 <p class="d-none">Refine Results <button role="button" type="reset" class="btn btn-light btn-sm">clear all</button></p>
                 <progress class="col-12" value="${obj.numberOfItems??0}" max="${obj.numberOfItems??10}">${obj.numberOfItems??``} of ${obj.numberOfItems??``}</progress>
-                <input id="query" disabled class="form-control" type="text" placeholder="type to filter">
+                <input id="query" class="form-control" type="text" placeholder="type to filter">
                 <section id="facetFilter"></section>
             </div>
     </div>`

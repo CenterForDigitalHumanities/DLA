@@ -58,14 +58,14 @@ class Entity extends Object {
     set data(entity) {
         entity.id = UTILS.URLasHTTPS(entity.id ?? entity["@id"] ?? this.id) // id is primary key
         const oldRecord = this._data ? JSON.parse(JSON.stringify(this._data)) : {}
-        Object.assign(this._data,entity)
+        Object.assign(this._data, entity)
         if (objectMatch(this._data, oldRecord)) {
             console.warn("Entity data unchanged")
             return
         }
         EntityMap.set(UTILS.URLasHTTPS(this.id), this)
         this.#announceUpdate()
-        if (oldRecord.id!=this.id) { this.#resolveURI(!this.#isLazy).then(this.#announceNewEntity) }
+        if (oldRecord.id != this.id) { this.#resolveURI(!this.#isLazy).then(this.#announceNewEntity) }
     }
 
     attachAnnotation(annotation) {
@@ -77,7 +77,7 @@ class Entity extends Object {
         return annos
             .then(annotations => annotations.filter(a => (a.type ?? a['@type'])?.includes("Annotation")).map(anno => new Annotation(anno)))
             .then(newAssertions => {
-                if (newAssertions?.length) {this.#announceUpdate()}
+                if (newAssertions?.length) { this.#announceUpdate() }
                 this.#announceComplete()
             })
             .catch(err => console.log(err))
@@ -141,6 +141,10 @@ class Entity extends Object {
             action: "error",
             payload: err
         })
+    }
+
+    getObject = () => {
+        return this.assertions
     }
 }
 

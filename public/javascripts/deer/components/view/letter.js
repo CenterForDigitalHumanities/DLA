@@ -2,7 +2,7 @@ import { UTILS, DEER } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
 import DeerView from './view.js'
 
-const textTemplate = (obj, options = {}) => `
+const textTemplate = (obj={}, options = {}) => `
     <div class="row">
         <div class="col">
         <h3>${UTILS.getLabel(obj)}</h3>
@@ -128,5 +128,5 @@ return pages
 }
 
 export function isLetter(elem) {
-    return elem.Entity?.data['@type']?.includes("Text")
+    return elem.Entity?.getObject()?.['@type']?.includes("Text")
 }

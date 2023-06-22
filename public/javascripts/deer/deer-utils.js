@@ -115,7 +115,7 @@ const utils = {
      */
     get getLabel() {
         let UTILS = this
-        return (obj, noLabel = "[ unlabeled ]", options = {}) => {
+        return (obj = {}, noLabel = "[ unlabeled ]", options = {}) => {
             if (typeof obj === "string") { return obj }
             let label = obj[options.label] ?? obj.name ?? obj.label ?? obj.title
             if (Array.isArray(label)) {

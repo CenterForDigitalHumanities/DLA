@@ -1,12 +1,11 @@
 import { DEER, UTILS } from '../../deer-utils.js'
 import NoticeBoard from '../../NoticeBoard.js'
-import DlaPoemDetail from './poem.js'
 import DeerView from './view.js'
 
 let progress
 
 // Full URIs can also be used, but the internal ids are a bit more readable and bookmarkable and stubbable.
-const recordCardTemplate = obj => (obj.label ?? obj.name) && `
+const recordCardTemplate = (obj = {}) => (obj.label ?? obj.name) && `
     <h4><a href="./record/${obj.id.split('/').pop()}">${UTILS.getLabel(obj)}</a></h4>
         <div class="row">
             <dl>
@@ -136,13 +135,12 @@ export class DlaRecord extends DeerView {
     }
     #replaceElement(tagName) {
         const swap = document.createElement(tagName)
-        swap.Entity = this.Entity
-        this.getAttributeNames().forEach(attr => swap.setAttribute(attr, this.getAttribute(attr)))
         this.replaceWith(swap)
-        this.remove()
+        this.getAttributeNames().forEach(attr => swap.setAttribute(attr, this.getAttribute(attr)))
+        swap.Entity = this.Entity
     }
     async #renderGenericRecord(ev) {
-        if (!["complete","update"].includes(ev.detail.action)) {return}
+        if (!["complete"].includes(ev.detail.action)) {return}
         
         if (isPoem(this)) {
             NoticeBoard.unsubscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#renderGenericRecord.bind(this))
