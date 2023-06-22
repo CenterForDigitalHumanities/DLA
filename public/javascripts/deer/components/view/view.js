@@ -27,10 +27,11 @@ export default class DeerView extends HTMLElement {
         const msg = e.detail
         switch (msg.action) {
             case "reload":
-                this.Entity = msg.payload
+                this.Entity = Object.assign(this.Entity ?? {},msg.payload)
                 this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
                 break
             case "update":
+                this.Entity = Object.assign(this.Entity ?? {},msg.payload)
                 this.innerHTML = this.template(msg.payload) ?? this.innerHTML
                 break
             case "error":

@@ -122,7 +122,7 @@ class Entity extends Object {
     #announceUpdate = () => {
         NoticeBoard.publish(UTILS.normalizeEventType(this.id), {
             action: "update",
-            payload: this.assertions
+            payload: this
         })
     }
     #announceNewEntity = () => {

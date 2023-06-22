@@ -142,7 +142,7 @@ export class DlaRecord extends DeerView {
         this.remove()
     }
     async #renderGenericRecord(ev) {
-        if (!["complete"].includes(ev.detail.action)) {return}
+        if (!["complete","update"].includes(ev.detail.action)) {return}
         
         if (isPoem(this)) {
             NoticeBoard.unsubscribe(UTILS.normalizeEventType(this.getAttribute(DEER.ID)), this.#renderGenericRecord.bind(this))

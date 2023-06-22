@@ -1,3 +1,6 @@
+import { DEER, UTILS } from '../../deer-utils.js'
+import NoticeBoard from '../../NoticeBoard.js'
+import DeerView from './view.js'
 export default class DlaPoemDetail extends DeerView {
     static get observedAttributes() { return [DEER.ID, DEER.LAZY] }
 
