@@ -86,7 +86,7 @@ class Entity extends Object {
     #resolveURI = (withAssertions) => {
         const targetStyle = ["target", "target.@id", "target.id"]
         let historyWildcard = { "$exists": true, "$size": 0 }
-        let obj = { "$or": [{ '@id': this.id }], "__rerum.history.next": historyWildcard }
+        let obj = { "$or": [{ '@id': UTILS.httpsIdArray(this.id) }], "__rerum.history.next": historyWildcard }
         for (let target of targetStyle) {
             let o = {}
             o[target] = UTILS.httpsIdArray(this.id)
