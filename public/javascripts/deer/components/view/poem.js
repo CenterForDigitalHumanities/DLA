@@ -61,9 +61,9 @@ export default class DlaPoemDetail extends DeerView {
         const historyWildcard = { "$exists": true, "$size": 0 }
         const exprQuery = {
             $or: [{
-                "body.isRealizationOf": UTILS.httpsQueryArray(this.Entity?.id)
+                "body.isRealizationOf": UTILS.httpsIdArray(this.Entity?.id)
             }, {
-                "body.isRealizationOf.value": UTILS.httpsQueryArray(this.Entity?.id)
+                "body.isRealizationOf.value": UTILS.httpsIdArray(this.Entity?.id)
             }],
             "__rerum.history.next": historyWildcard
         }
@@ -122,9 +122,9 @@ class DlaSimpleExpression extends DeerView {
         const historyWildcard = { "$exists": true, "$size": 0 }
         const manQuery = {
             $or: [{
-                "body.isEmbodimentOf": UTILS.httpsQueryArray(this.Entity?.id)
+                "body.isEmbodimentOf": UTILS.httpsIdArray(this.Entity?.id)
             }, {
-                "body.isEmbodimentOf.value": UTILS.httpsQueryArray(this.Entity?.id)
+                "body.isEmbodimentOf.value": UTILS.httpsIdArray(this.Entity?.id)
             }],
             "__rerum.history.next": historyWildcard
         }
