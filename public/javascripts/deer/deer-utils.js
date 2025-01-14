@@ -25,6 +25,12 @@ const utils = {
         return { $in: this.httpsIdLinks(id) }
     },
 
+    httpsIdArray(id,justArray) {
+        if (!id.startsWith("http")) return justArray ? [ id ] : id
+        if (id.startsWith("https://")) return justArray ? [ id, id.replace('https','http') ] : { $in: [ id, id.replace('https','http') ] }
+        return justArray ? [ id, id.replace('http','https') ] : { $in: [ id, id.replace('http','https') ] }
+    },
+
     /**
      * Simple transformation for accidentally unsecure links.
      * Does not confirm it is a URL and will silently return unmatchable strings 
