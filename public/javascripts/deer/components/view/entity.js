@@ -86,16 +86,25 @@ customElements.define(`deer-collection-label`, CollectionLabel)
 
 export class Label extends DeerView {
     static get observedAttributes() { return [DEER.ID,DEER.LISTENING] }
+    #isExpanded = false
+    #id = this.getAttribute(DEER.ID)
 
     constructor() {
         super()
-        this.template = obj => `${UTILS.getLabel(obj)}`
         this.classList.add('text-light')
     }
-
+    
     connectedCallback() {
-        this.innerHTML = this.template
+        this.template = obj => `${UTILS.getLabel(obj)}`
+        this.addEventListener(DEER.EVENTS.LOADED, e => {
+            if (this.#id === e.detail?.['@id']) {
+                this.#isExpanded = true
+                this.innerHTML = this.template(e.detail)
+            }
+        })
+        this.innerHTML = `loading...`
     }
+
 }
 
 customElements.define(`deer-label`, Label)

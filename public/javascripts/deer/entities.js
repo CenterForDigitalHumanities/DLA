@@ -32,7 +32,7 @@ class Entity extends Object {
             }
         }
         const id = UTILS.URLasHTTPS(entity.id ?? entity["@id"] ?? entity) // id is primary key
-        if (!id) { throw new Error("Entity must have an id") }
+        if (!id || id === "https://undefined") { throw new Error("Entity must have an id") }
         if (EntityMap.has(id)) { throw new Error("Entity already exists") }
         this.Annotations = new Map()
         this.#isLazy = Boolean(isLazy)
@@ -57,6 +57,10 @@ class Entity extends Object {
 
     set data(entity) {
         entity.id = UTILS.URLasHTTPS(entity.id ?? entity["@id"] ?? this.id) // id is primary key
+        if (!entity.id) { 
+            console.warn("Entity must have an id", entity)
+            return
+        }
         const oldRecord = this._data ? JSON.parse(JSON.stringify(this._data)) : {}
         Object.assign(this._data, entity)
         if (objectMatch(this._data, oldRecord)) {

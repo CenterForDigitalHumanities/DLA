@@ -26,7 +26,7 @@ const utils = {
     },
 
     httpsIdArray(id,justArray) {
-        if (!id.startsWith("http")) return justArray ? [ id ] : id
+        if (!id?.startsWith("http")) return justArray ? [ id ] : id
         if (id.startsWith("https://")) return justArray ? [ id, id.replace('https','http') ] : { $in: [ id, id.replace('https','http') ] }
         return justArray ? [ id, id.replace('http','https') ] : { $in: [ id, id.replace('http','https') ] }
     },
