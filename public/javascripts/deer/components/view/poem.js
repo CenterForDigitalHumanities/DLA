@@ -66,7 +66,7 @@ h1+.publication-info {
       </style>
     <h1>${UTILS.getLabel(obj)}</h1>
     <span class="publication-info"></span>
-    <row>
+    <div class="row">
         <div class="textSample card col">
         ${false ? true : `
         [ Text Sample ]
@@ -84,13 +84,15 @@ h1+.publication-info {
         </stanza>`}
         </div>
         <div class="col">
-            <div class="audioSample card">
+            <div class="audioSample card hidden">
                 <h3>Spoken Performance</h3>
+                <div class="card-body"></div>
             </div>
-            <div class="poemMusic card">
+            <div class="poemMusic card hidden">
+                <div class="card-body"></div>
             </div>
         </div>
-    </row>
+    </div>
     `
 export default class DlaPoemDetail extends DeerView {
     static get observedAttributes() { return [DEER.ID, DEER.LAZY, DEER.FINAL] }
