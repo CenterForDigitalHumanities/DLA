@@ -35,7 +35,7 @@
       let id = location.href.split('/').pop()
 
       if (!id.startsWith("http")) {
-        id = RERUM + "/id/" + id
+        id = `${RERUM}/id/${id}`
       }
       document.getElementsByTagName('deer-collection')[0]?.setAttribute('deer-id', id)
     })

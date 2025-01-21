@@ -7,8 +7,6 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 var indexRouter = require('./routes/index')
-var usersRouter = require('./routes/users')
-var managementRouter = require('./routes/management')
 var collectionsRouter = require('./routes/collections')
 var collectionRouter = require('./routes/collection')
 
@@ -20,8 +18,6 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
-app.use('/management', managementRouter)
 app.use('/collections', collectionsRouter)
 app.use('/collection', collectionRouter)
 app.use(express.static(path.join(__dirname, 'public')))

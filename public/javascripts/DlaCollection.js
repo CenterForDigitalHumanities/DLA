@@ -303,7 +303,7 @@ export class DlaCollection extends DeerView {
         let countBar = query.previousElementSibling
         let countBarValue = this.records.length - hiddenCount
         countBar.max = this.records.length
-        countBar.textContent = countBarValue + " of " + countBar.max
+        countBar.textContent = `${countBarValue} of ${countBar.max}`
         clearInterval(progress)
         const notzero = countBarValue > countBar.value ? 1 : -1
         let step = parseInt((countBarValue - countBar.value) / 25) || notzero
@@ -318,7 +318,7 @@ export class DlaCollection extends DeerView {
         Array.from(facetsElements).forEach(f => {
             const k = f.getAttribute("data-facet")
             const v = f.textContent
-            let count = document.querySelectorAll(".record:not([class*='hide-'])[data-" + k + "*='" + v + "']").length
+            let count = document.querySelectorAll(`.record:not([class*='hide-'])[data-${k}*='${v}']`).length
             f.setAttribute("data-count", count)
             if (count === 0) {
                 f.classList.add("hide-sidebar")

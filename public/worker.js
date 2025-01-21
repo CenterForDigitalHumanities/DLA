@@ -57,9 +57,14 @@ self.onmessage = message => {
     }
 }
 
-function getItem(id, args = {}) {
-    db.then(db => {
-        let lookup = db.transaction(IDBSTORE, "readonly").objectStore(IDBSTORE).get(id).onsuccess = (event) => {
+async function getItem(id, args = {}) {
+    try {
+        const dbInstance = await db
+        const transaction = dbInstance.transaction(IDBSTORE, "readonly")
+        const objectStore = transaction.objectStore(IDBSTORE)
+        const request = objectStore.get(id)
+        
+        request.onsuccess = async (event) => {
             let item = event.target.result
             if (item) {
                 postMessage({
@@ -71,28 +76,47 @@ function getItem(id, args = {}) {
             item = new Entity(item ?? { id })
             const oldRecord = JSON.parse(JSON.stringify(item.data))
             item.data.id = item.data.id ?? item.data['@id']
-            item.expand(args.matchOn).then(obj => {
-                if (objectMatch(oldRecord, obj.data)) { return }
-                const enterRecord = db.transaction(IDBSTORE, "readwrite").objectStore(IDBSTORE)
-                const insertionRequest = enterRecord.put(obj.data)
-                insertionRequest.onsuccess = function (event) {
-                    postMessage({
-                        item: obj.data,
-                        action: "expanded",
-                        id: obj.data.id
-                    })
-                }
-                insertionRequest.onerror = function (event) {
-                    console.log("Error: ", event)
-                    postMessage({
-                        error: event,
-                        action: "error",
-                        id: obj.data.id
-                    })
-                }
+            const obj = await item.expand(args.matchOn)
+            if (objectMatch(oldRecord, obj.data)) { return }
+            
+            const enterRecord = dbInstance.transaction(IDBSTORE, "readwrite").objectStore(IDBSTORE)
+            const insertionRequest = enterRecord.put(obj.data)
+            
+            insertionRequest.onsuccess = function (event) {
+                postMessage({
+                    item: obj.data,
+                    action: "expanded",
+                    id: obj.data.id
+                })
+            }
+            
+            insertionRequest.onerror = function (event) {
+                console.log("Error: ", event)
+                postMessage({
+                    error: event,
+                    action: "error",
+                    id: obj.data.id
+                })
+            }
+        }
+        
+        // Error handling for request
+        request.onerror = function (event) {
+            console.log("Error: ", event)
+            postMessage({
+                error: event,
+                action: "error",
+                id: id
             })
         }
-    })
+    } catch (error) {
+        console.log("Error: ", error)
+        postMessage({
+            error: error,
+            action: "error",
+            id: id
+        })
+    }
 }
 
 /**
@@ -106,6 +130,5 @@ document.dispatchEvent = msg => {
     const action = msg.detail.action
     const payload = msg.detail.payload
 
-    postMessage({ id, action, payload})
+    postMessage({ id, action, payload })
 }
-
