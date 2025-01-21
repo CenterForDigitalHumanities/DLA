@@ -93,7 +93,15 @@ h1+.publication-info {
     </row>
     `
 export default class DlaPoemDetail extends DeerView {
-    static get observedAttributes() { return [DEER.ID, DEER.LAZY] }
+    static get observedAttributes() { return [DEER.ID, DEER.LAZY, DEER.FINAL] }
+
+    // loadCards after the Entity is loaded and deer-final is set to true
+    async attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue)
+        if (oldValue !== newValue && this.getAttribute(DEER.FINAL) === "true") {
+            this.loadCards()
+        }
+    }
 
     constructor() {
         super()
@@ -102,6 +110,11 @@ export default class DlaPoemDetail extends DeerView {
 
     connectedCallback() {
         super.connectedCallback()
+        this.addEventListener(DEER.EVENTS.LOADED, this.loadCards.bind(this))
+    }
+
+    loadCards() {
+        if(!this.Entity) return
         this.classList.remove(this.dataset.spinner)
         const historyWildcard = { "$exists": true, "$size": 0 }
         const exprQuery = {
@@ -251,7 +264,7 @@ class DlaSimpleExpression extends DeerView {
             case "reload":
             case "update":
                 this.Entity = msg.payload
-                this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
+                if( msg.payload?.assertions ) this.innerHTML = this.template(msg.payload.assertions)
                 break
             case "error":
                 // this.#handleErrors(msg.payload)

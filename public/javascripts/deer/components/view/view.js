@@ -29,7 +29,7 @@ export default class DeerView extends HTMLElement {
             case "update":
             case "reload":
                 this.Entity = Object.assign(this.Entity ?? {},msg.payload)
-                this.innerHTML = this.template(msg.payload?.assertions) ?? this.innerHTML
+                if( msg.payload?.assertions ) this.innerHTML = this.template(msg.payload.assertions)
                 break
             case "error":
                 this.#handleErrors(msg.payload)
