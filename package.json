@@ -3,19 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/dla_public.js",
+    "start": "node --env-file=.env ./bin/dla_public.js",
     "test": "jest",
-    "runtest": "node ./bin/testApp.js"
+    "runtest": "node --env-file=.env ./bin/testApp.js",
+    "audit": "npm audit"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "dotenv": "^10.0.0",
-    "express": "^4.18.2",
-    "http-errors": "~1.6.3",
+    "debug": "~4.3.4",
+    "express": "^4.21.1",
+    "helmet": "^8.0.0",
+    "http-errors": "~2.0.0",
     "http-proxy-middleware": "^2.0.0",
-    "morgan": "~1.9.1",
-    "node-fetch": "^2.6.1"
+    "morgan": "~1.10.0",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "@jest-mock/express": "^1.4.5",

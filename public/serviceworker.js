@@ -4,7 +4,8 @@ const filesToCache = [
     // '/pages/offline.html',
     // '/pages/404.html'
 ]
-const staticCacheName = 'deer-cache-20200730'
+const staticCacheName = 'deer-cache-20251217'
+const maxCacheSize = 50
 
 self.addEventListener('install', event => {
     console.log('Attempting to install service worker and cache static assets')
@@ -36,6 +37,11 @@ self.addEventListener('activate', event => {
 })
 
 self.addEventListener('fetch', event => {
+    // Only cache same-origin GET requests
+    if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+        return
+    }
+    
     console.log('Fetch event for ', event.request.url)
     event.respondWith(
         caches.match(event.request)
@@ -45,21 +51,23 @@ self.addEventListener('fetch', event => {
                     return response
                 }
                 console.log('Network request for ', event.request.url)
-                return event.waitUntil(event=>{
-                    fetch(event.request)
+                return fetch(event.request)
                     .then(response => {
-                        if (response.status === 404) {
-                            return caches.match('pages/404.html')
+                        // Don't cache error responses
+                        if (!response || response.status !== 200 || response.type === 'error') {
+                            return response
                         }
+                        
+                        // Cache successful responses
                         return caches.open(staticCacheName).then(cache => {
                             cache.put(event.request.url, response.clone())
                             return response
                         })
                     })
-                })
-            }).catch(error => {
-                console.log('Error, ', error)
-                return caches.match('/pages/offline.html')
+                    .catch(error => {
+                        console.log('Fetch error: ', error)
+                        return caches.match('/pages/offline.html')
+                    })
             })
     )
 })

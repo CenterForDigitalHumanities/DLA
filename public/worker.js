@@ -37,17 +37,25 @@ self.onmessage = message => {
              * for an update (will postMessage() twice). Otherwise, get and cache it.
              */
             if (!message.data?.id) break // Nothing to see here
-            if (!EntityMap.has(message.data.id)) {
+            
+            // Validate ID format (basic URI validation)
+            const id = message.data.id
+            if (typeof id !== 'string' || (!id.startsWith('http://') && !id.startsWith('https://'))) {
+                console.error('Invalid ID format:', id)
+                break
+            }
+            
+            if (!EntityMap.has(id)) {
                 postMessage({
-                    id: message.data.id,
+                    id: id,
                     action: "reload",
-                    payload: new Entity(message.data.id, message.data.isLazy)
+                    payload: new Entity(id, message.data.isLazy)
                 })
             } else {
                 postMessage({
-                    id: message.data.id,
+                    id: id,
                     action: "update",
-                    payload: EntityMap.get(message.data.id)
+                    payload: EntityMap.get(id)
                 })
             }
             break

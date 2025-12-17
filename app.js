@@ -3,14 +3,20 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
-const dotenv = require('dotenv')
-dotenv.config()
+var helmet = require('helmet')
 
 var indexRouter = require('./routes/index')
 var collectionsRouter = require('./routes/collections')
 var collectionRouter = require('./routes/collection')
 
 var app = express()
+
+// Security headers
+app.use(helmet({
+  contentSecurityPolicy: false, // Keep lenient for inline scripts
+  crossOriginEmbedderPolicy: false
+}))
+app.disable('x-powered-by')
 
 app.use(logger('dev'))
 app.use(express.json())

@@ -1,0 +1,1372 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for DLA/public/javascripts/deer/deer-utils.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">DLA/public/javascripts/deer</a> deer-utils.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/429</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/429</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >/**</span></span></span>
+<span class="cstat-no" title="statement not covered" > * @module DEER Data Encoding and Exhibition for RERUM</span>
+<span class="cstat-no" title="statement not covered" > * @author Patrick Cuba &lt;cubap@slu.edu&gt;</span>
+<span class="cstat-no" title="statement not covered" > * @author Bryan Haberberger &lt;bryan.j.haberberger@slu.edu&gt;</span>
+<span class="cstat-no" title="statement not covered" > * @version 0.7</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" > * This code should serve as a basis for developers wishing to</span>
+<span class="cstat-no" title="statement not covered" > * use TinyThings as a RERUM proxy for an application for data entry,</span>
+<span class="cstat-no" title="statement not covered" > * especially within the Eventities model.</span>
+<span class="cstat-no" title="statement not covered" > * @see tiny.rerum.io</span>
+<span class="cstat-no" title="statement not covered" > */</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >import { default as DEER } from './deer-config.js'</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >import { default as worker } from '/javascripts/deer/worker.js'</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >import NoticeBoard from './NoticeBoard.js'</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >const utils = {</span>
+<span class="cstat-no" title="statement not covered" >    httpsIdLinks: function (id){</span>
+<span class="cstat-no" title="statement not covered" >        return [ id.replace(/^https?:/,'https:'), id.replace(/^https?:/,'http:') ]</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    </span>
+<span class="cstat-no" title="statement not covered" >    httpsQueryArray: function (id) {</span>
+<span class="cstat-no" title="statement not covered" >        return { $in: this.httpsIdLinks(id) }</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    httpsIdArray(id,justArray) {</span>
+<span class="cstat-no" title="statement not covered" >        if (!id?.startsWith("http")) return justArray ? [ id ] : id</span>
+<span class="cstat-no" title="statement not covered" >        if (id.startsWith("https://")) return justArray ? [ id, id.replace('https','http') ] : { $in: [ id, id.replace('https','http') ] }</span>
+<span class="cstat-no" title="statement not covered" >        return justArray ? [ id, id.replace('http','https') ] : { $in: [ id, id.replace('http','https') ] }</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Simple transformation for accidentally unsecure links.</span>
+<span class="cstat-no" title="statement not covered" >     * Does not confirm it is a URL and will silently return unmatchable strings </span>
+<span class="cstat-no" title="statement not covered" >     * but throw for any type without a replace() method.</span>
+<span class="cstat-no" title="statement not covered" >     * @param {URL} url URL string intended for matching or fetch() call.</span>
+<span class="cstat-no" title="statement not covered" >     * @returns URL as HTTPS</span>
+<span class="cstat-no" title="statement not covered" >     */</span>
+<span class="cstat-no" title="statement not covered" >    URLasHTTPS: url =&gt; url.startsWith("http") ? url?.replace(/^https?:/,'https:') : `https://${url}`,</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    listFromCollection: function (collectionId) {</span>
+<span class="cstat-no" title="statement not covered" >        let queryObj = {</span>
+<span class="cstat-no" title="statement not covered" >            body: {</span>
+<span class="cstat-no" title="statement not covered" >                targetCollection: collectionId</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        return fetch(DEER.URLS.QUERY, {</span>
+<span class="cstat-no" title="statement not covered" >            method: "POST",</span>
+<span class="cstat-no" title="statement not covered" >            mode: "cors",</span>
+<span class="cstat-no" title="statement not covered" >            body: JSON.stringify(queryObj)</span>
+<span class="cstat-no" title="statement not covered" >        }).then(response =&gt; response.json())</span>
+<span class="cstat-no" title="statement not covered" >            .then(function (pointers) {</span>
+<span class="cstat-no" title="statement not covered" >                let list = []</span>
+<span class="cstat-no" title="statement not covered" >                pointers.map(tc =&gt; list.push(fetch(tc.target).then(response =&gt; response.json())))</span>
+<span class="cstat-no" title="statement not covered" >                return Promise.all(list)</span>
+<span class="cstat-no" title="statement not covered" >            })</span>
+<span class="cstat-no" title="statement not covered" >            .then(function (list) {</span>
+<span class="cstat-no" title="statement not covered" >                return list</span>
+<span class="cstat-no" title="statement not covered" >            })</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    getValue: function (property, alsoPeek = [], asType) {</span>
+<span class="cstat-no" title="statement not covered" >        // TODO: There must be a best way to do this...</span>
+<span class="cstat-no" title="statement not covered" >        let prop;</span>
+<span class="cstat-no" title="statement not covered" >        if (property === undefined || property === "") {</span>
+<span class="cstat-no" title="statement not covered" >            // Value of property to lookup is missing!</span>
+<span class="cstat-no" title="statement not covered" >            return undefined</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        if (Array.isArray(property)) {</span>
+<span class="cstat-no" title="statement not covered" >            // It is an array of things, we can only presume that we want the array.  If it needs to become a string, local functions take on that responsibility.</span>
+<span class="cstat-no" title="statement not covered" >            if(property.length === 1){</span>
+<span class="cstat-no" title="statement not covered" >                return this.getValue(property[0], alsoPeek, asType)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            return property.map(p =&gt; this.getValue(p, alsoPeek, asType))</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >            if (typeof property === "object") {</span>
+<span class="cstat-no" title="statement not covered" >                // TODO: JSON-LD insists on "@value", but this is simplified in a lot</span>
+<span class="cstat-no" title="statement not covered" >                // of contexts. Reading that is ideal in the future.</span>
+<span class="cstat-no" title="statement not covered" >                if (!Array.isArray(alsoPeek)) {</span>
+<span class="cstat-no" title="statement not covered" >                    alsoPeek = [alsoPeek]</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                alsoPeek = alsoPeek.concat(["@value", "value", "$value", "val"])</span>
+<span class="cstat-no" title="statement not covered" >                for (let k of alsoPeek) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (property.hasOwnProperty(k)) {</span>
+<span class="cstat-no" title="statement not covered" >                        prop = property[k]</span>
+<span class="cstat-no" title="statement not covered" >                        break</span>
+<span class="cstat-no" title="statement not covered" >                    } else {</span>
+<span class="cstat-no" title="statement not covered" >                        prop = property</span>
+<span class="cstat-no" title="statement not covered" >                    }</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >            } else {</span>
+<span class="cstat-no" title="statement not covered" >                prop = property</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        try {</span>
+<span class="cstat-no" title="statement not covered" >            switch (asType.toUpperCase()) {</span>
+<span class="cstat-no" title="statement not covered" >                case "STRING":</span>
+<span class="cstat-no" title="statement not covered" >                    prop = prop.toString();</span>
+<span class="cstat-no" title="statement not covered" >                    break</span>
+<span class="cstat-no" title="statement not covered" >                case "NUMBER":</span>
+<span class="cstat-no" title="statement not covered" >                    prop = parseFloat(prop);</span>
+<span class="cstat-no" title="statement not covered" >                    break</span>
+<span class="cstat-no" title="statement not covered" >                case "INTEGER":</span>
+<span class="cstat-no" title="statement not covered" >                    prop = parseInt(prop);</span>
+<span class="cstat-no" title="statement not covered" >                    break</span>
+<span class="cstat-no" title="statement not covered" >                case "BOOLEAN":</span>
+<span class="cstat-no" title="statement not covered" >                    prop = !Boolean(["false", "no", "0", "", "undefined", "null"].indexOf(String(prop).toLowerCase().trim()));</span>
+<span class="cstat-no" title="statement not covered" >                    break</span>
+<span class="cstat-no" title="statement not covered" >                default:</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        } catch (err) {</span>
+<span class="cstat-no" title="statement not covered" >            if (asType) {</span>
+<span class="cstat-no" title="statement not covered" >                throw new Error("asType: '" + asType + "' is not possible.\n" + err.message)</span>
+<span class="cstat-no" title="statement not covered" >            } else {</span>
+<span class="cstat-no" title="statement not covered" >                // no casting requested</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        } finally {</span>
+<span class="cstat-no" title="statement not covered" >            return (prop.length === 1) ? prop[0] : prop</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Attempt to discover a readable label from the object</span>
+<span class="cstat-no" title="statement not covered" >     */</span>
+<span class="cstat-no" title="statement not covered" >    get getLabel() {</span>
+<span class="cstat-no" title="statement not covered" >        let UTILS = this</span>
+<span class="cstat-no" title="statement not covered" >        return (obj = {}, noLabel = "[ unlabeled ]", options = {}) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            if (typeof obj === "string") { return obj }</span>
+<span class="cstat-no" title="statement not covered" >            let label = obj[options.label] ?? obj.name ?? obj.label ?? obj.title</span>
+<span class="cstat-no" title="statement not covered" >            if (Array.isArray(label)) {</span>
+<span class="cstat-no" title="statement not covered" >                label = [...new Set(label.map(l =&gt; this.getValue(l)))]</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            if (typeof label === "object") {</span>
+<span class="cstat-no" title="statement not covered" >                label = UTILS.getValue(label)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            return label ?? noLabel</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Remove array values that are objects or arrays.  We have decided these are not meant to be put to the interface.</span>
+<span class="cstat-no" title="statement not covered" >     */</span>
+<span class="cstat-no" title="statement not covered" >    cleanArray: function (arr) {</span>
+<span class="cstat-no" title="statement not covered" >        let UTILS = this</span>
+<span class="cstat-no" title="statement not covered" >        return arr.filter((arrItem) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            if (Array.isArray(arrItem)) {</span>
+<span class="cstat-no" title="statement not covered" >                UTILS.warning("An annotation body value array contained an array.  We ignored it.  See ignored value below.")</span>
+<span class="cstat-no" title="statement not covered" >                UTILS.warning(arrItem)</span>
+<span class="cstat-no" title="statement not covered" >            } else if (typeof arrItem === "object") {</span>
+<span class="cstat-no" title="statement not covered" >                //TODO how should we handle?</span>
+<span class="cstat-no" title="statement not covered" >                UTILS.warning("An annotation body value array contained an object.  We ignored it.  See ignored value below.")</span>
+<span class="cstat-no" title="statement not covered" >                UTILS.warning(arrItem)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            return ["string", "number"].indexOf(typeof arrItem) &gt; -1</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Trims the protocol off of Event types and cleans characters.</span>
+<span class="cstat-no" title="statement not covered" >     * Buffs out problems with encoding for some names for Events.</span>
+<span class="cstat-no" title="statement not covered" >     * @param {String} eventType describes the type of Event, often a URI or custom</span>
+<span class="cstat-no" title="statement not covered" >     * @returns a predictable String for use in NoticeBoard</span>
+<span class="cstat-no" title="statement not covered" >     */</span>
+<span class="cstat-no" title="statement not covered" >    normalizeEventType : function(eventType){</span>
+<span class="cstat-no" title="statement not covered" >        if(typeof eventType !== 'string') return eventType // fail on your own</span>
+<span class="cstat-no" title="statement not covered" >        let cleanedString = eventType.normalize()</span>
+<span class="cstat-no" title="statement not covered" >        if (cleanedString.startsWith('http')) {</span>
+<span class="cstat-no" title="statement not covered" >            return cleanedString.split('://').pop()</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        return cleanedString</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Get the array of data from the container object, so long at it is one of the containers we support (so we know where to look.) </span>
+<span class="cstat-no" title="statement not covered" >     */</span>
+<span class="cstat-no" title="statement not covered" >    getArrayFromObj: function (containerObj, inputElem) {</span>
+<span class="cstat-no" title="statement not covered" >        let UTILS = this</span>
+<span class="cstat-no" title="statement not covered" >        let cleanArray = []</span>
+<span class="cstat-no" title="statement not covered" >        //Handle if what we are actualy looking for is inside containObj.value (DEER templates do that)</span>
+<span class="cstat-no" title="statement not covered" >        let alsoPeek = ["@value", "value", "$value", "val"]</span>
+<span class="cstat-no" title="statement not covered" >        for (let k of alsoPeek) {</span>
+<span class="cstat-no" title="statement not covered" >            if (containerObj.hasOwnProperty(k)) {</span>
+<span class="cstat-no" title="statement not covered" >                containerObj = containerObj[k]</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        let objType = containerObj.type || containerObj["@type"] || ""</span>
+<span class="cstat-no" title="statement not covered" >        let arrKey = (inputElem !== null &amp;&amp; inputElem.hasAttribute(DEER.LIST)) ? inputElem.getAttribute(DEER.LIST) : ""</span>
+<span class="cstat-no" title="statement not covered" >        if (Array.isArray(objType)) {</span>
+<span class="cstat-no" title="statement not covered" >            //Since type can be an array we have to pick one of the values that matches one of our supported container types.</span>
+<span class="cstat-no" title="statement not covered" >            //This picks the first one it comes across, since it doesnt seem like we would have any preference.</span>
+<span class="cstat-no" title="statement not covered" >            for (let t of objType) {</span>
+<span class="cstat-no" title="statement not covered" >                if (DEER.CONTAINERS.indexOf(t) &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >                    objType = t</span>
+<span class="cstat-no" title="statement not covered" >                    break</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        if (DEER.CONTAINERS.indexOf(objType) &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >            //Where it is we will find the array we seek differs between our supported types.  Perhaps we should store that with them in the config too.</span>
+<span class="cstat-no" title="statement not covered" >            if (["Set", "List", "set", "list", "@set", "@list"].indexOf(objType) &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >                if (arrKey === "") {</span>
+<span class="cstat-no" title="statement not covered" >                    arrKey = "items"</span>
+<span class="cstat-no" title="statement not covered" >                    UTILS.warning("Found attribute '" + DEER.INPUTTYPE + "' on an input, but there is no '" + DEER.LIST + "' attribute value.  DEER will use the default schema '" + arrKey + "' to find the array values for this " + objType + ".", inputElem)</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                if (containerObj.hasOwnProperty(arrKey)) { cleanArray = this.cleanArray(containerObj[arrKey]) } else {</span>
+<span class="cstat-no" title="statement not covered" >                    console.error("Object of type (" + objType + ") is malformed.  The values could not be found in obj[" + arrKey + "].  Therefore, the value is empty.  See object below.")</span>
+<span class="cstat-no" title="statement not covered" >                    console.log(containerObj)</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >            } else if (["ItemList"].indexOf(objType &gt; -1)) {</span>
+<span class="cstat-no" title="statement not covered" >                if (arrKey === "") {</span>
+<span class="cstat-no" title="statement not covered" >                    arrKey = "itemListElement"</span>
+<span class="cstat-no" title="statement not covered" >                    UTILS.warning("Found attribute '" + DEER.INPUTTYPE + "' on an input, but there is no '" + DEER.LIST + "' attribute value.  DEER will use the default schema '" + arrKey + "' to find the the array values for this " + objType + ".", inputElem)</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                if (containerObj.hasOwnProperty(arrKey)) { cleanArray = this.cleanArray(containerObj[arrKey]) } else {</span>
+<span class="cstat-no" title="statement not covered" >                    console.error("Object of type (" + objType + ") is malformed.  The values could not be found in obj[" + arrKey + "].  Therefore, the value is empty.  See object below.")</span>
+<span class="cstat-no" title="statement not covered" >                    console.log(containerObj)</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >            console.error("Object of type (" + objType + ") is not a supported container type.  Therefore, the value will be empty.  See object below..")</span>
+<span class="cstat-no" title="statement not covered" >            console.log(containerObj)</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        return cleanArray</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Given an array, turn the array into a string where the values are separated by the given delimeter.</span>
+<span class="cstat-no" title="statement not covered" >     */</span>
+<span class="cstat-no" title="statement not covered" >    stringifyArray: function (arr, delim) {</span>
+<span class="cstat-no" title="statement not covered" >        //TODO warn if arr is empty?</span>
+<span class="cstat-no" title="statement not covered" >        try {</span>
+<span class="cstat-no" title="statement not covered" >            return (arr.length) ? arr.join(delim) : ""</span>
+<span class="cstat-no" title="statement not covered" >        } catch (e) {</span>
+<span class="cstat-no" title="statement not covered" >            console.error("There was a join error on '" + arr + "'' using delimeter '" + delim + "'.")</span>
+<span class="cstat-no" title="statement not covered" >            return ""</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Assert a value found on an expanded object onto the HTML input that represents it.</span>
+<span class="cstat-no" title="statement not covered" >     * The input is a representative for the annotation so the values should match.  Hidden elements will never have user interaction, they</span>
+<span class="cstat-no" title="statement not covered" >     * must be marked dirty if the values do not match or if there is no annotation mapped to its DEER.KEY attribute.</span>
+<span class="cstat-no" title="statement not covered" >     * Values should not be hard coded into non-hidden input fields, they will be overwritten by the annotation value without being marked dirty.</span>
+<span class="cstat-no" title="statement not covered" > </span>
+<span class="cstat-no" title="statement not covered" >     * @param elem The input HTML element the value is being asserted on</span>
+<span class="cstat-no" title="statement not covered" >     * @param val The string value to be asserted onto an input HTML element</span>
+<span class="cstat-no" title="statement not covered" >     * @param fromAnno Boolean for if the value is from a DEER annotation as opposed to part of the object (noted in deer-id on the form) directly.</span>
+<span class="cstat-no" title="statement not covered" >     * </span>
+<span class="cstat-no" title="statement not covered" >    */</span>
+<span class="cstat-no" title="statement not covered" >    assertElementValue: function (elem, obj) {</span>
+<span class="cstat-no" title="statement not covered" >        delete elem.$isDirty</span>
+<span class="cstat-no" title="statement not covered" >        let deerKeyValue = elem.getAttribute(DEER.KEY)</span>
+<span class="cstat-no" title="statement not covered" >        let mapsToAnno = false</span>
+<span class="cstat-no" title="statement not covered" >        let assertedValue = ""</span>
+<span class="cstat-no" title="statement not covered" >        if (obj.hasOwnProperty(deerKeyValue)) {</span>
+<span class="cstat-no" title="statement not covered" >            if (obj[deerKeyValue].evidence) elem.setAttribute(DEER.EVIDENCE, obj[deerKeyValue].evidence)</span>
+<span class="cstat-no" title="statement not covered" >            if (obj[deerKeyValue].motivation) elem.setAttribute(DEER.MOTIVATION, obj[deerKeyValue].motivation)</span>
+<span class="cstat-no" title="statement not covered" >            if (obj[deerKeyValue].creator) elem.setAttribute(DEER.ATTRIBUTION, obj[deerKeyValue].creator)</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            //Then there is a key on this object that maps to the input.  </span>
+<span class="cstat-no" title="statement not covered" >            //It is either an annotation or was part of the object directly.  If it has a 'source' property, we assume it is an annotation.</span>
+<span class="cstat-no" title="statement not covered" >            assertedValue = this.getValue(obj[deerKeyValue])</span>
+<span class="cstat-no" title="statement not covered" >            mapsToAnno = (typeof obj[deerKeyValue] === "object" &amp;&amp; obj[deerKeyValue].hasOwnProperty("source"))</span>
+<span class="cstat-no" title="statement not covered" >            if (mapsToAnno) {</span>
+<span class="cstat-no" title="statement not covered" >                elem.setAttribute(DEER.SOURCE, this.getValue(obj[deerKeyValue].source, "citationSource"))</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            let annoBodyObjectType = (typeof assertedValue === "object") ? assertedValue.type || assertedValue["@type"] || "" : ""</span>
+<span class="cstat-no" title="statement not covered" >            let delim = elem.getAttribute(DEER.ARRAYDELIMETER) || DEER.DELIMETERDEFAULT || ","</span>
+<span class="cstat-no" title="statement not covered" >            let arrayOfValues = []</span>
+<span class="cstat-no" title="statement not covered" >            if (Array.isArray(assertedValue)) {</span>
+<span class="cstat-no" title="statement not covered" >                /**</span>
+<span class="cstat-no" title="statement not covered" >                 * This could mean multiple annotations of similar bodies were put together.</span>
+<span class="cstat-no" title="statement not covered" >                 * This could mean that the key on the orignal object also had annotations existing for it was put together.</span>
+<span class="cstat-no" title="statement not covered" >                 * This could mean that the key on the original object was an array already, and may not contain anything we can get a value from.</span>
+<span class="cstat-no" title="statement not covered" >                 * We will preference the first entry of the array that is an annotation.  </span>
+<span class="cstat-no" title="statement not covered" >                 * If no annotations are found, DEER will aribitrarily pick the last string or number encountered.   </span>
+<span class="cstat-no" title="statement not covered" >                 * DEER does not technically support this situation, but can make a best guess and help it along...</span>
+<span class="cstat-no" title="statement not covered" >                 */</span>
+<span class="cstat-no" title="statement not covered" >                this.warning("There are multiple possible values for key '" + deerKeyValue + "'. See below. ", assertedValue)</span>
+<span class="cstat-no" title="statement not covered" >                let arbitraryAssertedValue = ""</span>
+<span class="cstat-no" title="statement not covered" >                for (let entry of assertedValue) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (["string", "number"].indexOf(typeof entry) &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >                        //We found it and understand it, but we preference annotation objects so look at the rest of the entries.</span>
+<span class="cstat-no" title="statement not covered" >                        //Consequently, if no annotations are found, the last string/number entry will be the one DEER uses.</span>
+<span class="cstat-no" title="statement not covered" >                        mapsToAnno = false</span>
+<span class="cstat-no" title="statement not covered" >                        elem.setAttribute(DEER.SOURCE, this.getValue(entry.source, "citationSource"))</span>
+<span class="cstat-no" title="statement not covered" >                        assertedValue = arbitraryAssertedValue = this.getValue(entry)</span>
+<span class="cstat-no" title="statement not covered" >                    } else if (typeof entry === "object") {</span>
+<span class="cstat-no" title="statement not covered" >                        if (entry.hasOwnProperty(deerKeyValue) &amp;&amp; entry[deerKeyValue].hasOwnProperty("source")) {</span>
+<span class="cstat-no" title="statement not covered" >                            //Then this is an object like {deerKeyValue:{value:"hopefully", source:"anno/123"}} and can be preferenced</span>
+<span class="cstat-no" title="statement not covered" >                            mapsToAnno = true</span>
+<span class="cstat-no" title="statement not covered" >                            elem.setAttribute(DEER.SOURCE, this.getValue(entry.source, "citationSource"))</span>
+<span class="cstat-no" title="statement not covered" >                            assertedValue = arbitraryAssertedValue = this.getValue(entry[deerKeyValue])</span>
+<span class="cstat-no" title="statement not covered" >                            break</span>
+<span class="cstat-no" title="statement not covered" >                        } else if (entry.hasOwnProperty("source")) {</span>
+<span class="cstat-no" title="statement not covered" >                            //Then this is an object like {value:"hopefully", source:"anno/123"} and can be preferenced</span>
+<span class="cstat-no" title="statement not covered" >                            mapsToAnno = true</span>
+<span class="cstat-no" title="statement not covered" >                            elem.setAttribute(DEER.SOURCE, this.getValue(entry.source, "citationSource"))</span>
+<span class="cstat-no" title="statement not covered" >                            assertedValue = arbitraryAssertedValue = this.getValue(entry)</span>
+<span class="cstat-no" title="statement not covered" >                            break</span>
+<span class="cstat-no" title="statement not covered" >                        }</span>
+<span class="cstat-no" title="statement not covered" >                    }</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                if (arbitraryAssertedValue) { this.warning("DEER arbitrarily chose the value '" + arbitraryAssertedValue + "'.") } else {</span>
+<span class="cstat-no" title="statement not covered" >                    console.error("DEER did not understand any of these values.  Therefore, the value will be an empty string.")</span>
+<span class="cstat-no" title="statement not covered" >                    assertedValue = ""</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >            } else {</span>
+<span class="cstat-no" title="statement not covered" >                switch (typeof assertedValue) {</span>
+<span class="cstat-no" title="statement not covered" >                    //getValue either returned an object because it could not find obj.value or because obj.value was an object.  </span>
+<span class="cstat-no" title="statement not covered" >                    case "object":</span>
+<span class="cstat-no" title="statement not covered" >                        if (mapsToAnno) {</span>
+<span class="cstat-no" title="statement not covered" >                            //Then getValue found an annotation DEER understood and the body.value was an object.</span>
+<span class="cstat-no" title="statement not covered" >                            if (elem.getAttribute(DEER.INPUTTYPE)) {</span>
+<span class="cstat-no" title="statement not covered" >                                //Only an element noted as a DEER.INPUTTYPE would have this kind of annotation behind it.  For others, it is an error.  </span>
+<span class="cstat-no" title="statement not covered" >                                if (annoBodyObjectType === "" || elem.getAttribute(DEER.INPUTTYPE) !== annoBodyObjectType) {</span>
+<span class="cstat-no" title="statement not covered" >                                    //The HTML input should note the same type of container as the annotation so helper functiions can determine if it is a supported in DEER.CONTAINERS</span>
+<span class="cstat-no" title="statement not covered" >                                    this.warning("Container type mismatch!.  See attribute '" + DEER.INPUTTYPE + "' on element " + elem.outerHTML + "." +</span>
+<span class="cstat-no" title="statement not covered" >                                        " The element is now dirty and will overwrite the type noted in the annotation seen below upon form submission." +</span>
+<span class="cstat-no" title="statement not covered" >                                        " If the type of the annotation body is not a supported type then DEER will not be able to get the array of values.", obj[deerKeyValue])</span>
+<span class="cstat-no" title="statement not covered" >                                }</span>
+<span class="cstat-no" title="statement not covered" >                                if (elem.getAttribute(DEER.INPUTTYPE) === "object") {</span>
+<span class="cstat-no" title="statement not covered" >                                    try {</span>
+<span class="cstat-no" title="statement not covered" >                                        assertedValue = JSON.stringify(assertedValue)</span>
+<span class="cstat-no" title="statement not covered" >                                    } catch (err) {</span>
+<span class="cstat-no" title="statement not covered" >                                        assertedValue = ""</span>
+<span class="cstat-no" title="statement not covered" >                                    }</span>
+<span class="cstat-no" title="statement not covered" >                                } else {</span>
+<span class="cstat-no" title="statement not covered" >                                    arrayOfValues = this.getArrayFromObj(assertedValue, el)</span>
+<span class="cstat-no" title="statement not covered" >                                    assertedValue = this.stringifyArray(arrayOfValues, delim)</span>
+<span class="cstat-no" title="statement not covered" >                                }</span>
+<span class="cstat-no" title="statement not covered" >                            } else {</span>
+<span class="cstat-no" title="statement not covered" >                                //This should have been a string or number.  We do not support whatever was meant to be here.  </span>
+<span class="cstat-no" title="statement not covered" >                                console.error("We do not support annotation body values that are objects, unless they are a supported container object and the element " + elem.outerHTML + " notes '" + DEER.INPUTTYPE + "'.  Therefore, the value of annotation is being ignored.  See annotation below.")</span>
+<span class="cstat-no" title="statement not covered" >                                console.log(obj[deerKeyValue])</span>
+<span class="cstat-no" title="statement not covered" >                                assertedValue = ""</span>
+<span class="cstat-no" title="statement not covered" >                            }</span>
+<span class="cstat-no" title="statement not covered" >                        } else {</span>
+<span class="cstat-no" title="statement not covered" >                            //Then getValue returned an object and could not confirm it was an annotation.  We cannot find a value. </span>
+<span class="cstat-no" title="statement not covered" >                            console.error("Could not find 'value' in the object body.  See below.")</span>
+<span class="cstat-no" title="statement not covered" >                            console.log(obj[deerKeyValue])</span>
+<span class="cstat-no" title="statement not covered" >                            assertedValue = ""</span>
+<span class="cstat-no" title="statement not covered" >                        }</span>
+<span class="cstat-no" title="statement not covered" >                        break</span>
+<span class="cstat-no" title="statement not covered" >                    case "string":</span>
+<span class="cstat-no" title="statement not covered" >                    case "number":</span>
+<span class="cstat-no" title="statement not covered" >                        //getValue either found that obj[deerKeyValue] was a string or found that it was an object with a 'value' that was a string or number. </span>
+<span class="cstat-no" title="statement not covered" >                        //The asserted value is already set and we know whether or not it mapsToAnno, so do nothing.  Keep this here for future handling. </span>
+<span class="cstat-no" title="statement not covered" >                        break</span>
+<span class="cstat-no" title="statement not covered" >                    default:</span>
+<span class="cstat-no" title="statement not covered" >                        //An undefined situation perhaps?</span>
+<span class="cstat-no" title="statement not covered" >                        console.error("We do not support values of this type '" + typeof assertedValue + "'.  Therefore, the value of annotation is being ignored.  See annotation below.")</span>
+<span class="cstat-no" title="statement not covered" >                        console.log(obj[deerKeyValue])</span>
+<span class="cstat-no" title="statement not covered" >                        assertedValue = ""</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        if (elem.type === "hidden") {</span>
+<span class="cstat-no" title="statement not covered" >            if (elem.hasAttribute("value") &amp;&amp; elem.value !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                if (!mapsToAnno || elem.value !== assertedValue) {</span>
+<span class="cstat-no" title="statement not covered" >                    elem.$isDirty = true</span>
+<span class="cstat-no" title="statement not covered" >                    if (elem.value !== assertedValue &amp;&amp; elem.hasAttribute(DEER.INPUTTYPE)) {</span>
+<span class="cstat-no" title="statement not covered" >                        this.warning("Hidden element with a hard coded 'value' also contains attributes '" + DEER.KEY + "' and '" + DEER.INPUTTYPE + "'.  " +</span>
+<span class="cstat-no" title="statement not covered" >                            "DEER takes this to mean the '" + elem.getAttribute(DEER.KEY) + "' annotation body value array will .join() into this string and pass a comparison operation. " +</span>
+<span class="cstat-no" title="statement not covered" >                            "If the array value as string does not match the hidden element's value string (including empty string), it will be considered dirty and a candidate " +</span>
+<span class="cstat-no" title="statement not covered" >                            "to be updated upon submission even though no interaction has taken place to change it.  Make sure this is what you want. \n" +</span>
+<span class="cstat-no" title="statement not covered" >                            "If this hidden input value is reactive to other interactions then processing should be done by your own custom interaction handler. " +</span>
+<span class="cstat-no" title="statement not covered" >                            "Remove the hard coded '" + DEER.KEY + "' or 'value' attribute.  This will make the DEER form input handler avoid processing of this input on page load. " +</span>
+<span class="cstat-no" title="statement not covered" >                            "If you want form submission to handle the annotation behind the input, make sure to handle the $isDirty state appropriately and restore the '" + DEER.KEY + "' attribute before submission. " +</span>
+<span class="cstat-no" title="statement not covered" >                            "See below.", elem)</span>
+<span class="cstat-no" title="statement not covered" >                    }</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >            if (mapsToAnno &amp;&amp; elem.hasAttribute("value") &amp;&amp; elem.value !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                //Empty strings count as a value.</span>
+<span class="cstat-no" title="statement not covered" >                this.warning("Element value is already set.  The element value should not be hard coded and will be overwritten by the annotation value '" + assertedValue + "'.  See below.", elem)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            if (elem.hasAttribute(DEER.INPUTTYPE)) {</span>
+<span class="cstat-no" title="statement not covered" >                this.warning("This input element also has attribute '" + DEER.INPUTTYPE + "'.  This attribute is only for hidden inputs only.  The attribute is being removed to avoid errors.")</span>
+<span class="cstat-no" title="statement not covered" >                elem.removeAttribute(DEER.INPUTTYPE)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            elem.value = assertedValue</span>
+<span class="cstat-no" title="statement not covered" >            elem.setAttribute("value", assertedValue)</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Send a warning message to the console if dev has this feature turned on through the ROBUSTFEEDBACK config option.</span>
+<span class="cstat-no" title="statement not covered" >     */</span>
+<span class="cstat-no" title="statement not covered" >    warning: function (msg, logMe) {</span>
+<span class="cstat-no" title="statement not covered" >        if (DEER.ROBUSTFEEDBACK.valueOf() &amp;&amp; msg) {</span>
+<span class="cstat-no" title="statement not covered" >            console.warn(msg)</span>
+<span class="cstat-no" title="statement not covered" >            if (logMe) {</span>
+<span class="cstat-no" title="statement not covered" >                console.log(logMe)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    /**</span>
+<span class="cstat-no" title="statement not covered" >     * Stringifies a JSON object (not any randon JS object).</span>
+<span class="cstat-no" title="statement not covered" >     *</span>
+<span class="cstat-no" title="statement not covered" >     * It should be noted that JS objects can have members of</span>
+<span class="cstat-no" title="statement not covered" >     * specific type (e.g. function), that are not supported</span>
+<span class="cstat-no" title="statement not covered" >     * by JSON.</span>
+<span class="cstat-no" title="statement not covered" >     * @license https://github.com/fraunhoferfokus/JSum/blob/master/LICENSE</span>
+<span class="cstat-no" title="statement not covered" >     * @param {Object} obj JSON object</span>
+<span class="cstat-no" title="statement not covered" >     * @returns {String} stringified JSON object.</span>
+<span class="cstat-no" title="statement not covered" >     */</span>
+<span class="cstat-no" title="statement not covered" >    serialize: function (obj) {</span>
+<span class="cstat-no" title="statement not covered" >        if (Array.isArray(obj)) {</span>
+<span class="cstat-no" title="statement not covered" >            return JSON.stringify(obj.map(i =&gt; serialize(i)))</span>
+<span class="cstat-no" title="statement not covered" >        } else if (typeof obj === 'object' &amp;&amp; obj !== null) {</span>
+<span class="cstat-no" title="statement not covered" >            return Object.keys(obj)</span>
+<span class="cstat-no" title="statement not covered" >                .sort()</span>
+<span class="cstat-no" title="statement not covered" >                .map(k =&gt; `${k}:${serialize(obj[k])}`)</span>
+<span class="cstat-no" title="statement not covered" >                .join('|')</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        return obj</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    checksum: function (inputData) {</span>
+<span class="cstat-no" title="statement not covered" >        if (typeof inputData === "object") {</span>
+<span class="cstat-no" title="statement not covered" >            inputData = this.serialize(data)</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        return CryptoJS.MD5(data)</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export { DEER, utils as UTILS }</span>
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2025-12-17T21:20:01.242Z
+            </div>
+        <script src="../../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
+    </body>
+</html>
+    
