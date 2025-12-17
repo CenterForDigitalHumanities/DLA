@@ -1,12 +1,13 @@
 /**
  * @mothballed - We will not manage in the current interface; it is readonly
  */
-var express = require('express')
-var router = express.Router()
+import express from 'express'
+
+const router = express.Router()
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send({user:"username",id:12})
+router.get('/', (req, res) => {
+  res.send({ user: 'username', id: 12 })
 })
 
-module.exports = router
+export default router

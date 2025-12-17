@@ -1,6 +1,7 @@
 {
   "name": "dla",
   "version": "0.0.1",
+  "type": "module",
   "private": true,
   "scripts": {
     "start": "node --env-file=.env ./bin/dla_public.js",
