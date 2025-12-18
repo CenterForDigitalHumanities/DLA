@@ -78,7 +78,17 @@ export class CollectionLabel extends DeerView {
     }
 
     connectedCallback() {
-        this.innerHTML = this.template
+        // Show a neutral loading state until collection data is available
+        this.innerHTML = `loading...`
+        this.addEventListener(DEER.EVENTS.LOADED, e => {
+            const obj = e.detail ?? {}
+            try {
+                this.innerHTML = this.template(obj)
+            } catch (err) {
+                console.error('CollectionLabel render error:', err)
+                this.innerHTML = `Unknown Collection`
+            }
+        })
     }
 }
 

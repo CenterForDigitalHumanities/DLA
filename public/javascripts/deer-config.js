@@ -26,11 +26,11 @@ export default {
     PRIMITIVES: ["name", "creator", "label"],
 
     URLS: {
-        BASE_ID: "http://store.rerum.io/v1",
+        BASE_ID: "/api/resource", // proxied
         CREATE: "http://tinypaul.rerum.io/dla/create",
         UPDATE: "http://tinypaul.rerum.io/dla/update",
         OVERWRITE: "http://tinypaul.rerum.io/dla/overwrite",
-        QUERY: "http://tinypaul.rerum.io/dla/query",
+        QUERY: "/api/query", // proxied
         SINCE: "http://store.rerum.io/v1/since"
     },
 

@@ -19,15 +19,27 @@ router.use((req, res, next) => {
 })
 
 /* Management API */
-router.post('/update', (req, res) => {
-  fetch(`${RERUM}/update.action`, {
-    method: 'PUT',
-    'Content-Type': 'application/json; charset=utf-8',
-    'Authorization': `Bearer ${pubTok}`,
-    mode: 'cors',
-    redirect: 'follow',
-    body: req.body
-  }).then(response => response.ok ? response.json() : Promise.reject(response))
+router.post('/update', async (req, res) => {
+  try {
+    const response = await fetch(`${RERUM}/update.action`, {
+      method: 'PUT',
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': `Bearer ${pubTok}`,
+      mode: 'cors',
+      redirect: 'follow',
+      body: req.body
+    })
+    
+    if (!response.ok) {
+      return res.status(response.status).json({ error: 'Update failed' })
+    }
+    
+    const data = await response.json()
+    res.json(data)
+  } catch (err) {
+    console.error('Update error:', err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 })
 
 export default router

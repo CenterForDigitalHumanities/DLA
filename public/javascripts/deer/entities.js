@@ -96,11 +96,11 @@ class Entity extends Object {
             o[target] = UTILS.httpsIdArray(this.id)
             obj["$or"].push(o)
         }
-        const results = withAssertions ? fetch(DEER.URLS.QUERY, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(obj)
-        }) : fetch(UTILS.URLasHTTPS(this.id))
+            const results = withAssertions ? fetch(DEER.URLS.QUERY, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(obj)
+            }) : fetch(`/api/resource/${encodeURIComponent(this.id)}`)
         return results
             .then(res => res.ok ? res.json() : Promise.reject(res))
             .then(finds => {
@@ -200,7 +200,7 @@ class Annotation extends Object {
 async function expand(entity = new Entity({}), matchOn) {
     let findId = entity.data["@id"] ?? entity.data.id ?? entity.data
     if (typeof findId !== "string") { return Promise.resolve(entity.data) }
-    let obj = fetch(findId).then(res => res.json()).then(res => Object.assign(entity.data, res))
+        let obj = fetch(`/api/resource/${encodeURIComponent(findId)}`).then(res => res.json()).then(res => Object.assign(entity.data, res))
     let annos = findByTargetId(findId, [], DEER.URLS.QUERY).then(res => res.map(anno => new Annotation(anno)))
     await Promise.all([obj, annos]).then(res => {
         annos = res[1]
@@ -318,13 +318,13 @@ async function findByTargetId(id, targetStyle = [], queryUrl = DEER.URLS.QUERY) 
             obj["$or"].push(o)
         }
     }
-    let matches = await fetch(queryUrl, {
-        method: "POST",
-        body: JSON.stringify(obj),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+        let matches = await fetch(queryUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(obj)
+        })
         .then(response => response.json())
         .catch((err) => console.error(err))
     return matches

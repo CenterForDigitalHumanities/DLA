@@ -206,7 +206,7 @@ class DlaSimpleExpression extends DeerView {
                         if (poem.download_link) {
                             const audioSamples = document.querySelector('.audioSample .card-body')
                             audioSamples.innerHTML += `
-                    <audio controls><source src="${poem.download_link}" type="audio/mpeg"></audio>
+                    <audio controls preload="none" src="${poem.download_link}"><source src="${poem.download_link}" type="audio/mpeg"></audio>
                     <a target="_blank" title="View on eCommons 🡕" href="${poem.url}">${poem.configured_field_t_publication_information}</a>`
                             audioSamples.parentElement.classList.remove('hidden')
                         }
@@ -216,9 +216,11 @@ class DlaSimpleExpression extends DeerView {
                             musicHTML += poem.music.reduce((a, b) => a += `
                     <p>
                     <a target="_blank" title="View on eCommons 🡕" href="${b.url}"><cite>${b.author_display} (${(new Date(b.publication_date)).getFullYear()})</cite></a>
-                    <small><a href="${b.fulltext_url}" target="_blank">
-                        <object data="${b.fulltext_url}" type="application/pdf" width="100%" height="500px">PDF 🡕</object>
-                    </a></small>
+                    <small>
+                        <a href="${b.fulltext_url}" target="_blank">Open on eCommons 🡕</a>
+                        <a href="#" class="button is-small pdf-load" data-src="${b.fulltext_url}" role="button" aria-label="Load PDF inline">Load PDF</a>
+                        <div class="pdf-inline-container" style="margin-top:0.5rem"></div>
+                    </small>
                     </p>`, ``)
 
                             const linkedMusic = document.querySelector('.poemMusic .card-body')
@@ -326,6 +328,41 @@ const debounce = (wait, func) => {
     }
 }
 
+// Delegated handler to lazily load PDFs into a sandboxed iframe and provide a fallback link
+document.addEventListener('click', (ev) => {
+    const trigger = (ev.target && ev.target.closest) ? ev.target.closest('.pdf-load') : null
+    if (!trigger) return
+    ev.preventDefault()
+    const src = trigger.dataset.src
+    if (!src) return
+
+    let container = trigger.closest('small')?.querySelector('.pdf-inline-container') ?? trigger.parentElement?.querySelector('.pdf-inline-container')
+    if (!container) {
+        container = document.createElement('div')
+        container.className = 'pdf-inline-container'
+        container.style.marginTop = '0.5rem'
+        trigger.insertAdjacentElement('afterend', container)
+    }
+
+    // create sandboxed iframe (avoid allow-scripts to block third-party JS)
+    const iframe = document.createElement('iframe')
+    iframe.width = '100%'
+    iframe.height = '500'
+    iframe.loading = 'lazy'
+    iframe.src = src
+
+    // clear and insert iframe
+    container.innerHTML = ''
+    container.appendChild(iframe)
+
+    // add fallback note
+    const fallback = document.createElement('div')
+    fallback.innerHTML = `<small>If the PDF does not display, <a href="${src}" target="_blank" rel="noopener">open it in a new tab</a>.</small>`
+    container.appendChild(fallback)
+
+    // remove the trigger element to avoid duplicate actions
+    trigger.remove()
+})
 const applyFilter = debounce(200, function (ev) {
     const TERM = ev.target.value.toLowerCase()
     if (TERM?.length < 2) {
@@ -385,14 +422,14 @@ const markText = (html) => {
 
 
 let glossaryTip = ({ title, url, download_link, configured_field_t_definition, configured_field_t_ipa }) => `
-<div class="glossaryTip popover fade show bs-popover-top rounded">
+<div class="glossaryTip popover fade show bs-popover-top rounded" role="dialog" aria-label="${title}">
     <h3 class="popover-header">${title}</h3>
     <div class="popover-body">
         <p>
             ${configured_field_t_ipa} 
             ${configured_field_t_definition}
         </p>
-        <audio controls src="${download_link}">
+        <audio controls preload="none" src="${download_link}">
             <a href="${download_link}" target="_blank">download audio</a>
         </audio>
     </div>
@@ -401,3 +438,53 @@ let glossaryTip = ({ title, url, download_link, configured_field_t_definition, c
 </div>`
 
 const poemContainsTerm = (poem, term) => (new RegExp(String.raw`\b${term}\b`, 'i')).test(poem.textContent)
+
+// Handle glossary popovers via click/focus so users can interact with audio controls.
+// - Clicking an anchor toggles its popover
+// - Clicking inside an open popover (e.g., audio controls) should NOT close it
+// - Clicking outside both anchor and popover hides visible popovers
+document.addEventListener('click', (ev) => {
+    const anchor = ev.target.closest('a[data-definition]')
+    const inPopover = ev.target.closest('div.glossaryTip.popover')
+
+    // If click is neither on the anchor nor inside a popover, hide any visible popovers
+    if (!anchor && !inPopover) {
+        document.querySelectorAll('div.glossaryTip.popover.visible').forEach(p => p.classList.remove('visible'))
+        return
+    }
+
+    // If the click is inside an existing popover, allow interaction (do nothing)
+    if (!anchor && inPopover) {
+        return
+    }
+
+    // If link clicked, toggle the adjacent glossaryTip and prevent navigation
+    ev.preventDefault()
+    const tip = anchor.nextElementSibling
+    if (tip && tip.classList.contains('glossaryTip')) {
+        const isVisible = tip.classList.toggle('visible')
+        if (isVisible) {
+            // ensure any other popovers are closed
+            document.querySelectorAll('div.glossaryTip.popover').forEach(p => { if (p !== tip) p.classList.remove('visible') })
+        }
+    }
+})
+
+// Allow users to dismiss visible popovers with Escape for better keyboard accessibility
+document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape') {
+        document.querySelectorAll('div.glossaryTip.popover.visible').forEach(p => p.classList.remove('visible'))
+    }
+})
+
+// Also support keyboard accessibility: show on Enter or Space
+document.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Enter' && ev.key !== ' ') return
+    const anchor = ev.target.closest && ev.target.closest('a[data-definition]')
+    if (!anchor) return
+    ev.preventDefault()
+    const tip = anchor.nextElementSibling
+    if (tip && tip.classList.contains('glossaryTip')) {
+        tip.classList.toggle('visible')
+    }
+})

@@ -41,23 +41,15 @@ const utils = {
     URLasHTTPS: url => url.startsWith("http") ? url?.replace(/^https?:/,'https:') : `https://${url}`,
 
     listFromCollection: function (collectionId) {
-        let queryObj = {
-            body: {
-                targetCollection: collectionId
-            }
-        }
+        const queryObj = { body: { targetCollection: collectionId } }
         return fetch(DEER.URLS.QUERY, {
             method: "POST",
-            mode: "cors",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(queryObj)
         }).then(response => response.json())
             .then(function (pointers) {
-                let list = []
-                pointers.map(tc => list.push(fetch(tc.target).then(response => response.json())))
+                const list = pointers.map(tc => fetch(`/api/resource/${encodeURIComponent(tc.target)}`).then(response => response.json()))
                 return Promise.all(list)
-            })
-            .then(function (list) {
-                return list
             })
     },
     getValue: function (property, alsoPeek = [], asType) {

@@ -29,16 +29,27 @@ div.glossaryTip {
   position: absolute;
   background-color: #FFF;
   box-shadow: 0 0 3em 0 rgba(0,0,0,.3);
-  transition: opacity 250ms;
+  transition: opacity 150ms;
+  pointer-events: none; /* avoid accidental interactions when hidden */
+  z-index: 1000;
 }
 
 .glossaryTip.popover {
   max-width: 100%;
 }
 
+/* visible state when hovered or explicitly shown */
+.a-show + div.glossaryTip,
+.glossaryTip.popover.visible,
 a:hover+div.glossaryTip, a+div.glossaryTip:hover {
   visibility: visible;
   opacity: 1;
+  pointer-events: auto;
+}
+
+/* ensure popovers sit above other elements */
+div.glossaryTip.popover {
+  z-index: 9999;
 }
 
 printed {
